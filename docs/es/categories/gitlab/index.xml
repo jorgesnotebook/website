@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Gitlab on Jorge's notebook</title><link>https://jorgesnotebook.com/es/categories/gitlab/</link><description>Recent content in Gitlab on Jorge's notebook</description><generator>Hugo</generator><language>es</language><lastBuildDate>Thu, 23 Jan 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/es/categories/gitlab/index.xml" rel="self" type="application/rss+xml"/><item><title>Cómo instalar GitLab en Debian 9</title><link>https://jorgesnotebook.com/es/posts/how-to-install-gitlab-on-debian-9/</link><pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/posts/how-to-install-gitlab-on-debian-9/</guid><description>&lt;p&gt;Llevaba tiempo dándole vueltas a instalar GitLab en mi servidor. Tenia Git instalado y me gustaba, pero GitLab lo había probado hace un tiempo y me gusto bastante, asi que al final me decidí.&lt;/p&gt;
+&lt;p&gt;GitLab es una herramienta muy buena. Puedes tenerla en tu servidor, crear equipos, proyectos para esos equipos y asignar roles a cada persona. Lo de los equipos me parece genial la verdad.&lt;/p&gt;
+&lt;h2 id="instalación"&gt;
+ Instalación
+ &lt;a class="anchor" href="#instalaci%c3%b3n"&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;Lo primero es instalar las dependencias:&lt;/p&gt;</description></item></channel></rss>

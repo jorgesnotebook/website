@@ -1,11 +1,13 @@
 +++
-title= "Create your own cluster with k3s"
+title= "Building a Production-Grade k3s Homelab: HA, Cilium, and MetalLB"
 author = "Jorge Andreu Calatayud"
-categories = ["cluster", "Kubernetes"]
-tags = ["kubernetes", "How to", "k3s", "ha", "cilium", "metallb"]
+categories = ["Kubernetes", "Platform Engineering", "Homelab"]
+tags = ["kubernetes", "k3s", "ha", "cilium", "metallb", "raspberry-pi", "homelab"]
 date = "2023-08-15"
-description = "How to set up a k3s cluster with cilium and Metallb"
+lastmod = "2026-04-18"
+description = "Setting up a 6-node Raspberry Pi k3s cluster with high availability control plane, Cilium CNI replacing flannel, and MetalLB for bare-metal load balancing."
 comments= true
+featured = true
 +++
 
 For a long time, I've been trying to achieve a better configuration in my home lab. 

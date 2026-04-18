@@ -1,11 +1,13 @@
 +++
-title= "How to config SOPS in Helm"
+title= "Encrypting Kubernetes Secrets with SOPS and Helmfile"
 date= "2021-02-28"
+lastmod = "2026-04-18"
 comments = true
-categories = ["Helm", "kubernetes", "How to"]
-description = "I will explain how to use SOPS in helm deploying it with helmfile"
+categories = ["Helm", "Kubernetes", "Security"]
+description = "How to integrate SOPS with Helmfile and helm-secrets to encrypt Kubernetes secrets using AWS KMS, GCP KMS, or PGP — keeping secrets in Git without exposing them."
 author = "Jorge Andreu Calatayud"
-tags= ["helm", "helmcharts", "sops","kubernetes", "helmfile", "cluster", "helm-secrets", "secrets"]
+tags= ["helm", "helmfile", "sops", "kubernetes", "secrets", "security", "helm-secrets", "aws-kms"]
+featured = true
 +++
 
 In our previous post about helmfile, we spoke briefly about sops, but we didn't use it or speak more about it... Now it's the time to do that. With SOPS, we can have a file in our repo that is encrypted by sops and have the variables to use in our chart through Helmfile there. 

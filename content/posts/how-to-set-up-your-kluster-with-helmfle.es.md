@@ -3,34 +3,28 @@ title= "Configurar tu kluster con Helmfile"
 date= "2021-01-30"
 comments = true
 categories = ["Helm", "kubernetes", "How to", "helmfile"]
-description = "Echamos un vistazo atrás de cómo se ha portado helmfile después de 6 meses usando helmfile en el trabajo y mostramos a cómo configurarlo."
+description = "Cómo configuro helmfile después de 6 meses usándolo. No es la solución perfecta, pero es la mía y funciona."
 author = "Jorge Andreu Calatayud"
 tags= ["helm", "helmcharts", "kubernetes", "helmfile", "cluster"]
 +++
 
-Helmfile es una herramienta que te permite sacar más partido a Helm. Ya que si usas helmfile puedes implementar cualquier cantidad de helmcharts. Básicamente con helmfile declaras las helmcharts y les das los valores que tú quieres a cada una de las helm chart, helmfile creara el correspondiente deploy mediante helm para mandar a tu cluster todo lo que has definido en helmfile, claro esta puedes decirle a helmfile impleméntame solo este grupo de helmchart y de este grupo quiero implementarlas en esta secuencia. 
-
-## ¿Cómo se ha portado helmfile? 
-Después de estos 6 meses usando helmfile la verdad es que me ha dado mucha más vida. Si queremos implementar cosas nuevas cosas.... todo va más rápido. 
+Helmfile es una herramienta que te permite sacar más partido a Helm. Con helmfile puedes implementar tantas charts como quieras, darle los valores que quieras a cada una y helmfile se encarga de mandarlo todo al cluster mediante helm. Además puedes decirle que solo implemente un grupo concreto de charts, y en el orden que quieras.
 
 ## ¿Qué me ha gustado de helmfile?
-Después estar usando lo un tiempo, esto es lo que más me ha gustado de helmfile:
 
-- Lo que más vas a notar usando helmfile es que el tiempo de implementación de las helmchart habrá descendido. Por ejemplo, en donde trabajo hemos notado una mejora de 15~30 minutos comparado a lo que usábamos anteriormente que era `Landscaper`, actualmente obsoleto. Dejo aquí un enlace al [repositorio](https://github.com/Eneco/landscaper) por si alguien está interesado.  
+Después de 6 meses usándolo, esto es lo que más me ha gustado:
 
+- Lo primero que vas a notar es que el tiempo de implementación de las charts baja bastante. Por ejemplo, donde trabajo hemos notado una mejora de 15 a 30 minutos comparado con lo que usábamos antes, que era `Landscaper`, ahora obsoleto. Te dejo el [repositorio](https://github.com/Eneco/landscaper) por si te interesa.
 
-- Otra cosa que he notado es que gracias a helmfile tengo la posibilidad de tener toda la configuration de diferentes entornos en un mismo sitio. Cuando estoy trabajando con minikube y le indico que me implemente las chart con los valores que tiene para minukube lo hace sin rechistar.
+- Otra cosa que me gusta es poder tener toda la configuración de diferentes entornos en el mismo sitio. Cuando trabajo con minikube y le digo que implemente las charts con los valores de minikube lo hace sin rechistar.
 
+- `diff`. Posiblemente lo mejor de todo... es estúpidamente sencillo y te salva más de una cuando estás actualizando charts o cambiando valores y no estás seguro de si la has liado.
 
-- `diff`. Posiblemente esto es lo mejor de todo... es estúpidamente sencillo y te salva más de una vez cuando estás haciendo actualizaciones de charts o estás cambiando valores en la chart y estás seguro si te has cargado algo.
-
-
-- Variables de entorno. Puedes implementar `sops` en helmfile pero el plugin que estaban usando lo han jubilado asi que... me pase al uso de variables de entorno es lo mejor actualmente, ya que puedes tener los valores que tú quieres cuando desarrollas localmente y tener unos valores globales en tu CD/CI software.  Si queréis que hable sobre la implementacion de `SOPS` en helmfile solo decirlo y hare otro post sobre ello.
+- Variables de entorno. Puedes implementar `sops` en helmfile, aunque el plugin que usaban lo han jubilado. Me pasé al uso de variables de entorno, que es lo mejor ahora mismo. Puedes tener los valores que quieres cuando desarrollas localmente y tener unos valores globales en tu software de CI/CD. Si quieres que hable sobre la implementación de `SOPS` en helmfile dímelo y hago otro post.
 
 ## ¿Cómo lo configuro?
 
-La configuración es bastante sencilla. Lo primero de todo es tener un repo para todo esto o en una carpeta si vas a tener lo en un mismo repo con más cosas en él. Yo actualmente lo tengo en un repo exclusivamente para helmfile. Mi esquema del repo es el siguiente:
-
+La configuración es bastante sencilla. Lo primero es tener un repo para todo esto, o una carpeta si lo tienes junto con otras cosas. Yo lo tengo en un repo exclusivamente para helmfile. Mi esquema del repo es el siguiente:
 
 ```shell
 .
@@ -60,10 +54,9 @@ La configuración es bastante sencilla. Lo primero de todo es tener un repo para
         ├── helmfile.yaml
         ├── README.md
         └── values.yaml.gotmpl
-
 ```
 
-Ahora os voy a mostrar lo que tenemos en el principal helmfile.yaml:
+Ahora te muestro lo que tengo en el helmfile.yaml principal:
 
 ```yaml
 {{ readFile "base/templates/helmfile.yaml" }}
@@ -74,9 +67,11 @@ releases:
 
 ```
 
-Como veréis no tengo nada en releases y eso es porque tengo un script que va por todas las carpetas de dentro de releases y me encuentra todo fichero que se llame `helmfile.yaml` y me lo agrega al final del documento. De esa manera nos libramos de tener un fichero de más 200 lineas en el repo y que da más bonito a la hora de leer el fichero y te da más flexibilidad, ya que solo has de crear tu carpeta con la chart que quieres y los valores que tú quieres y listo. Os preguntaréis por qué ha puesto dos readFile ahi arriba. Bueno pues... esta es la manera que encontre de mantener las cosas simples. Ya que en templates puedo crear diferentes templates para los releases y luego decirle a un release tú usa esta y tú usa la otra. Una gozada. Luego también tenemos los repositorios que como todos sabemos para declarar un repositorio en helmfile tenemos que tener dos lineas, esto quiere decir que tendríamos dos lineas más de fichero tontamente, pues mejor es tenerlo en otro fichero no? asi todo queda más limpio. A continuación os mostraré un ejemplo de los ficheros, estar atengo que uno lleva sorpresa.
+Como ves no tengo nada en releases. Eso es porque tengo un script que va por todas las carpetas de releases, encuentra todos los ficheros `helmfile.yaml` y los añade al final del documento. Asi me libro de tener un fichero de más de 200 líneas y queda más limpio. Solo tienes que crear tu carpeta con la chart que quieres y los valores que necesitas.
 
-Empezamos por el más sencillo de todo que es el de los repositorios. 
+Los dos `readFile` de arriba son mi forma de mantener las cosas simples. En templates puedo crear diferentes templates para los releases y luego decirle a cada release cuál usar. Y los repositorios, pues mejor en un fichero separado que tener dos líneas extra por repositorio en el fichero principal.
+
+Empezamos por el más sencillo, el de repositorios:
 
 ```yaml
 repositories:
@@ -86,12 +81,13 @@ repositories:
     url: grafana https://grafana.github.io/helm-charts
 ```
 
-A continuacion tenemos en de la template
+A continuación el de la template:
+
 ```yaml
 bases:
   - base/defaults/helmfile.yaml
   - base/environments/helmfile.yaml
-  
+
 templates:
   defaultTmpl: &defaultTmpl
     missingFileHandler: Warn
@@ -100,16 +96,17 @@ templates:
       - releases/{{ .Release.Name }}/values.yaml.gotmpl
 ```
 
-Como podéis ver lleva sorpresa no solo tenemos templates tenemos la section base ahi. La verdad es que esto si queremos podríamos agregar otro fichero y poner otro `readFile` esto ya fue a mi gusto, ya que cuando estaba haciendo la template quería agregar la base, por lo que pensé que deberían ir juntos.
+Como puedes ver lleva sorpresa — no solo tenemos templates sino también la sección base. Podría haberla puesto en otro fichero con otro `readFile`, pero quise que fueran juntas.
 
-Ahora pasamos a la parte de los defaults
+Los defaults:
+
 ```yaml
 helmDefaults:
   wait: true
   timeout: 300
 ```
 
-Ahora vamos a irnos a mirar nuestro `environments.yaml`. Como podéis ver, declaramos los dos entornos que tenemos y luego añadimos los valores atraves de un fichero. En este fichero le estamos indicando cuales charts queremos implementar en el entorno.
+Y el `environments.yaml`. Aquí declaramos los dos entornos que tenemos y añadimos los valores a través de un fichero. En ese fichero le decimos qué charts queremos instalar en cada entorno:
 
 ```yaml
 environments:
@@ -121,7 +118,7 @@ environments:
       - base/values/minikube/values.yaml.gotmp
 ```
 
-Os dejo también un ejemplo de esto. He de comentar que este es un buen lugar para agregar variables globales para el entorno no solo para decirle que es lo que quieres instalar y lo que no.
+Un ejemplo de ese fichero de valores. También es un buen sitio para añadir variables globales del entorno:
 
 ```yaml
 prometheus:
@@ -130,7 +127,7 @@ grafana:
   installed: true
 ```
 
-A continuación vais a ver el `helmfile.yaml` que tengo para grafana. Es de lo más sencillo, ya que llamo a la template en el principio del release y luego agrego los datos para el release, además como veréis tenemos el campo `installed` que de esta manera le digo si lo quiero instalar o no y también tengo otro campo para decirle que no lo quiero implementar hasta que la lista de charts esté implementada
+Y aquí el `helmfile.yaml` de grafana. Lo más sencillo del mundo: llamo a la template al principio y luego añado los datos del release. El campo `installed` me dice si lo quiero instalar o no, y `needs` le dice que no lo implemente hasta que la lista de charts esté lista:
 
 ```yaml
 - <<: *defaultTmpl
@@ -139,26 +136,25 @@ A continuación vais a ver el `helmfile.yaml` que tengo para grafana. Es de lo m
   namespace: "monitoring"
   version: "3.2.5"
   installed: {{ .Values | getOrNil "grafana.installed" | default false }}
-  needs: 
+  needs:
     - observability/fluentd
     - observability/prometheus
     - operators/jaeger-operator
 ```
 
-Y con esto hemos terminado la configuración de helmfile.
+## Cómo usarlo
 
-## Como Usar Helmfile
-
-Helmfile es muy sencillo a la hora de user vamos alli a donde tengáis un helmfile.yaml y yo os recomiendo ejecutar el siguiente comando:
+Es lo más sencillo de todo este post. Ve a donde tengas el helmfile.yaml y ejecuta:
 
 ```shell
-helmfile -e minikube apply 
+helmfile -e minikube apply
 ```
-Tenéis más comandos para el uso de helmfile. Yo suelo usar bastante `tempalte` y `diff`.
 
-Tenéis que poner siempre en entorno al que queréis implementar las charts por eso siempre que ejecutéis el comando tenéis que poner `-e` seguido del entorno al que vais a mandarlo, eso si, lo tenéis que tener puesto en la lista que tengáis en el fichero de entornos.
+Hay más comandos. Yo suelo usar bastante `template` y `diff`.
 
-Para terminar voy a mostraros el script que uso para buscar y agregar los ficheros al fichero principal
+Siempre tienes que poner el entorno al que quieres implementar las charts con `-e` seguido del nombre, eso sí, tiene que estar en tu fichero de entornos.
+
+Para terminar, el script que uso para buscar y añadir los ficheros al fichero principal:
 
 ```shell
 #!/bin/bash
@@ -171,6 +167,6 @@ for release in `find releases/ -name "*.yaml"`; do
 done
 ```
 
-Si queréis ver todas los ficheros juntos y como esto funciona todo junto os dejo todo en este [repo](https://github.com/jorgeancal/helmfile-schema). Y esto ha sido todo senores, espero que os haya gustado y nos leemos en el próximo.
+Si quieres ver todos los ficheros juntos te dejo todo en este [repo](https://github.com/jorgeancal/helmfile-schema).
 
-
+Espero que te haya sido útil. Talogo!

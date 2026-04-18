@@ -1,19 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>K3s on Jorge&#39;s notebook</title>
-    <link>https://jorgesnotebook.com/tags/k3s/</link>
-    <description>Recent content in K3s on Jorge&#39;s notebook</description>
-    <generator>Hugo</generator>
-    <language>en</language>
-    <lastBuildDate>Tue, 15 Aug 2023 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://jorgesnotebook.com/tags/k3s/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Create your own cluster with k3s</title>
-      <link>https://jorgesnotebook.com/posts/how-to-create-a-k8s-homelab-with-k3s/</link>
-      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>https://jorgesnotebook.com/posts/how-to-create-a-k8s-homelab-with-k3s/</guid>
-      <description>&lt;p&gt;For a long time, I&amp;rsquo;ve been trying to achieve a better configuration in my home lab.&#xA;Since I have been working with Kubernetes (k8s) for an extended period of time,&#xA;I have always desired an overkill configuration with multiple nodes for high availability.&#xA;However, looking at the costs related to running such a setup, I got depressed.&#xA;I then explored alternatives and came to the conclusion&amp;hellip; Raspberry Pis!&#xA;I bought 6 Raspberry Pis and said which one should I use k0s, k3s or some other lightweight k8s?&#xA;Then I said let&amp;rsquo;s go for k3s, it seems easier :D So the Raspberry Pis arrived but&amp;hellip;&#xA;I moved house then my Raspberries went missing in one of the boxes&amp;hellip;&#xA;Three months later, I stumbled upon them again amidst my collection of belongings –&#xA;I tend to accumulate a lot of stuff – and by this point, I had changed jobs, moved again,&#xA;and dealt with more complications&amp;hellip;&#xA;So after 2 years, here we are again&amp;hellip; looking again at this project&amp;hellip; so I will trust my old me&#xA;saying the k3s is the best thing that I could use&amp;hellip; So let&amp;rsquo;s look at the hardware that I have&amp;hellip;&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>K3s on Jorge's notebook</title><link>https://jorgesnotebook.com/tags/k3s/</link><description>Recent content in K3s on Jorge's notebook</description><generator>Hugo</generator><language>en-GB</language><lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/tags/k3s/index.xml" rel="self" type="application/rss+xml"/><item><title>Building a Production-Grade k3s Homelab: HA, Cilium, and MetalLB</title><link>https://jorgesnotebook.com/posts/how-to-create-a-k8s-homelab-with-k3s/</link><pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/posts/how-to-create-a-k8s-homelab-with-k3s/</guid><description>&lt;p&gt;For a long time, I&amp;rsquo;ve been trying to achieve a better configuration in my home lab.
+Since I have been working with Kubernetes (k8s) for an extended period of time,
+I have always desired an overkill configuration with multiple nodes for high availability.
+However, looking at the costs related to running such a setup, I got depressed.
+I then explored alternatives and came to the conclusion&amp;hellip; Raspberry Pis!
+I bought 6 Raspberry Pis and said which one should I use k0s, k3s or some other lightweight k8s?
+Then I said let&amp;rsquo;s go for k3s, it seems easier :D So the Raspberry Pis arrived but&amp;hellip;
+I moved house then my Raspberries went missing in one of the boxes&amp;hellip;
+Three months later, I stumbled upon them again amidst my collection of belongings –
+I tend to accumulate a lot of stuff – and by this point, I had changed jobs, moved again,
+and dealt with more complications&amp;hellip;
+So after 2 years, here we are again&amp;hellip; looking again at this project&amp;hellip; so I will trust my old me
+saying the k3s is the best thing that I could use&amp;hellip; So let&amp;rsquo;s look at the hardware that I have&amp;hellip;&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,22 @@
+{{ $bookTranslatedOnly := default false .Site.Params.BookTranslatedOnly }}
+{{ $translations := dict }}
+{{ if (eq $bookTranslatedOnly false) }}
+  {{ range .Site.Home.Translations }}
+    {{ $translations = merge $translations (dict .Language.Lang .) }}
+  {{ end }}
+{{ end }}
+{{ range .Translations }}
+  {{ $translations = merge $translations (dict .Language.Lang .) }}
+{{ end }}
+
+<div class="nb-lang-switcher">
+  {{ range hugo.Sites }}
+    {{ if eq .Language.Lang $.Site.Language.Lang }}
+      <span class="nb-lang nb-lang-active">{{ .Language.LanguageName }}</span>
+    {{ else }}
+      {{ with index $translations .Language.Lang }}
+        <a class="nb-lang" href="{{ cond hugo.IsMultihost .Permalink .RelPermalink }}">{{ .Language.LanguageName }}</a>
+      {{ end }}
+    {{ end }}
+  {{ end }}
+</div>

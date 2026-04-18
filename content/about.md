@@ -1,14 +1,38 @@
 ---
 title: "About"
-description: "Just something about the Website."
+description: "Staff Site Reliability Engineer with 13 years of experience building scalable platforms."
 type: doc
 ---
-Hi,
 
-I am Jorge Andreu Calatayud and this is my notebook.
+## Jorge Andreu Calatayud
 
-This is my new project. 
+**Staff Site Reliability Engineer** · Shropshire, UK
 
-In this blog, I’ll post about my knowledge and some things that I discover while I'm working. I won’t post everyday because that’s impossible. I'll try to post once per week or at least once per month. If you like my posts, stay tuned because I'm starting a Youtube channel. Guess what it's going to be called?...Jorge's NoteBook!. 
+13 years of experience designing and operating scalable infrastructure. I work at the intersection of platform engineering, reliability, and developer experience — building the systems that let product teams move fast without breaking things.
 
-See you soon.
+---
+
+### What I work on
+
+- **Kubernetes & Platform Engineering** — multi-tenant clusters, GitOps workflows, admission controllers, operator design
+- **Observability** — OpenTelemetry pipelines, distributed tracing, cost-aware metrics collection, log aggregation
+- **Security & Secrets Management** — SOPS, Vault, secrets rotation at scale, RBAC design, IP allowlisting
+- **Infrastructure & Networking** — Traefik, MetalLB, Cilium, AWS, service mesh
+
+---
+
+### Stack
+
+`Kubernetes` `Helm` `Helmfile` `SOPS` `Traefik` `KEDA` `OpenTelemetry` `Prometheus` `Grafana` `AWS` `Cilium` `k3s` `ArgoCD` `Terraform`
+
+---
+
+### Links
+
+- [GitHub — jorgeancal](https://github.com/jorgeancal)
+- [CV — jorgeancal.com](https://jorgeancal.com)
+- Email: [contact@jorgeancal.com](mailto:contact@jorgeancal.com)
+
+---
+
+This notebook documents real-world engineering problems and how I solve them — not step-by-step tutorials, but the reasoning, trade-offs, and lessons from operating systems in production.

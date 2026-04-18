@@ -3,30 +3,32 @@ title= "Como configurar SOPS en Helmfile"
 date= "2021-02-28"
 comments = true
 categories = ["Helm", "kubernetes", "How to"]
-description = "Te explicare como implementar sops en Helmfile de una manera rapida y sencilla."
+description = "Te explico cómo implementar SOPS en Helmfile de una manera rápida y sencilla."
 author = "Jorge Andreu Calatayud"
 tags= ["helm", "helmcharts", "sops","kubernetes", "helmfile", "cluster", "helm-secrets", "secrets"]
 +++
 
-Como veíamos por encima en nuestro anterior post sobre helmfile podemos tener un fichero en nuestro repo que este encriptado mediante sops y tener ahi las variables para usar en nuestra chart mediante Helmfile.
+Como veíamos por encima en el post anterior sobre helmfile, puedes tener un fichero en tu repo encriptado con SOPS y tener ahi las variables para usar en tu chart mediante Helmfile.
 
-## ¿Qué es Sops?
-Si nos vamos a si [proyecto](https://github.com/mozilla/sops) veremos que Mozilla define SOPS como un editor de archivos cifrados que admite los formatos YAML, JSON, ENV, INI y BINARY. Además de soportar el cifrado de estos mediante los cifrados AWS KMS, GCP KMS, Azure Key Vault y PGP. 
+## ¿Qué es SOPS?
+
+Si vas al [proyecto](https://github.com/mozilla/sops) verás que Mozilla define SOPS como un editor de ficheros cifrados que soporta los formatos YAML, JSON, ENV, INI y BINARY, y que cifra con AWS KMS, GCP KMS, Azure Key Vault y PGP.
 
 ## ¿Cómo implementarlo?
 
-Como muchos sabréis, en esta vida todo se basa en plugins...y como Helm nos deja instalar diferentes plugins solo hemos de encontrar el plugin perfecto y en este caso hay uno llamado `helm-sercrets`. Si buscamos este plugin en [Helm Community](https://helm.sh/docs/community/related/#helm-plugins) vemos que ellos recomiendan  [jkroepke/helm-secrets](https://github.com/jkroepke/helm-secrets) que este es un fork de [zendesk/helm-secrets](https://github.com/zendesk/helm-secrets) pero este ultimo ha sido abandonado...
+Como todos sabemos, en esta vida todo se basa en plugins... y como Helm te deja instalar diferentes plugins solo tienes que encontrar el correcto. En este caso hay uno llamado `helm-secrets`. Si lo buscas en [Helm Community](https://helm.sh/docs/community/related/#helm-plugins) ves que recomiendan [jkroepke/helm-secrets](https://github.com/jkroepke/helm-secrets), que es un fork de [zendesk/helm-secrets](https://github.com/zendesk/helm-secrets) porque este último fue abandonado.
 
-He de decir que cuando empece a mirar este plugin fue a mediados del 2020 que para aquel entonces no estaba obsoleto. Por suerte no ha cambiado mucho su utilización y sigue siendo rápida y sencilla.
+He de decir que cuando empecé a mirar este plugin era a mediados del 2020 y para entonces no estaba obsoleto. Por suerte tampoco ha cambiado mucho y sigue siendo rápido y sencillo de usar.
 
-Lo primero de todo hemos de instalar las dependecias del plugin y esta es instalar SOPS. Si mal no recuerdo si tienes Ubuntu o Debian se instala solo cuando instalar el plugin pero aqui un servidor usa ArchLinux y ha de instalarlo manualmente. Yo os recomiendo que lo instaleis manualmente que no cuesta nada solo habeis de ir a los [releases](https://github.com/mozilla/sops/releases) del repo e instalar.
+Lo primero es instalar las dependencias del plugin, que básicamente es SOPS. Si mal no recuerdo en Ubuntu o Debian se instala solo cuando instalas el plugin, pero aquí un servidor usa ArchLinux y lo ha de instalar manualmente. Te recomiendo que lo instales manualmente, que no cuesta nada, solo tienes que ir a los [releases](https://github.com/mozilla/sops/releases) del repo e instalarlo.
 
-Una vez que lo habéis instalado ejecutáis el siguiente comando para instalar el plugin siendo `${HELM_SECRERS_VERSION}` la última version stable del plugin.
+Una vez instalado, ejecutas el siguiente comando para instalar el plugin siendo `${HELM_SECRERS_VERSION}` la última versión stable:
+
 ```bash
 helm plugin install https://github.com/jkroepke/helm-secrets --version ${HELM_SECRERS_VERSION}
 ```
 
-Una vez que tenéis esto solo habéis de ir a vuestra carpeta de helmfile y crear el siguiente fichero llamado `.sops.yaml`, por puesto teneis que elegir una de las tres opciones he de decir que está permitido tener multiples KSM y PGP keys.
+Con eso listo, ve a tu carpeta de helmfile y crea el fichero `.sops.yaml`. Tienes que elegir una de las tres opciones, aunque está permitido tener múltiples KMS y PGP keys:
 
 ```yaml
 creation_rules:
@@ -42,7 +44,7 @@ creation_rules:
   # For more help look at https://github.com/mozilla/sops
 ```
 
-Ahora ya solo os queda agregar el campo `secrets:` en vuestro fichero del release y listo. Os quedaría una cosa asi:
+Ahora solo tienes que añadir el campo `secrets:` en tu fichero del release y listo:
 
 ```yaml
 - <<: *defaultTmpl
@@ -51,7 +53,7 @@ Ahora ya solo os queda agregar el campo `secrets:` en vuestro fichero del releas
   namespace: "monitoring"
   version: "3.2.5"
   installed: {{ .Values | getOrNil "grafana.installed" | default false }}
-  needs: 
+  needs:
     - observability/fluentd
     - observability/prometheus
     - operators/jaeger-operator
@@ -59,14 +61,16 @@ Ahora ya solo os queda agregar el campo `secrets:` en vuestro fichero del releas
     - releases/grafana/secrets.yaml
 ```
 
-## ¿Como usar SOPS como editor de texto?
-Hay muchas formas diferentes de editar los ficheros pero yo te recomendaría que te crearas una variable de entorno y luego vayas a la carpeta donde tienes el dichero y lo abras con el siguiente comando `sops secrets.yaml` y sops se encarga de desencriptarlo y encriptarlo por ti.
+## ¿Cómo usar SOPS para editar los ficheros?
 
-Yo por ejemplo uso SOPS con KMS ARN por lo que tengo una variable de entorno llamada `SOPS_KMS_ARN` ejemplo:
+Hay varias formas de editar los ficheros pero yo te recomendaría que te crearas una variable de entorno, vayas a la carpeta donde tienes el fichero y lo abras con `sops secrets.yaml`. SOPS se encarga de desencriptarlo y encriptarlo por ti.
+
+Yo por ejemplo uso SOPS con AWS KMS, asi que tengo la variable de entorno `SOPS_KMS_ARN`:
 
 ```
 export SOPS_KMS_ARN=arn:aws:kms:eu-west-1:222222222222:key/111b1c11-1c11-1fd1-aa11-a1c1a1sa1dsl1
-``` 
+```
 
+Y eso es todo.
 
-Esto ha sido todo! Nos leemos!
+Espero que te haya sido útil. Talogo!

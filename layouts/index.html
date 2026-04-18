@@ -1,0 +1,46 @@
+{{ define "main" }}
+
+<div class="nb-hero">
+  <h1 class="nb-hero-name">Jorge Andreu</h1>
+  <div class="nb-hero-badge">Staff Site Reliability Engineer</div>
+  <p class="nb-hero-desc">
+    Building and operating scalable platforms. Writing about Kubernetes, Observability,
+    Platform Engineering, and real-world SRE problems — from production, not tutorials.
+  </p>
+  <div class="nb-hero-links">
+    <a class="nb-btn" href="https://github.com/jorgeancal" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a class="nb-btn nb-btn-outline" href="{{ "about/" | relLangURL }}">About</a>
+    <a class="nb-btn nb-btn-outline" href="https://jorgeancal.com" target="_blank" rel="noopener noreferrer">CV</a>
+  </div>
+</div>
+
+{{ $featured := where (where .Site.RegularPages "Section" "posts") "Params.featured" true }}
+{{ if $featured }}
+<section class="nb-section">
+  <h2 class="nb-section-title">Featured</h2>
+  <div class="nb-post-grid">
+    {{ range first 3 $featured }}
+    <a class="nb-post-card" href="{{ .Permalink }}">
+      <div class="nb-post-meta">{{ .Date.Format "Jan 2, 2006" }}{{ with .Params.categories }} · {{ index . 0 }}{{ end }}</div>
+      <h3 class="nb-post-title">{{ .Title }}</h3>
+      {{ with .Description }}<p class="nb-post-desc">{{ . }}</p>{{ end }}
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+
+<section class="nb-section">
+  <h2 class="nb-section-title">All Posts</h2>
+  {{ range where .Site.RegularPages.ByDate.Reverse "Section" "posts" }}
+  <article class="nb-list-item">
+    <span class="nb-list-meta">{{ .Date.Format "Jan 2, 2006" }}</span>
+    <div class="nb-list-body">
+      <a class="nb-list-title" href="{{ .Permalink }}">{{ .Title }}</a>
+      {{ with .Description }}<p class="nb-list-desc">{{ . }}</p>{{ end }}
+    </div>
+  </article>
+  {{ end }}
+</section>
+
+{{ end }}

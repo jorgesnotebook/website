@@ -1,19 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Spring Boot 2.0 on Jorge&#39;s notebook</title>
-    <link>https://jorgesnotebook.com/tags/spring-boot-2.0/</link>
-    <description>Recent content in Spring Boot 2.0 on Jorge&#39;s notebook</description>
-    <generator>Hugo</generator>
-    <language>en</language>
-    <lastBuildDate>Thu, 23 Jan 2020 23:10:39 +0000</lastBuildDate>
-    <atom:link href="https://jorgesnotebook.com/tags/spring-boot-2.0/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Starting with Spring Boot</title>
-      <link>https://jorgesnotebook.com/posts/starting-with-spring-boot/</link>
-      <pubDate>Thu, 23 Jan 2020 23:10:39 +0000</pubDate>
-      <guid>https://jorgesnotebook.com/posts/starting-with-spring-boot/</guid>
-      <description>&lt;p&gt;In this post we’re going to have different sections, in the first one, as in all beginner courses, we’re going to define Spring, learn how to create a project with Spring Boot and learn what the meaning of the basic class which Spring gives you when you start a project is.&lt;/p&gt;&#xA;&lt;h2 id=&#34;whats-spring&#34;&gt;&#xA;  What’s Spring?&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#whats-spring&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;If you stop someone on the street and ask them about it, they are going to tell you that Spring is a season of the year, but that’s not the meaning that we want. Spring in IT is an open source framework  for Java Platforms which was created by Roderick “Rod” Johnson. This framework is lightweight because it has a modular philosophy, I mean if you have a base and you add the different modules when you need them or when the application is getting bigger. This framework is really popular because of it’s simplicity, loose coupling and testability.&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Spring Boot 2.0 on Jorge's notebook</title><link>https://jorgesnotebook.com/tags/spring-boot-2.0/</link><description>Recent content in Spring Boot 2.0 on Jorge's notebook</description><generator>Hugo</generator><language>en-GB</language><lastBuildDate>Thu, 23 Jan 2020 23:10:39 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/tags/spring-boot-2.0/index.xml" rel="self" type="application/rss+xml"/><item><title>Starting with Spring Boot</title><link>https://jorgesnotebook.com/posts/starting-with-spring-boot/</link><pubDate>Thu, 23 Jan 2020 23:10:39 +0000</pubDate><guid>https://jorgesnotebook.com/posts/starting-with-spring-boot/</guid><description>&lt;p&gt;In this post we’re going to have different sections, in the first one, as in all beginner courses, we’re going to define Spring, learn how to create a project with Spring Boot and learn what the meaning of the basic class which Spring gives you when you start a project is.&lt;/p&gt;
+&lt;h2 id="whats-spring"&gt;
+ What’s Spring?
+ &lt;a class="anchor" href="#whats-spring"&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;If you stop someone on the street and ask them about it, they are going to tell you that Spring is a season of the year, but that’s not the meaning that we want. Spring in IT is an open source framework for Java Platforms which was created by Roderick “Rod” Johnson. This framework is lightweight because it has a modular philosophy, I mean if you have a base and you add the different modules when you need them or when the application is getting bigger. This framework is really popular because of it’s simplicity, loose coupling and testability.&lt;/p&gt;</description></item></channel></rss>

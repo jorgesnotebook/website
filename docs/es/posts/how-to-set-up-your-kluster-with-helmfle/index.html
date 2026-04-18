@@ -1,526 +1,96 @@
-<!DOCTYPE html>
-<html lang="es" dir="ltr">
-<head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Echamos un vistazo atrás de cómo se ha portado helmfile después de 6 meses usando helmfile en el trabajo y mostramos a cómo configurarlo.">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
-<meta name="color-scheme" content="light dark"><meta property="og:url" content="https://jorgesnotebook.com/es/posts/how-to-set-up-your-kluster-with-helmfle/">
-  <meta property="og:site_name" content="Jorge&#39;s notebook">
-  <meta property="og:title" content="Configurar tu kluster con Helmfile">
-  <meta property="og:description" content="Echamos un vistazo atrás de cómo se ha portado helmfile después de 6 meses usando helmfile en el trabajo y mostramos a cómo configurarlo.">
-  <meta property="og:locale" content="es">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2021-01-30T00:00:00+00:00">
-    <meta property="article:modified_time" content="2021-01-30T00:00:00+00:00">
-    <meta property="article:tag" content="Helm">
-    <meta property="article:tag" content="Helmcharts">
-    <meta property="article:tag" content="Kubernetes">
-    <meta property="article:tag" content="Helmfile">
-    <meta property="article:tag" content="Cluster">
-<title>Configurar tu kluster con Helmfile | Jorge&#39;s notebook</title>
-<link rel="icon" href="/favicon-notebook.png" >
-<link rel="manifest" href="/manifest.json">
-<link rel="canonical" href="https://jorgesnotebook.com/es/posts/how-to-set-up-your-kluster-with-helmfle/">
-  <link rel="alternate" hreflang="en" href="https://jorgesnotebook.com/posts/how-to-set-up-your-kluster-with-helmfle/" title="How to set up your kluster with helmfile">
-<link rel="stylesheet" href="/book.min.434035e7885c7f5d12818bd9f111cf1a0925c6fb78382667381c3d5eda3fb4f1.css" integrity="sha256-Q0A154hcf10SgYvZ8RHPGgklxvt4OCZnOBw9Xto/tPE=" crossorigin="anonymous">
-  <script defer src="/fuse.min.js"></script>
-  <script defer src="/es.search.min.dc4bf8e4f51007d0578a7d46c530caabac2a837dd086e23b3704439c77e1ab34.js" integrity="sha256-3Ev45PUQB9BXin1GxTDKq6wqg33QhuI7NwRDnHfhqzQ=" crossorigin="anonymous"></script>
-
-  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
-
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X0MZZJXFN"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-5X0MZZJXFN');
-        }
-      </script><!--
-Made with Book Theme
-https://github.com/alex-shpak/hugo-book
--->
-  
-</head>
-<body dir="ltr">
-  <input type="checkbox" class="hidden toggle" id="menu-control" />
-  <input type="checkbox" class="hidden toggle" id="toc-control" />
-  <main class="container flex">
-    <aside class="book-menu">
-      <div class="book-menu-content">
-        
-  <nav>
-<h2 class="book-brand">
-  <a class="flex align-center" href="/"><img src="/favicon.svg" alt="Logo" class="book-icon" /><span>Jorge&#39;s notebook</span>
-  </a>
-</h2>
-
-
-<div class="book-search hidden">
-  <input type="text" id="book-search-input" placeholder="Buscar" aria-label="Buscar" maxlength="64" data-hotkeys="s/" />
-  <div class="book-search-spinner hidden"></div>
-  <ul id="book-search-results"></ul>
-</div>
-<script>document.querySelector(".book-search").classList.remove("hidden")</script>
-
-
-
-  
-
-
-
-  
-    
-  
-
-
-  
-
-
-<ul class="book-languages">
-  <li>
-    <input type="checkbox" id="languages" class="toggle" />
-    <label for="languages" class="flex justify-between">
-      <a role="button" class="flex align-center">
-        <img src="/svg/translate.svg" class="book-icon" alt="Languages" />
-        Castellano
-      </a>
-    </label>
-
-    <ul>
-      
-      <li>
-        <a href="/posts/how-to-set-up-your-kluster-with-helmfle/">
-          English
-        </a>
-      </li>
-      
-    </ul>
-  </li>
-</ul>
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-  
-  <ul>
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <span>Posts</span>
-  
-
-          
-  <ul>
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/es/posts/how-to-implement-sops-helmfile/" class="">Como configurar SOPS en Helmfile</a>
-  
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/es/posts/how-to-set-up-your-kluster-with-helmfle/" class="active">Configurar tu kluster con Helmfile</a>
-  
-
-        </li>
-      
-    
-  </ul>
-
-        </li>
-      
-    
-      
-        <li>
-          
-  
-  
-
-  
-    <a href="/es/about/" class="">About</a>
-  
-
-        </li>
-      
-    
-  </ul>
-
-
-
-
-
-
-
-
-
-
-  
-<ul>
-  
-  <li>
-    <a href="https://github.com/jorgeancal/"  target="_blank" rel="noopener">
-        Github
-      </a>
-  </li>
-  
-</ul>
-
-
-
-
-
-
-</nav>
-
-
-
-
-  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
-
-
- 
-      </div>
-    </aside>
-
-    <div class="book-page">
-      <header class="book-header">
-        
-  <div class="flex align-center justify-between">
-  <label for="menu-control">
-    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
-  </label>
-
-  <h3>Configurar tu kluster con Helmfile</h3>
-
-  <label for="toc-control">
-    
-    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
-    
-  </label>
-</div>
-
-
-  
-  <aside class="hidden clearfix">
-    
-  
-<nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#cómo-se-ha-portado-helmfile">¿Cómo se ha portado helmfile?</a></li>
-        <li><a href="#qué-me-ha-gustado-de-helmfile">¿Qué me ha gustado de helmfile?</a></li>
-        <li><a href="#cómo-lo-configuro">¿Cómo lo configuro?</a></li>
-        <li><a href="#como-usar-helmfile">Como Usar Helmfile</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-
-
-
-  </aside>
-  
- 
-      </header>
-
-      
-      
-<article class="markdown book-post">
-  <h2>
-    Configurar tu kluster con Helmfile
-  </h2>
-  
-  <div class="flex align-center text-small book-post-date">
-    <img src="/svg/calendar.svg" class="book-icon " alt="" />
-    <span>enero 30, 2021</span>
-  </div>
-
-
-
-  
-  <div class="text-small">
-    
-      <a href="/es/categories/helm/">Helm</a>, 
-      <a href="/es/categories/kubernetes/">Kubernetes</a>, 
-      <a href="/es/categories/how-to/">How To</a>, 
-      <a href="/es/categories/helmfile/">Helmfile</a>
-  </div>
-  
-
-  
-  <div class="text-small">
-    
-      <a href="/es/tags/helm/">Helm</a>, 
-      <a href="/es/tags/helmcharts/">Helmcharts</a>, 
-      <a href="/es/tags/kubernetes/">Kubernetes</a>, 
-      <a href="/es/tags/helmfile/">Helmfile</a>, 
-      <a href="/es/tags/cluster/">Cluster</a>
-  </div>
-  
-
-
-  <div class="book-post-content"><p>Helmfile es una herramienta que te permite sacar más partido a Helm. Ya que si usas helmfile puedes implementar cualquier cantidad de helmcharts. Básicamente con helmfile declaras las helmcharts y les das los valores que tú quieres a cada una de las helm chart, helmfile creara el correspondiente deploy mediante helm para mandar a tu cluster todo lo que has definido en helmfile, claro esta puedes decirle a helmfile impleméntame solo este grupo de helmchart y de este grupo quiero implementarlas en esta secuencia.</p>
-<h2 id="cómo-se-ha-portado-helmfile">
-  ¿Cómo se ha portado helmfile?
-  <a class="anchor" href="#c%c3%b3mo-se-ha-portado-helmfile">#</a>
-</h2>
-<p>Después de estos 6 meses usando helmfile la verdad es que me ha dado mucha más vida. Si queremos implementar cosas nuevas cosas&hellip;. todo va más rápido.</p>
-<h2 id="qué-me-ha-gustado-de-helmfile">
-  ¿Qué me ha gustado de helmfile?
-  <a class="anchor" href="#qu%c3%a9-me-ha-gustado-de-helmfile">#</a>
-</h2>
-<p>Después estar usando lo un tiempo, esto es lo que más me ha gustado de helmfile:</p>
-<ul>
-<li>
-<p>Lo que más vas a notar usando helmfile es que el tiempo de implementación de las helmchart habrá descendido. Por ejemplo, en donde trabajo hemos notado una mejora de 15~30 minutos comparado a lo que usábamos anteriormente que era <code>Landscaper</code>, actualmente obsoleto. Dejo aquí un enlace al 
-  <a href="https://github.com/Eneco/landscaper">repositorio</a> por si alguien está interesado.</p>
-</li>
-<li>
-<p>Otra cosa que he notado es que gracias a helmfile tengo la posibilidad de tener toda la configuration de diferentes entornos en un mismo sitio. Cuando estoy trabajando con minikube y le indico que me implemente las chart con los valores que tiene para minukube lo hace sin rechistar.</p>
-</li>
-<li>
-<p><code>diff</code>. Posiblemente esto es lo mejor de todo&hellip; es estúpidamente sencillo y te salva más de una vez cuando estás haciendo actualizaciones de charts o estás cambiando valores en la chart y estás seguro si te has cargado algo.</p>
-</li>
-<li>
-<p>Variables de entorno. Puedes implementar <code>sops</code> en helmfile pero el plugin que estaban usando lo han jubilado asi que&hellip; me pase al uso de variables de entorno es lo mejor actualmente, ya que puedes tener los valores que tú quieres cuando desarrollas localmente y tener unos valores globales en tu CD/CI software.  Si queréis que hable sobre la implementacion de <code>SOPS</code> en helmfile solo decirlo y hare otro post sobre ello.</p>
-</li>
-</ul>
-<h2 id="cómo-lo-configuro">
-  ¿Cómo lo configuro?
-  <a class="anchor" href="#c%c3%b3mo-lo-configuro">#</a>
-</h2>
-<p>La configuración es bastante sencilla. Lo primero de todo es tener un repo para todo esto o en una carpeta si vas a tener lo en un mismo repo con más cosas en él. Yo actualmente lo tengo en un repo exclusivamente para helmfile. Mi esquema del repo es el siguiente:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>.
-</span></span><span style="display:flex;"><span>├── addReleases.sh
-</span></span><span style="display:flex;"><span>├── base
-</span></span><span style="display:flex;"><span>│   ├── defaults
-</span></span><span style="display:flex;"><span>│   │   └── helmfile.yaml
-</span></span><span style="display:flex;"><span>|   ├── environments
-</span></span><span style="display:flex;"><span>│   │   └── helmfile.yaml
-</span></span><span style="display:flex;"><span>│   ├── repositories
-</span></span><span style="display:flex;"><span>│   │   └── helmfile.yaml
-</span></span><span style="display:flex;"><span>│   ├── templates
-</span></span><span style="display:flex;"><span>│   │   └── template.yaml
-</span></span><span style="display:flex;"><span>│   └── values
-</span></span><span style="display:flex;"><span>│       ├── minikube
-</span></span><span style="display:flex;"><span>│       │   └── values.yaml.gotmpl
-</span></span><span style="display:flex;"><span>│       └── production
-</span></span><span style="display:flex;"><span>│           └── values.yaml.gotmpl
-</span></span><span style="display:flex;"><span>├── helmfile.yaml
-</span></span><span style="display:flex;"><span>├── README.md
-</span></span><span style="display:flex;"><span>└── releases
-</span></span><span style="display:flex;"><span>    ├── prometheus
-</span></span><span style="display:flex;"><span>    │   ├── helmfile.yaml
-</span></span><span style="display:flex;"><span>    │   ├── README.md
-</span></span><span style="display:flex;"><span>    │   └── values.yaml.gotmpl
-</span></span><span style="display:flex;"><span>    └── grafana
-</span></span><span style="display:flex;"><span>        ├── helmfile.yaml
-</span></span><span style="display:flex;"><span>        ├── README.md
-</span></span><span style="display:flex;"><span>        └── values.yaml.gotmpl
-</span></span></code></pre></div><p>Ahora os voy a mostrar lo que tenemos en el principal helmfile.yaml:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>{{ <span style="color:#ae81ff">readFile &#34;base/templates/helmfile.yaml&#34; }}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>{{ <span style="color:#ae81ff">readFile &#34;base/repositories/helmfile.yaml&#34; }}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">releases</span>:
-</span></span></code></pre></div><p>Como veréis no tengo nada en releases y eso es porque tengo un script que va por todas las carpetas de dentro de releases y me encuentra todo fichero que se llame <code>helmfile.yaml</code> y me lo agrega al final del documento. De esa manera nos libramos de tener un fichero de más 200 lineas en el repo y que da más bonito a la hora de leer el fichero y te da más flexibilidad, ya que solo has de crear tu carpeta con la chart que quieres y los valores que tú quieres y listo. Os preguntaréis por qué ha puesto dos readFile ahi arriba. Bueno pues&hellip; esta es la manera que encontre de mantener las cosas simples. Ya que en templates puedo crear diferentes templates para los releases y luego decirle a un release tú usa esta y tú usa la otra. Una gozada. Luego también tenemos los repositorios que como todos sabemos para declarar un repositorio en helmfile tenemos que tener dos lineas, esto quiere decir que tendríamos dos lineas más de fichero tontamente, pues mejor es tenerlo en otro fichero no? asi todo queda más limpio. A continuación os mostraré un ejemplo de los ficheros, estar atengo que uno lleva sorpresa.</p>
-<p>Empezamos por el más sencillo de todo que es el de los repositorios.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">repositories</span>:
-</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">prometheus-community</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">url</span>: <span style="color:#ae81ff">https://prometheus-community.github.io/helm-charts</span>
-</span></span><span style="display:flex;"><span>  - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">grafana</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">url</span>: <span style="color:#ae81ff">grafana https://grafana.github.io/helm-charts</span>
-</span></span></code></pre></div><p>A continuacion tenemos en de la template</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">bases</span>:
-</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">base/defaults/helmfile.yaml</span>
-</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">base/environments/helmfile.yaml</span>
-</span></span><span style="display:flex;"><span>  
-</span></span><span style="display:flex;"><span><span style="color:#f92672">templates</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">defaultTmpl</span>: <span style="color:#75715e">&amp;defaultTmpl</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">missingFileHandler</span>: <span style="color:#ae81ff">Warn</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">valuesTemplate</span>:
-</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">base/values/{{ .Environment.Name }}/values.yaml.gotmpl</span>
-</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">releases/{{ .Release.Name }}/values.yaml.gotmpl</span>
-</span></span></code></pre></div><p>Como podéis ver lleva sorpresa no solo tenemos templates tenemos la section base ahi. La verdad es que esto si queremos podríamos agregar otro fichero y poner otro <code>readFile</code> esto ya fue a mi gusto, ya que cuando estaba haciendo la template quería agregar la base, por lo que pensé que deberían ir juntos.</p>
-<p>Ahora pasamos a la parte de los defaults</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">helmDefaults</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">wait</span>: <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">timeout</span>: <span style="color:#ae81ff">300</span>
-</span></span></code></pre></div><p>Ahora vamos a irnos a mirar nuestro <code>environments.yaml</code>. Como podéis ver, declaramos los dos entornos que tenemos y luego añadimos los valores atraves de un fichero. En este fichero le estamos indicando cuales charts queremos implementar en el entorno.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">environments</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">production</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">values</span>:
-</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">base/values/production/values.yaml.gotmpl</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">minikube</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#f92672">values</span>:
-</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">base/values/minikube/values.yaml.gotmp</span>
-</span></span></code></pre></div><p>Os dejo también un ejemplo de esto. He de comentar que este es un buen lugar para agregar variables globales para el entorno no solo para decirle que es lo que quieres instalar y lo que no.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">prometheus</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">installed</span>: <span style="color:#66d9ef">true</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">grafana</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">installed</span>: <span style="color:#66d9ef">true</span>
-</span></span></code></pre></div><p>A continuación vais a ver el <code>helmfile.yaml</code> que tengo para grafana. Es de lo más sencillo, ya que llamo a la template en el principio del release y luego agrego los datos para el release, además como veréis tenemos el campo <code>installed</code> que de esta manera le digo si lo quiero instalar o no y también tengo otro campo para decirle que no lo quiero implementar hasta que la lista de charts esté implementada</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#f92672">&lt;&lt;</span>: <span style="color:#75715e">*defaultTmpl</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>:  <span style="color:#e6db74">&#34;grafana&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">chart</span>: <span style="color:#e6db74">&#34;grafana/grafana&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">namespace</span>: <span style="color:#e6db74">&#34;monitoring&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">version</span>: <span style="color:#e6db74">&#34;3.2.5&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">installed</span>: {{ <span style="color:#ae81ff">.Values | getOrNil &#34;grafana.installed&#34; | default false }}</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">needs</span>: 
-</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">observability/fluentd</span>
-</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">observability/prometheus</span>
-</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">operators/jaeger-operator</span>
-</span></span></code></pre></div><p>Y con esto hemos terminado la configuración de helmfile.</p>
-<h2 id="como-usar-helmfile">
-  Como Usar Helmfile
-  <a class="anchor" href="#como-usar-helmfile">#</a>
-</h2>
-<p>Helmfile es muy sencillo a la hora de user vamos alli a donde tengáis un helmfile.yaml y yo os recomiendo ejecutar el siguiente comando:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>helmfile -e minikube apply 
-</span></span></code></pre></div><p>Tenéis más comandos para el uso de helmfile. Yo suelo usar bastante <code>tempalte</code> y <code>diff</code>.</p>
-<p>Tenéis que poner siempre en entorno al que queréis implementar las charts por eso siempre que ejecutéis el comando tenéis que poner <code>-e</code> seguido del entorno al que vais a mandarlo, eso si, lo tenéis que tener puesto en la lista que tengáis en el fichero de entornos.</p>
-<p>Para terminar voy a mostraros el script que uso para buscar y agregar los ficheros al fichero principal</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> release in <span style="color:#e6db74">`</span>find releases/ -name <span style="color:#e6db74">&#34;*.yaml&#34;</span><span style="color:#e6db74">`</span>; <span style="color:#66d9ef">do</span>
-</span></span><span style="display:flex;"><span>    release_name<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>cat $release | grep <span style="color:#e6db74">&#34;name: &#34;</span> | cut -d<span style="color:#e6db74">&#39; &#39;</span> -f2-<span style="color:#66d9ef">)</span>
-</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;Templating  </span>$release<span style="color:#e6db74">&#34;</span>
-</span></span><span style="display:flex;"><span>    cat $release | sed <span style="color:#e6db74">&#39;s/\(.*\)/  \1/&#39;</span> &gt;&gt; helmfile.yaml
-</span></span><span style="display:flex;"><span>    echo &gt;&gt; helmfile.yaml
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
-</span></span></code></pre></div><p>Si queréis ver todas los ficheros juntos y como esto funciona todo junto os dejo todo en este 
-  <a href="https://github.com/jorgeancal/helmfile-schema">repo</a>. Y esto ha sido todo senores, espero que os haya gustado y nos leemos en el próximo.</p>
-</div>
-</article>
- 
-      
-
-      <footer class="book-footer">
-        
-  <div class="flex flex-wrap justify-between">
-
-
-
-
-
-</div>
-
-
-
-  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
-
-
- 
-        
-      </footer>
-
-      
-  
-  <div class="book-comments">
-<div id="disqus_thread"></div>
-<script>
-    window.disqus_config = function () {
-    
-    
-    
-    };
-    (function() {
-        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
-            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
-            return;
-        }
-        var d = document, s = d.createElement('script'); s.async = true;
-        s.src = '//' + "jorgesnotebook" + '.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-    })();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-</div>
-  
- 
-
-      <label for="menu-control" class="hidden book-menu-overlay"></label>
-    </div>
-
-    
-    <aside class="book-toc">
-      <div class="book-toc-content">
-        
-  
-<nav id="TableOfContents">
-  <ul>
-    <li>
-      <ul>
-        <li><a href="#cómo-se-ha-portado-helmfile">¿Cómo se ha portado helmfile?</a></li>
-        <li><a href="#qué-me-ha-gustado-de-helmfile">¿Qué me ha gustado de helmfile?</a></li>
-        <li><a href="#cómo-lo-configuro">¿Cómo lo configuro?</a></li>
-        <li><a href="#como-usar-helmfile">Como Usar Helmfile</a></li>
-      </ul>
-    </li>
-  </ul>
-</nav>
-
-
- 
-      </div>
-    </aside>
-    
-  </main>
-
-  
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
+<!doctype html><html lang=es dir=ltr><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Cómo configuro helmfile después de 6 meses usándolo. No es la solución perfecta, pero es la mía y funciona."><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#343a40"><meta name=color-scheme content="light dark"><meta property="og:url" content="https://jorgesnotebook.com/es/posts/how-to-set-up-your-kluster-with-helmfle/"><meta property="og:site_name" content="Jorge's notebook"><meta property="og:title" content="Configurar tu kluster con Helmfile"><meta property="og:description" content="Cómo configuro helmfile después de 6 meses usándolo. No es la solución perfecta, pero es la mía y funciona."><meta property="og:locale" content="es"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-01-30T00:00:00+00:00"><meta property="article:modified_time" content="2021-01-30T00:00:00+00:00"><meta property="article:tag" content="Helm"><meta property="article:tag" content="Helmcharts"><meta property="article:tag" content="Kubernetes"><meta property="article:tag" content="Helmfile"><meta property="article:tag" content="Cluster"><title>Configurar tu kluster con Helmfile | Jorge's notebook</title><link rel=icon href=/favicon-32.png><link rel=manifest href=/manifest.json><link rel=canonical href=https://jorgesnotebook.com/es/posts/how-to-set-up-your-kluster-with-helmfle/><link rel=alternate hreflang=en href=https://jorgesnotebook.com/posts/how-to-set-up-your-kluster-with-helmfle/ title="Helmfile: Structuring Kubernetes Releases at Scale"><link rel=stylesheet href=/book.min.c6f0ab8898a9b8e243f0aacc03c73275192bd36dfd0d01e4417d38cbfcafdc42.css integrity="sha256-xvCriJipuOJD8KrMA8cydRkr0239DQHkQX04y/yv3EI=" crossorigin=anonymous><script defer src=/fuse.min.js></script><script defer src=/es.search.min.efd5ea4af6bef61397b5556a633d87eeeb668cae246803aaced67b933f9e5825.js integrity="sha256-79XqSva+9hOXtVVqYz2H7utmjK4kaAOqztZ7kz+eWCU=" crossorigin=anonymous></script><script defer src=/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js integrity="sha256-b2+Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC+NdcPIvZhzk=" crossorigin=anonymous></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-5X0MZZJXFN"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-5X0MZZJXFN")}</script><style>:root{--nb-purple:#7040A0;--nb-purple-light:#9060C0;--nb-purple-dark:#4A2870;--nb-gold:#C9A843;--nb-gold-light:#DFC06A;--nb-gold-dark:#9A7E2E;--nb-bg:#0a0a0f;--nb-bg-card:#111118;--nb-border:#1e1e2a;--nb-text:#9ca3af;--nb-text-light:#e5e7eb;--nb-text-muted:#6b7280;--color-link:var(--nb-purple);--color-visited-link:var(--nb-purple-dark)}@media(prefers-color-scheme:dark){:root{--body-background:var(--nb-bg);--body-font-color:var(--nb-text);--color-link:var(--nb-purple-light);--color-visited-link:var(--nb-purple);--gray-100:var(--nb-bg-card);--gray-200:var(--nb-border);--gray-500:var(--nb-text-muted)}.book-menu .book-menu-content,.book-search input{background:var(--nb-bg-card)}h1,h2,h3{color:var(--nb-text-light)}a:hover{color:var(--nb-purple-light)}code,pre{background:#0d0d14}.markdown img{filter:brightness(.88)contrast(1.05);border-radius:.25rem}}.nb-lang-switcher{display:flex;align-items:center;gap:.5rem;padding:.75rem 0 .25rem;font-size:.8rem}.nb-lang{color:var(--nb-text-muted);text-decoration:none;transition:color .2s}.nb-lang:hover{color:var(--nb-purple-light)}.nb-lang-active{color:var(--nb-purple);font-weight:700;cursor:default}@media(prefers-color-scheme:dark){.nb-lang-active{color:var(--nb-purple-light)}}.nb-lang-switcher .nb-lang+.nb-lang::before,.nb-lang-switcher .nb-lang-active+.nb-lang::before,.nb-lang-switcher .nb-lang+.nb-lang-active::before{content:"/";margin-right:.5rem;color:var(--nb-text-muted)}::selection{background:var(--nb-purple);color:#fff}::-moz-selection{background:var(--nb-purple);color:#fff}body{font-family:roboto,-apple-system,BlinkMacSystemFont,segoe ui,sans-serif;line-height:1.75}.book-page{max-width:740px}.book-brand img.book-icon{height:2.2rem;width:2.2rem;filter:none!important}.nb-hero{padding:3rem 0 2.5rem;margin-bottom:2.5rem}.nb-hero-name{font-size:2.4rem;font-weight:900;letter-spacing:.05rem;background:linear-gradient(90deg,var(--nb-purple) 0%,var(--nb-gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 .4rem}.nb-hero-badge{font-size:1rem;font-weight:300;color:var(--nb-gold);margin-bottom:1.2rem;letter-spacing:.08rem}.nb-hero-desc{font-size:.95rem;max-width:560px;line-height:1.7;margin-bottom:1.5rem;color:var(--body-font-color)}.nb-hero-links{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem}.nb-btn{display:inline-block;padding:.45rem 1.1rem;border-radius:.35rem;font-size:.85rem;font-weight:600;background:var(--nb-purple);color:#fff!important;text-decoration:none;transition:background .2s}.nb-btn:hover{background:var(--nb-purple-light);color:#fff!important}.nb-btn-outline{background:0 0;border:1px solid var(--nb-purple);color:var(--nb-purple)!important}.nb-btn-outline:hover{background:var(--nb-purple);color:#fff!important}@media(prefers-color-scheme:dark){.nb-btn-outline{border-color:var(--nb-purple-light);color:var(--nb-purple-light)!important}.nb-btn-outline:hover{background:var(--nb-purple-light);color:#fff!important}}.nb-hero-stack{display:flex;flex-wrap:wrap;gap:.4rem}.nb-tag{font-size:.75rem;padding:.2rem .65rem;border-radius:9999px;border:1px solid var(--nb-gold-dark);color:var(--nb-text-muted,#6b7280);background:0 0}@media(prefers-color-scheme:dark){.nb-tag{border-color:var(--nb-gold-dark);color:var(--nb-text-muted);background:rgba(201,168,67,5%)}}.nb-section{margin-bottom:3rem}.nb-section-title{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.12rem;color:var(--nb-purple)!important;border-bottom:2px solid var(--nb-gold-dark);padding-bottom:.5rem;margin-bottom:1.25rem}@media(prefers-color-scheme:dark){.nb-section-title{color:var(--nb-purple-light)!important;border-color:var(--nb-gold-dark)}}.nb-post-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}.nb-post-card{display:block;padding:1.1rem 1.2rem;border:1px solid var(--nb-border,#e9ecef);border-radius:.5rem;text-decoration:none!important;transition:border-color .2s,background .2s;background:0 0}.nb-post-card:hover{border-color:var(--nb-purple);background:rgba(112,64,160,5%)}@media(prefers-color-scheme:dark){.nb-post-card{border-color:var(--nb-border)}.nb-post-card:hover{border-color:var(--nb-purple-light);background:rgba(112,64,160,.1)}}.nb-post-meta{font-size:.72rem;color:var(--nb-text-muted,#6b7280);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05rem}.nb-post-title{font-size:.95rem;font-weight:600;margin:0 0 .5rem;color:var(--body-font-color);line-height:1.4}.nb-post-desc{font-size:.82rem;color:var(--nb-text-muted,#6b7280);margin:0;line-height:1.5}.nb-list-item{display:flex;align-items:flex-start;gap:1.2rem;padding:.85rem 0;border-bottom:1px solid var(--nb-border,#f0f0f0)}@media(prefers-color-scheme:dark){.nb-list-item{border-color:var(--nb-border)}}.nb-list-meta{flex-shrink:0;font-size:.72rem;color:var(--nb-text-muted,#6b7280);padding-top:.2rem;min-width:90px}.nb-list-body{flex:1}.nb-list-title{font-size:.95rem;font-weight:600;color:var(--body-font-color)!important;text-decoration:none;display:block;margin-bottom:.25rem}.nb-list-title:hover{color:var(--nb-purple-light)!important}.nb-list-desc{font-size:.82rem;color:var(--nb-text-muted,#6b7280);margin:0;line-height:1.5}.markdown h1,.markdown h2,.markdown h3{font-weight:700}.markdown h2{border-left:3px solid var(--nb-gold-dark);padding-left:.75rem}.markdown code{font-size:.85em}</style></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
+<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a class="flex align-center" href=/><img src=/main_logo_transparent.png alt=Logo class=book-icon><span>Jorge's notebook</span></a></h2><div class="book-search hidden"><input type=text id=book-search-input placeholder=Buscar aria-label=Buscar maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><script>document.querySelector(".book-search").classList.remove("hidden")</script><div class=nb-lang-switcher><a class=nb-lang href=/posts/how-to-set-up-your-kluster-with-helmfle/>English</a>
+<span class="nb-lang nb-lang-active">Castellano</span></div><ul><li><span>Posts</span><ul><li><a href=/es/posts/designing-otel-pipeline-for-scaling/>Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)</a></li><li><a href=/es/posts/how-to-create-a-k8s-homelab-with-k3s/>Monta tu propio cluster con k3s</a></li><li><a href=/es/posts/how-to-implement-sops-helmfile/>Como configurar SOPS en Helmfile</a></li><li><a href=/es/posts/how-to-set-up-your-kluster-with-helmfle/ class=active>Configurar tu kluster con Helmfile</a></li><li><a href=/es/posts/how-to-create-a-small-jvm-docker-image/>jlink con Spring Boot</a></li><li><a href=/es/posts/starting-with-spring-boot/>Empezando con Spring Boot</a></li><li><a href=/es/posts/what-is-going-on-with-java/>¿Qué está pasando con Java?</a></li><li><a href=/es/posts/how-to-install-gitlab-on-debian-9/>Cómo instalar GitLab en Debian 9</a></li><li><a href=/es/posts/how-to-install-jenkins/>Cómo instalar Jenkins</a></li></ul></li><li><a href=/es/about/>About</a></li></ul><ul><li><a href=https://github.com/jorgeancal/ target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label><h3>Configurar tu kluster con Helmfile</h3><label for=toc-control><img src=/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><ul><li><a href=#qué-me-ha-gustado-de-helmfile>¿Qué me ha gustado de helmfile?</a></li><li><a href=#cómo-lo-configuro>¿Cómo lo configuro?</a></li><li><a href=#cómo-usarlo>Cómo usarlo</a></li></ul></li></ul></nav></aside></header><article class="markdown book-post"><h2>Configurar tu kluster con Helmfile</h2><div class="flex align-center text-small book-post-date"><img src=/svg/calendar.svg class=book-icon alt>
+<span>enero 30, 2021</span></div><div class=text-small><a href=/es/categories/helm/>Helm</a>,
+<a href=/es/categories/kubernetes/>Kubernetes</a>,
+<a href=/es/categories/how-to/>How To</a>,
+<a href=/es/categories/helmfile/>Helmfile</a></div><div class=text-small><a href=/es/tags/helm/>Helm</a>,
+<a href=/es/tags/helmcharts/>Helmcharts</a>,
+<a href=/es/tags/kubernetes/>Kubernetes</a>,
+<a href=/es/tags/helmfile/>Helmfile</a>,
+<a href=/es/tags/cluster/>Cluster</a></div><div class=book-post-content><p>Helmfile es una herramienta que te permite sacar más partido a Helm. Con helmfile puedes implementar tantas charts como quieras, darle los valores que quieras a cada una y helmfile se encarga de mandarlo todo al cluster mediante helm. Además puedes decirle que solo implemente un grupo concreto de charts, y en el orden que quieras.</p><h2 id=qué-me-ha-gustado-de-helmfile>¿Qué me ha gustado de helmfile?
+<a class=anchor href=#qu%c3%a9-me-ha-gustado-de-helmfile>#</a></h2><p>Después de 6 meses usándolo, esto es lo que más me ha gustado:</p><ul><li><p>Lo primero que vas a notar es que el tiempo de implementación de las charts baja bastante. Por ejemplo, donde trabajo hemos notado una mejora de 15 a 30 minutos comparado con lo que usábamos antes, que era <code>Landscaper</code>, ahora obsoleto. Te dejo el
+<a href=https://github.com/Eneco/landscaper>repositorio</a> por si te interesa.</p></li><li><p>Otra cosa que me gusta es poder tener toda la configuración de diferentes entornos en el mismo sitio. Cuando trabajo con minikube y le digo que implemente las charts con los valores de minikube lo hace sin rechistar.</p></li><li><p><code>diff</code>. Posiblemente lo mejor de todo&mldr; es estúpidamente sencillo y te salva más de una cuando estás actualizando charts o cambiando valores y no estás seguro de si la has liado.</p></li><li><p>Variables de entorno. Puedes implementar <code>sops</code> en helmfile, aunque el plugin que usaban lo han jubilado. Me pasé al uso de variables de entorno, que es lo mejor ahora mismo. Puedes tener los valores que quieres cuando desarrollas localmente y tener unos valores globales en tu software de CI/CD. Si quieres que hable sobre la implementación de <code>SOPS</code> en helmfile dímelo y hago otro post.</p></li></ul><h2 id=cómo-lo-configuro>¿Cómo lo configuro?
+<a class=anchor href=#c%c3%b3mo-lo-configuro>#</a></h2><p>La configuración es bastante sencilla. Lo primero es tener un repo para todo esto, o una carpeta si lo tienes junto con otras cosas. Yo lo tengo en un repo exclusivamente para helmfile. Mi esquema del repo es el siguiente:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>.
+</span></span><span style=display:flex><span>├── addReleases.sh
+</span></span><span style=display:flex><span>├── base
+</span></span><span style=display:flex><span>│   ├── defaults
+</span></span><span style=display:flex><span>│   │   └── helmfile.yaml
+</span></span><span style=display:flex><span>|   ├── environments
+</span></span><span style=display:flex><span>│   │   └── helmfile.yaml
+</span></span><span style=display:flex><span>│   ├── repositories
+</span></span><span style=display:flex><span>│   │   └── helmfile.yaml
+</span></span><span style=display:flex><span>│   ├── templates
+</span></span><span style=display:flex><span>│   │   └── template.yaml
+</span></span><span style=display:flex><span>│   └── values
+</span></span><span style=display:flex><span>│       ├── minikube
+</span></span><span style=display:flex><span>│       │   └── values.yaml.gotmpl
+</span></span><span style=display:flex><span>│       └── production
+</span></span><span style=display:flex><span>│           └── values.yaml.gotmpl
+</span></span><span style=display:flex><span>├── helmfile.yaml
+</span></span><span style=display:flex><span>├── README.md
+</span></span><span style=display:flex><span>└── releases
+</span></span><span style=display:flex><span>    ├── prometheus
+</span></span><span style=display:flex><span>    │   ├── helmfile.yaml
+</span></span><span style=display:flex><span>    │   ├── README.md
+</span></span><span style=display:flex><span>    │   └── values.yaml.gotmpl
+</span></span><span style=display:flex><span>    └── grafana
+</span></span><span style=display:flex><span>        ├── helmfile.yaml
+</span></span><span style=display:flex><span>        ├── README.md
+</span></span><span style=display:flex><span>        └── values.yaml.gotmpl
+</span></span></code></pre></div><p>Ahora te muestro lo que tengo en el helmfile.yaml principal:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span>{{ <span style=color:#ae81ff>readFile &#34;base/templates/helmfile.yaml&#34; }}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>{{ <span style=color:#ae81ff>readFile &#34;base/repositories/helmfile.yaml&#34; }}</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>releases</span>:
+</span></span></code></pre></div><p>Como ves no tengo nada en releases. Eso es porque tengo un script que va por todas las carpetas de releases, encuentra todos los ficheros <code>helmfile.yaml</code> y los añade al final del documento. Asi me libro de tener un fichero de más de 200 líneas y queda más limpio. Solo tienes que crear tu carpeta con la chart que quieres y los valores que necesitas.</p><p>Los dos <code>readFile</code> de arriba son mi forma de mantener las cosas simples. En templates puedo crear diferentes templates para los releases y luego decirle a cada release cuál usar. Y los repositorios, pues mejor en un fichero separado que tener dos líneas extra por repositorio en el fichero principal.</p><p>Empezamos por el más sencillo, el de repositorios:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>repositories</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>prometheus-community</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>url</span>: <span style=color:#ae81ff>https://prometheus-community.github.io/helm-charts</span>
+</span></span><span style=display:flex><span>  - <span style=color:#f92672>name</span>: <span style=color:#ae81ff>grafana</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>url</span>: <span style=color:#ae81ff>grafana https://grafana.github.io/helm-charts</span>
+</span></span></code></pre></div><p>A continuación el de la template:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>bases</span>:
+</span></span><span style=display:flex><span>  - <span style=color:#ae81ff>base/defaults/helmfile.yaml</span>
+</span></span><span style=display:flex><span>  - <span style=color:#ae81ff>base/environments/helmfile.yaml</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>templates</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>defaultTmpl</span>: <span style=color:#75715e>&amp;defaultTmpl</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>missingFileHandler</span>: <span style=color:#ae81ff>Warn</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>valuesTemplate</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>base/values/{{ .Environment.Name }}/values.yaml.gotmpl</span>
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>releases/{{ .Release.Name }}/values.yaml.gotmpl</span>
+</span></span></code></pre></div><p>Como puedes ver lleva sorpresa — no solo tenemos templates sino también la sección base. Podría haberla puesto en otro fichero con otro <code>readFile</code>, pero quise que fueran juntas.</p><p>Los defaults:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>helmDefaults</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>wait</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>timeout</span>: <span style=color:#ae81ff>300</span>
+</span></span></code></pre></div><p>Y el <code>environments.yaml</code>. Aquí declaramos los dos entornos que tenemos y añadimos los valores a través de un fichero. En ese fichero le decimos qué charts queremos instalar en cada entorno:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>environments</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>production</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>values</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>base/values/production/values.yaml.gotmpl</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>minikube</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>values</span>:
+</span></span><span style=display:flex><span>      - <span style=color:#ae81ff>base/values/minikube/values.yaml.gotmp</span>
+</span></span></code></pre></div><p>Un ejemplo de ese fichero de valores. También es un buen sitio para añadir variables globales del entorno:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>prometheus</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>installed</span>: <span style=color:#66d9ef>true</span>
+</span></span><span style=display:flex><span><span style=color:#f92672>grafana</span>:
+</span></span><span style=display:flex><span>  <span style=color:#f92672>installed</span>: <span style=color:#66d9ef>true</span>
+</span></span></code></pre></div><p>Y aquí el <code>helmfile.yaml</code> de grafana. Lo más sencillo del mundo: llamo a la template al principio y luego añado los datos del release. El campo <code>installed</code> me dice si lo quiero instalar o no, y <code>needs</code> le dice que no lo implemente hasta que la lista de charts esté lista:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span>- <span style=color:#f92672>&lt;&lt;</span>: <span style=color:#75715e>*defaultTmpl</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>:  <span style=color:#e6db74>&#34;grafana&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>chart</span>: <span style=color:#e6db74>&#34;grafana/grafana&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>namespace</span>: <span style=color:#e6db74>&#34;monitoring&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>version</span>: <span style=color:#e6db74>&#34;3.2.5&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>installed</span>: {{ <span style=color:#ae81ff>.Values | getOrNil &#34;grafana.installed&#34; | default false }}</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>needs</span>:
+</span></span><span style=display:flex><span>    - <span style=color:#ae81ff>observability/fluentd</span>
+</span></span><span style=display:flex><span>    - <span style=color:#ae81ff>observability/prometheus</span>
+</span></span><span style=display:flex><span>    - <span style=color:#ae81ff>operators/jaeger-operator</span>
+</span></span></code></pre></div><h2 id=cómo-usarlo>Cómo usarlo
+<a class=anchor href=#c%c3%b3mo-usarlo>#</a></h2><p>Es lo más sencillo de todo este post. Ve a donde tengas el helmfile.yaml y ejecuta:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span>helmfile -e minikube apply
+</span></span></code></pre></div><p>Hay más comandos. Yo suelo usar bastante <code>template</code> y <code>diff</code>.</p><p>Siempre tienes que poner el entorno al que quieres implementar las charts con <code>-e</code> seguido del nombre, eso sí, tiene que estar en tu fichero de entornos.</p><p>Para terminar, el script que uso para buscar y añadir los ficheros al fichero principal:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e>#!/bin/bash
+</span></span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> release in <span style=color:#e6db74>`</span>find releases/ -name <span style=color:#e6db74>&#34;*.yaml&#34;</span><span style=color:#e6db74>`</span>; <span style=color:#66d9ef>do</span>
+</span></span><span style=display:flex><span>    release_name<span style=color:#f92672>=</span><span style=color:#66d9ef>$(</span>cat $release | grep <span style=color:#e6db74>&#34;name: &#34;</span> | cut -d<span style=color:#e6db74>&#39; &#39;</span> -f2-<span style=color:#66d9ef>)</span>
+</span></span><span style=display:flex><span>    echo <span style=color:#e6db74>&#34;Templating  </span>$release<span style=color:#e6db74>&#34;</span>
+</span></span><span style=display:flex><span>    cat $release | sed <span style=color:#e6db74>&#39;s/\(.*\)/  \1/&#39;</span> &gt;&gt; helmfile.yaml
+</span></span><span style=display:flex><span>    echo &gt;&gt; helmfile.yaml
+</span></span><span style=display:flex><span><span style=color:#66d9ef>done</span>
+</span></span></code></pre></div><p>Si quieres ver todos los ficheros juntos te dejo todo en este
+<a href=https://github.com/jorgeancal/helmfile-schema>repo</a>.</p><p>Espero que te haya sido útil. Talogo!</p></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"></div><script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script></footer><div class=book-comments><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//jorgesnotebook.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><ul><li><a href=#qué-me-ha-gustado-de-helmfile>¿Qué me ha gustado de helmfile?</a></li><li><a href=#cómo-lo-configuro>¿Cómo lo configuro?</a></li><li><a href=#cómo-usarlo>Cómo usarlo</a></li></ul></li></ul></nav></div></aside></main></body></html>

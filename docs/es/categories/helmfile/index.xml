@@ -1,19 +1,6 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Helmfile on Jorge&#39;s notebook</title>
-    <link>https://jorgesnotebook.com/es/categories/helmfile/</link>
-    <description>Recent content in Helmfile on Jorge&#39;s notebook</description>
-    <generator>Hugo</generator>
-    <language>es</language>
-    <lastBuildDate>Sat, 30 Jan 2021 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://jorgesnotebook.com/es/categories/helmfile/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Configurar tu kluster con Helmfile</title>
-      <link>https://jorgesnotebook.com/es/posts/how-to-set-up-your-kluster-with-helmfle/</link>
-      <pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>https://jorgesnotebook.com/es/posts/how-to-set-up-your-kluster-with-helmfle/</guid>
-      <description>&lt;p&gt;Helmfile es una herramienta que te permite sacar más partido a Helm. Ya que si usas helmfile puedes implementar cualquier cantidad de helmcharts. Básicamente con helmfile declaras las helmcharts y les das los valores que tú quieres a cada una de las helm chart, helmfile creara el correspondiente deploy mediante helm para mandar a tu cluster todo lo que has definido en helmfile, claro esta puedes decirle a helmfile impleméntame solo este grupo de helmchart y de este grupo quiero implementarlas en esta secuencia.&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Helmfile on Jorge's notebook</title><link>https://jorgesnotebook.com/es/categories/helmfile/</link><description>Recent content in Helmfile on Jorge's notebook</description><generator>Hugo</generator><language>es</language><lastBuildDate>Sat, 30 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/es/categories/helmfile/index.xml" rel="self" type="application/rss+xml"/><item><title>Configurar tu kluster con Helmfile</title><link>https://jorgesnotebook.com/es/posts/how-to-set-up-your-kluster-with-helmfle/</link><pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/posts/how-to-set-up-your-kluster-with-helmfle/</guid><description>&lt;p&gt;Helmfile es una herramienta que te permite sacar más partido a Helm. Con helmfile puedes implementar tantas charts como quieras, darle los valores que quieras a cada una y helmfile se encarga de mandarlo todo al cluster mediante helm. Además puedes decirle que solo implemente un grupo concreto de charts, y en el orden que quieras.&lt;/p&gt;
+&lt;h2 id="qué-me-ha-gustado-de-helmfile"&gt;
+ ¿Qué me ha gustado de helmfile?
+ &lt;a class="anchor" href="#qu%c3%a9-me-ha-gustado-de-helmfile"&gt;#&lt;/a&gt;
+&lt;/h2&gt;
+&lt;p&gt;Después de 6 meses usándolo, esto es lo que más me ha gustado:&lt;/p&gt;</description></item></channel></rss>

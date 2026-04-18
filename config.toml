@@ -6,6 +6,8 @@ theme = 'book'
 disqusShortname = "jorgesnotebook"
 googleAnalytics = "G-5X0MZZJXFN"
 publishDir="docs"
+enableRobotsTXT = true
+rssLimit = 20
 
 [pagination]
 pagerSize = 10
@@ -16,9 +18,17 @@ enableGitInfo = true
 home = ["html", "rss"]
 
 # Needed for mermaid/katex shortcodes
+[sitemap]
+  changefreq = "monthly"
+  priority   = 0.5
+
 [markup]
 [markup.goldmark.renderer]
 unsafe = true
+
+[markup.highlight]
+codeFences = true
+guessSyntax = true
 
 [markup.tableOfContents]
 startLevel = 1
@@ -63,11 +73,11 @@ BookToC = true
 
 # (Optional, default favicon.png) Set the path to a favicon file.
 # If the favicon is /static/favicon.png then the path would be favicon.png
-BookFavicon = 'favicon-notebook.png'
+BookFavicon = 'favicon-32.png'
 
 # (Optional, default none) Set the path to a logo for the book.
 # If the logo is /static/logo.png then the path would be logo.png
-BookLogo = './favicon.svg'
+BookLogo = 'main_logo_transparent.png'
 
 # (Optional, default none) Set leaf bundle to render as side menu
 # When not specified file structure and weights will be used
@@ -124,7 +134,7 @@ BookServiceWorker = true
 BookTranslatedOnly = false
 
 [params.meta]
-description         = "Welcome to my notebook"
+description         = "Staff SRE building scalable platforms. Writing about Kubernetes, Observability, Helm, and real-world platform engineering."
 author              = "Jorge Andreu Calatayud"
 favicon             = true
 svg                 = true
@@ -143,7 +153,7 @@ languageMenu        = true
 
 [params.intro]
 header                = "Jorge's Notebook"
-paragraph             = "Wellcome! This is a multi-lengual notebook. You'll read some geeky things here. I hope you enjoy it."
+paragraph             = "Staff SRE. Writing about Kubernetes, Observability, and Platform Engineering."
 rssIntro              = true
 socialIntro           = true
 hideWhenSingleColumn  = true

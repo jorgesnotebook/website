@@ -1,11 +1,13 @@
 +++
-title= "How to set up your kluster with helmfile"
+title= "Helmfile: Structuring Kubernetes Releases at Scale"
 date= "2021-01-30"
+lastmod = "2026-04-18"
 comments = true
-categories = ["Helm", "kubernetes", "How to", "cluster"]
-description = "We'll config helmfile. This is not the perfect solution, but this is my way, and it works for me."
-tags= ["cluster", "helm", "helmcharts", "kubernetes", "helmfile" ]
+categories = ["Helm", "Kubernetes", "Platform Engineering"]
+description = "How to structure Helmfile for production Kubernetes: modular releases, templated values, environment separation, and dependency ordering."
+tags= ["helm", "helmfile", "helmcharts", "kubernetes", "platform-engineering"]
 author = "Jorge Andreu Calatayud"
+featured = true
 +++
 
 
