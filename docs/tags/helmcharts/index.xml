@@ -1,1 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Helmcharts on Jorge's notebook</title><link>https://jorgesnotebook.com/tags/helmcharts/</link><description>Recent content in Helmcharts on Jorge's notebook</description><generator>Hugo</generator><language>en-GB</language><lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/tags/helmcharts/index.xml" rel="self" type="application/rss+xml"/><item><title>Helmfile: Structuring Kubernetes Releases at Scale</title><link>https://jorgesnotebook.com/posts/how-to-set-up-your-kluster-with-helmfle/</link><pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/posts/how-to-set-up-your-kluster-with-helmfle/</guid><description>&lt;p&gt;Helmfile is a tool that allows you to get more out of Helm. When you use helmfile, you can implement as many charts as you want. Helmfile allows you to template the charts with the values that you want, and it will ship it to your cluster. Helmfile brings modular deployments too, by this I mean that you can have a huge list of deployments, and you can say deploy only this group of helmchart, you can also deploy them in sequence.&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Helmcharts on Jorge&#39;s notebook</title>
+    <link>http://localhost:46859/tags/helmcharts/</link>
+    <description>Recent content in Helmcharts on Jorge&#39;s notebook</description>
+    <generator>Hugo</generator>
+    <language>en-GB</language>
+    <lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:46859/tags/helmcharts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Helmfile: Structuring Kubernetes Releases at Scale</title>
+      <link>http://localhost:46859/posts/how-to-set-up-your-kluster-with-helmfle/</link>
+      <pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/posts/how-to-set-up-your-kluster-with-helmfle/</guid>
+      <description>&lt;p&gt;Helmfile is a tool that allows you to get more out of Helm. When you use helmfile, you can implement as many charts as you want. Helmfile allows you to template the charts with the values that you want, and it will ship it to your cluster. Helmfile brings modular deployments too, by this I mean that you can have a huge list of deployments, and you can say deploy only this group of helmchart, you can also deploy them in sequence.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

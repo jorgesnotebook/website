@@ -1,53 +1,868 @@
-<!doctype html><html lang=es dir=ltr><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Cómo montar un cluster k3s con Cilium y MetalLB en Raspberry Pis"><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#343a40"><meta name=color-scheme content="light dark"><meta property="og:url" content="https://jorgesnotebook.com/es/posts/how-to-create-a-k8s-homelab-with-k3s/"><meta property="og:site_name" content="Jorge's notebook"><meta property="og:title" content="Monta tu propio cluster con k3s"><meta property="og:description" content="Cómo montar un cluster k3s con Cilium y MetalLB en Raspberry Pis"><meta property="og:locale" content="es"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-08-15T00:00:00+00:00"><meta property="article:modified_time" content="2023-08-15T00:00:00+00:00"><meta property="article:tag" content="Kubernetes"><meta property="article:tag" content="How To"><meta property="article:tag" content="K3s"><meta property="article:tag" content="Ha"><meta property="article:tag" content="Cilium"><meta property="article:tag" content="Metallb"><title>Monta tu propio cluster con k3s | Jorge's notebook</title><link rel=icon href=/favicon-32.png><link rel=manifest href=/manifest.json><link rel=canonical href=https://jorgesnotebook.com/es/posts/how-to-create-a-k8s-homelab-with-k3s/><link rel=alternate hreflang=en href=https://jorgesnotebook.com/posts/how-to-create-a-k8s-homelab-with-k3s/ title="Building a Production-Grade k3s Homelab: HA, Cilium, and MetalLB"><link rel=stylesheet href=/book.min.c6f0ab8898a9b8e243f0aacc03c73275192bd36dfd0d01e4417d38cbfcafdc42.css integrity="sha256-xvCriJipuOJD8KrMA8cydRkr0239DQHkQX04y/yv3EI=" crossorigin=anonymous><script defer src=/fuse.min.js></script><script defer src=/es.search.min.efd5ea4af6bef61397b5556a633d87eeeb668cae246803aaced67b933f9e5825.js integrity="sha256-79XqSva+9hOXtVVqYz2H7utmjK4kaAOqztZ7kz+eWCU=" crossorigin=anonymous></script><script defer src=/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js integrity="sha256-b2+Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC+NdcPIvZhzk=" crossorigin=anonymous></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-5X0MZZJXFN"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-5X0MZZJXFN")}</script><style>:root{--nb-purple:#7040A0;--nb-purple-light:#9060C0;--nb-purple-dark:#4A2870;--nb-gold:#C9A843;--nb-gold-light:#DFC06A;--nb-gold-dark:#9A7E2E;--nb-bg:#0a0a0f;--nb-bg-card:#111118;--nb-border:#1e1e2a;--nb-text:#9ca3af;--nb-text-light:#e5e7eb;--nb-text-muted:#6b7280;--color-link:var(--nb-purple);--color-visited-link:var(--nb-purple-dark)}@media(prefers-color-scheme:dark){:root{--body-background:var(--nb-bg);--body-font-color:var(--nb-text);--color-link:var(--nb-purple-light);--color-visited-link:var(--nb-purple);--gray-100:var(--nb-bg-card);--gray-200:var(--nb-border);--gray-500:var(--nb-text-muted)}.book-menu .book-menu-content,.book-search input{background:var(--nb-bg-card)}h1,h2,h3{color:var(--nb-text-light)}a:hover{color:var(--nb-purple-light)}code,pre{background:#0d0d14}.markdown img{filter:brightness(.88)contrast(1.05);border-radius:.25rem}}.nb-lang-switcher{display:flex;align-items:center;gap:.5rem;padding:.75rem 0 .25rem;font-size:.8rem}.nb-lang{color:var(--nb-text-muted);text-decoration:none;transition:color .2s}.nb-lang:hover{color:var(--nb-purple-light)}.nb-lang-active{color:var(--nb-purple);font-weight:700;cursor:default}@media(prefers-color-scheme:dark){.nb-lang-active{color:var(--nb-purple-light)}}.nb-lang-switcher .nb-lang+.nb-lang::before,.nb-lang-switcher .nb-lang-active+.nb-lang::before,.nb-lang-switcher .nb-lang+.nb-lang-active::before{content:"/";margin-right:.5rem;color:var(--nb-text-muted)}::selection{background:var(--nb-purple);color:#fff}::-moz-selection{background:var(--nb-purple);color:#fff}body{font-family:roboto,-apple-system,BlinkMacSystemFont,segoe ui,sans-serif;line-height:1.75}.book-page{max-width:740px}.book-brand img.book-icon{height:2.2rem;width:2.2rem;filter:none!important}.nb-hero{padding:3rem 0 2.5rem;margin-bottom:2.5rem}.nb-hero-name{font-size:2.4rem;font-weight:900;letter-spacing:.05rem;background:linear-gradient(90deg,var(--nb-purple) 0%,var(--nb-gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 .4rem}.nb-hero-badge{font-size:1rem;font-weight:300;color:var(--nb-gold);margin-bottom:1.2rem;letter-spacing:.08rem}.nb-hero-desc{font-size:.95rem;max-width:560px;line-height:1.7;margin-bottom:1.5rem;color:var(--body-font-color)}.nb-hero-links{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem}.nb-btn{display:inline-block;padding:.45rem 1.1rem;border-radius:.35rem;font-size:.85rem;font-weight:600;background:var(--nb-purple);color:#fff!important;text-decoration:none;transition:background .2s}.nb-btn:hover{background:var(--nb-purple-light);color:#fff!important}.nb-btn-outline{background:0 0;border:1px solid var(--nb-purple);color:var(--nb-purple)!important}.nb-btn-outline:hover{background:var(--nb-purple);color:#fff!important}@media(prefers-color-scheme:dark){.nb-btn-outline{border-color:var(--nb-purple-light);color:var(--nb-purple-light)!important}.nb-btn-outline:hover{background:var(--nb-purple-light);color:#fff!important}}.nb-hero-stack{display:flex;flex-wrap:wrap;gap:.4rem}.nb-tag{font-size:.75rem;padding:.2rem .65rem;border-radius:9999px;border:1px solid var(--nb-gold-dark);color:var(--nb-text-muted,#6b7280);background:0 0}@media(prefers-color-scheme:dark){.nb-tag{border-color:var(--nb-gold-dark);color:var(--nb-text-muted);background:rgba(201,168,67,5%)}}.nb-section{margin-bottom:3rem}.nb-section-title{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.12rem;color:var(--nb-purple)!important;border-bottom:2px solid var(--nb-gold-dark);padding-bottom:.5rem;margin-bottom:1.25rem}@media(prefers-color-scheme:dark){.nb-section-title{color:var(--nb-purple-light)!important;border-color:var(--nb-gold-dark)}}.nb-post-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}.nb-post-card{display:block;padding:1.1rem 1.2rem;border:1px solid var(--nb-border,#e9ecef);border-radius:.5rem;text-decoration:none!important;transition:border-color .2s,background .2s;background:0 0}.nb-post-card:hover{border-color:var(--nb-purple);background:rgba(112,64,160,5%)}@media(prefers-color-scheme:dark){.nb-post-card{border-color:var(--nb-border)}.nb-post-card:hover{border-color:var(--nb-purple-light);background:rgba(112,64,160,.1)}}.nb-post-meta{font-size:.72rem;color:var(--nb-text-muted,#6b7280);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05rem}.nb-post-title{font-size:.95rem;font-weight:600;margin:0 0 .5rem;color:var(--body-font-color);line-height:1.4}.nb-post-desc{font-size:.82rem;color:var(--nb-text-muted,#6b7280);margin:0;line-height:1.5}.nb-list-item{display:flex;align-items:flex-start;gap:1.2rem;padding:.85rem 0;border-bottom:1px solid var(--nb-border,#f0f0f0)}@media(prefers-color-scheme:dark){.nb-list-item{border-color:var(--nb-border)}}.nb-list-meta{flex-shrink:0;font-size:.72rem;color:var(--nb-text-muted,#6b7280);padding-top:.2rem;min-width:90px}.nb-list-body{flex:1}.nb-list-title{font-size:.95rem;font-weight:600;color:var(--body-font-color)!important;text-decoration:none;display:block;margin-bottom:.25rem}.nb-list-title:hover{color:var(--nb-purple-light)!important}.nb-list-desc{font-size:.82rem;color:var(--nb-text-muted,#6b7280);margin:0;line-height:1.5}.markdown h1,.markdown h2,.markdown h3{font-weight:700}.markdown h2{border-left:3px solid var(--nb-gold-dark);padding-left:.75rem}.markdown code{font-size:.85em}</style></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
-<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a class="flex align-center" href=/><img src=/main_logo_transparent.png alt=Logo class=book-icon><span>Jorge's notebook</span></a></h2><div class="book-search hidden"><input type=text id=book-search-input placeholder=Buscar aria-label=Buscar maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><script>document.querySelector(".book-search").classList.remove("hidden")</script><div class=nb-lang-switcher><a class=nb-lang href=/posts/how-to-create-a-k8s-homelab-with-k3s/>English</a>
-<span class="nb-lang nb-lang-active">Castellano</span></div><ul><li><span>Posts</span><ul><li><a href=/es/posts/designing-otel-pipeline-for-scaling/>Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)</a></li><li><a href=/es/posts/how-to-create-a-k8s-homelab-with-k3s/ class=active>Monta tu propio cluster con k3s</a></li><li><a href=/es/posts/how-to-implement-sops-helmfile/>Como configurar SOPS en Helmfile</a></li><li><a href=/es/posts/how-to-set-up-your-kluster-with-helmfle/>Configurar tu kluster con Helmfile</a></li><li><a href=/es/posts/how-to-create-a-small-jvm-docker-image/>jlink con Spring Boot</a></li><li><a href=/es/posts/starting-with-spring-boot/>Empezando con Spring Boot</a></li><li><a href=/es/posts/what-is-going-on-with-java/>¿Qué está pasando con Java?</a></li><li><a href=/es/posts/how-to-install-gitlab-on-debian-9/>Cómo instalar GitLab en Debian 9</a></li><li><a href=/es/posts/how-to-install-jenkins/>Cómo instalar Jenkins</a></li></ul></li><li><a href=/es/about/>About</a></li></ul><ul><li><a href=https://github.com/jorgeancal/ target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label><h3>Monta tu propio cluster con k3s</h3><label for=toc-control><img src=/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents></nav></aside></header><article class="markdown book-post"><h2>Monta tu propio cluster con k3s</h2><div class="flex align-center text-small book-post-date"><img src=/svg/calendar.svg class=book-icon alt>
-<span>agosto 15, 2023</span></div><div class=text-small><a href=/es/categories/cluster/>Cluster</a>,
-<a href=/es/categories/kubernetes/>Kubernetes</a></div><div class=text-small><a href=/es/tags/kubernetes/>Kubernetes</a>,
-<a href=/es/tags/how-to/>How To</a>,
-<a href=/es/tags/k3s/>K3s</a>,
-<a href=/es/tags/ha/>Ha</a>,
-<a href=/es/tags/cilium/>Cilium</a>,
-<a href=/es/tags/metallb/>Metallb</a></div><div class=book-post-content><p>Llevaba mucho tiempo intentando conseguir una configuración mejor en mi homelab. Como llevo bastante tiempo trabajando con Kubernetes, siempre he querido una configuración de overkill con varios nodos para alta disponibilidad. Pero cuando miré los costes de montar algo así me deprimí un poco.</p><p>Estuve mirando alternativas y llegué a la conclusión&mldr; ¡Raspberry Pis! Me compré 6 y me puse a pensar cuál usar: k0s, k3s u otro Kubernetes ligero. Al final dije venga, k3s, parece más fácil :D Las Raspberries llegaron pero&mldr; me mudé de casa y las Raspberries se perdieron en alguna caja&mldr;</p><p>Tres meses después las encontré entre un montón de cosas — que sí, acumulo mucho — y para entonces ya había cambiado de trabajo, me había mudado otra vez y había tenido más complicaciones&mldr;</p><p>Asi que después de 2 años, aquí estamos de nuevo&mldr; mirando este proyecto otra vez. Me fío de mi yo del pasado que dijo que k3s era lo mejor, asi que vamos a ver el hardware que tengo:</p><ul><li>6 Raspberries - 8 GB de RAM cada una</li><li>6 PoE hats para las Raspberries</li><li>8 microSD de 128 GB</li></ul><p>Lo primero que me pasó fue que usé la imagen por defecto sin personalizarla, asi que tuve que quitar el swap. Para eso ejecuté:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>sudo sync <span style=color:#f92672>&amp;&amp;</span> sudo swapoff -a <span style=color:#f92672>&amp;&amp;</span> sudo apt-get purge -y dphys-swapfile <span style=color:#f92672>&amp;&amp;</span> sudo rm /var/swap <span style=color:#f92672>&amp;&amp;</span> sudo sync
-</span></span></code></pre></div><p>Luego me di cuenta de que no había actualizado la Raspberry, asi que:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-fallback data-lang=fallback><span style=display:flex><span>sudo apt autoremove &amp;&amp; sudo apt update &amp;&amp; sudo apt upgrade
-</span></span></code></pre></div><p>Después me di cuenta de que necesitaba añadir lo siguiente en el fichero <code>/boot/cmdline.txt</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-txt data-lang=txt><span style=display:flex><span>cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1
-</span></span></code></pre></div><p>Después de este cambio hay que reiniciar la Raspberry. Ah, y también tuve que configurar una IP estática.</p><p>Con todo eso hecho, quería probar Cilium y MetalLB en vez de flannel y el load balancer Klipper que vienen por defecto en k3s.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#75715e># export MY_IP=$(ip a |grep global | awk &#39;{print $2}&#39; | cut -f1 -d &#39;/&#39;)</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=&#34;server&#34; sh -s - \</span>
-</span></span><span style=display:flex><span>  --cluster-init --node-ip<span style=color:#f92672>=</span><span style=color:#e6db74>${</span>MY_IP<span style=color:#e6db74>}</span> --node-external-ip<span style=color:#f92672>=</span><span style=color:#e6db74>${</span>MY_IP<span style=color:#e6db74>}</span> --bind-address<span style=color:#f92672>=</span><span style=color:#e6db74>${</span>MY_IP<span style=color:#e6db74>}</span> <span style=color:#ae81ff>\
-</span></span></span><span style=display:flex><span>  --flannel-backend<span style=color:#f92672>=</span>none --disable-network-policy --cluster-cidr<span style=color:#f92672>=</span>10.10.0.0/16 --service-cidr<span style=color:#f92672>=</span>10.11.0.0/16 <span style=color:#ae81ff>\
-</span></span></span><span style=display:flex><span>  --disable <span style=color:#e6db74>&#34;servicelb&#34;</span> --disable <span style=color:#e6db74>&#34;traefik&#34;</span> --disable <span style=color:#e6db74>&#34;metrics-server&#34;</span>
-</span></span></code></pre></div><p>Con los dedos cruzados, ya tenia el primer nodo master. Me asusté porque los pods estaban en pending, pero luego me di cuenta de que no había instalado la network policy. Asi que todo bien :) Tuve que coger el kubectl config de <code>/etc/rancher/k3s/k3s.yaml</code> para poder conectarme al cluster desde mi local.</p><p>Uno hecho, cinco por hacer&mldr; Para añadir un nuevo nodo necesitaba el token de k8s, asi que fui a buscarlo:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># cat /var/lib/rancher/k3s/server/token</span>
-</span></span><span style=display:flex><span>93821hp98rf9283jhf82p14hfn2984f2qhfuwhep9r8h3q2498rytq24r::server:9823p54uy19823rj248994fj0429fj
-</span></span></code></pre></div><p>Con el token, me fui a la siguiente Raspberry y repetí los pasos del swap y el cmdline. Luego meti el token, la IP actual y la IP del nodo master en variables de entorno y ejecuté:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#75715e># curl -sfL https://get.k3s.io | K3S_TOKEN=${MY_K3S_TOKEN} sh -s - server \</span>
-</span></span><span style=display:flex><span>--server https://<span style=color:#e6db74>${</span>MASTER_IP<span style=color:#e6db74>}</span>:6443 --node-ip<span style=color:#f92672>=</span><span style=color:#e6db74>${</span>MY_IP<span style=color:#e6db74>}</span> --node-external-ip<span style=color:#f92672>=</span><span style=color:#e6db74>${</span>MY_IP<span style=color:#e6db74>}</span> --bind-address<span style=color:#f92672>=</span><span style=color:#e6db74>${</span>MY_IP<span style=color:#e6db74>}</span> <span style=color:#ae81ff>\
-</span></span></span><span style=display:flex><span>--flannel-backend<span style=color:#f92672>=</span>none --disable-network-policy --cluster-cidr<span style=color:#f92672>=</span>10.10.0.0/16 --service-cidr<span style=color:#f92672>=</span>10.11.0.0/16 <span style=color:#ae81ff>\
-</span></span></span><span style=display:flex><span>--disable <span style=color:#e6db74>&#34;servicelb&#34;</span> --disable <span style=color:#e6db74>&#34;traefik&#34;</span> --disable <span style=color:#e6db74>&#34;metrics-server&#34;</span>
-</span></span></code></pre></div><p>Segundo nodo master listo&mldr; uno más y a por los agents. Con el tercero igual, y luego pasé a los agents. Primero — como te puedes imaginar — el paso del swap, el cmdline y la IP estática. Luego con la IP del nodo master y el token:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;agent&#34;</span> K3S_URL<span style=color:#f92672>=</span>https://<span style=color:#e6db74>${</span>MASTER_IP<span style=color:#e6db74>}</span>:6443 K3S_TOKEN<span style=color:#f92672>=</span><span style=color:#e6db74>${</span>MY_K3S_TOKEN<span style=color:#e6db74>}</span> sh -
-</span></span></code></pre></div><p>Repetí eso 3 veces más&mldr; y llegó el momento de instalar Cilium. Como para todo uso helm:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>helm repo add cilium https://helm.cilium.io/
-</span></span><span style=display:flex><span>helm install cilium cilium/cilium --set global.containerRuntime.integration<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;containerd&#34;</span> <span style=color:#ae81ff>\
-</span></span></span><span style=display:flex><span>--set global.containerRuntime.socketPath<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;/var/run/k3s/containerd/containerd.sock&#34;</span> <span style=color:#ae81ff>\
-</span></span></span><span style=display:flex><span>--set global.kubeProxyReplacement<span style=color:#f92672>=</span><span style=color:#e6db74>&#34;strict&#34;</span> --namespace kube-system
-</span></span></code></pre></div><p>Entonces&mldr; necesitaba un café&mldr; Con mi café caliente y rico, toca instalar el load balancer:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-bash data-lang=bash><span style=display:flex><span>helm repo add metallb https://metallb.github.io/metallb
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>helm install metallb metallb/metallb --namespace metallb-system --create-namespace
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>cat <span style=color:#e6db74>&lt;&lt; &#39;EOF&#39; | kubectl apply -f -
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>apiVersion: metallb.io/v1beta1
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>kind: IPAddressPool
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>metadata:
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>name: home-lab-pool
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>namespace: metallb-system
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>spec:
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>addresses:
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>- 172.16.88.1-172.16.88.20
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>---
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>apiVersion: metallb.io/v1beta1
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>kind: L2Advertisement
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>metadata:
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>name: home-lab
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>namespace: metallb-system
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>spec:
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>ipAddressPools:
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>- home-lab-pool
-</span></span></span><span style=display:flex><span><span style=color:#e6db74>  EOF</span>
-</span></span></code></pre></div><p>Y listo.</p><p>Si has seguido toda esta odisea, deberías tener el mismo lab que yo si quieres :D ¡Suerte!</p><p>Espero que te haya sido útil. Talogo!</p></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"></div><script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script></footer><div class=book-comments><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//jorgesnotebook.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents></nav></div></aside></main></body></html>
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=46859&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cómo montar un cluster k3s con Cilium y MetalLB en Raspberry Pis">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:46859/es/posts/how-to-create-a-k8s-homelab-with-k3s/">
+  <meta property="og:site_name" content="Jorge&#39;s notebook">
+  <meta property="og:title" content="Monta tu propio cluster con k3s">
+  <meta property="og:description" content="Cómo montar un cluster k3s con Cilium y MetalLB en Raspberry Pis">
+  <meta property="og:locale" content="es">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-08-15T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-08-15T00:00:00+00:00">
+    <meta property="article:tag" content="Kubernetes">
+    <meta property="article:tag" content="How To">
+    <meta property="article:tag" content="K3s">
+    <meta property="article:tag" content="Ha">
+    <meta property="article:tag" content="Cilium">
+    <meta property="article:tag" content="Metallb">
+<title>Monta tu propio cluster con k3s | Jorge&#39;s notebook</title>
+<link rel="icon" href="/favicon-32.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:46859/es/posts/how-to-create-a-k8s-homelab-with-k3s/">
+  <link rel="alternate" hreflang="en" href="http://localhost:46859/posts/how-to-create-a-k8s-homelab-with-k3s/" title="Building a Production-Grade k3s Homelab: HA, Cilium, and MetalLB">
+<link rel="stylesheet" href="/book.min.c6f0ab8898a9b8e243f0aacc03c73275192bd36dfd0d01e4417d38cbfcafdc42.css" integrity="sha256-xvCriJipuOJD8KrMA8cydRkr0239DQHkQX04y/yv3EI=" crossorigin="anonymous">
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/es.search.min.9d76f391177a713c6ed7288a5c596c14d97906002a8ed3555e56ff7c882bb99e.js" integrity="sha256-nXbzkRd6cTxu1yiKXFlsFNl5BgAqjtNVXlb/fIgruZ4=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X0MZZJXFN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-5X0MZZJXFN');
+        }
+      </script><!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <style>
+ 
+:root {
+  --nb-purple:       #7040A0;
+  --nb-purple-light: #9060C0;
+  --nb-purple-dark:  #4A2870;
+  --nb-gold:         #C9A843;
+  --nb-gold-light:   #DFC06A;
+  --nb-gold-dark:    #9A7E2E;
+  --nb-bg:           #0a0a0f;
+  --nb-bg-card:      #111118;
+  --nb-border:       #1e1e2a;
+  --nb-text:         #9ca3af;
+  --nb-text-light:   #e5e7eb;
+  --nb-text-muted:   #6b7280;
+
+  --color-link:         var(--nb-purple);
+  --color-visited-link: var(--nb-purple-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-background:    var(--nb-bg);
+    --body-font-color:    var(--nb-text);
+    --color-link:         var(--nb-purple-light);
+    --color-visited-link: var(--nb-purple);
+    --gray-100:           var(--nb-bg-card);
+    --gray-200:           var(--nb-border);
+    --gray-500:           var(--nb-text-muted);
+  }
+
+  .book-menu .book-menu-content,
+  .book-search input {
+    background: var(--nb-bg-card);
+  }
+
+  h1, h2, h3 {
+    color: var(--nb-text-light);
+  }
+
+  a:hover {
+    color: var(--nb-purple-light);
+  }
+
+  code, pre {
+    background: #0d0d14;
+  }
+
+   
+  .markdown img {
+    filter: brightness(0.88) contrast(1.05);
+    border-radius: .25rem;
+  }
+}
+
+ 
+.nb-lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .75rem 0 .25rem;
+  font-size: .8rem;
+}
+
+.nb-lang {
+  color: var(--nb-text-muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.nb-lang:hover {
+  color: var(--nb-purple-light);
+}
+
+.nb-lang-active {
+  color: var(--nb-purple);
+  font-weight: 700;
+  cursor: default;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-lang-active { color: var(--nb-purple-light); }
+}
+
+.nb-lang-switcher .nb-lang + .nb-lang::before,
+.nb-lang-switcher .nb-lang-active + .nb-lang::before,
+.nb-lang-switcher .nb-lang + .nb-lang-active::before {
+  content: "/";
+  margin-right: .5rem;
+  color: var(--nb-text-muted);
+}
+
+ 
+::selection {
+  background: var(--nb-purple);
+  color: #fff;
+}
+
+::-moz-selection {
+  background: var(--nb-purple);
+  color: #fff;
+}
+
+ 
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.75;
+}
+
+.book-page {
+  max-width: 740px;
+}
+
+ 
+.book-brand img.book-icon {
+  height: 2.2rem;
+  width:  2.2rem;
+  filter: none !important;
+}
+
+ 
+.nb-hero {
+  padding: 3rem 0 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.nb-hero-name {
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: .05rem;
+  background: linear-gradient(90deg, var(--nb-purple) 0%, var(--nb-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 .4rem;
+}
+
+.nb-hero-badge {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--nb-gold);
+  margin-bottom: 1.2rem;
+  letter-spacing: .08rem;
+}
+
+.nb-hero-desc {
+  font-size: .95rem;
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: var(--body-font-color);
+}
+
+.nb-hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-bottom: 1.5rem;
+}
+
+ 
+.nb-btn {
+  display: inline-block;
+  padding: .45rem 1.1rem;
+  border-radius: .35rem;
+  font-size: .85rem;
+  font-weight: 600;
+  background: var(--nb-purple);
+  color: #fff !important;
+  text-decoration: none;
+  transition: background .2s;
+}
+
+.nb-btn:hover {
+  background: var(--nb-purple-light);
+  color: #fff !important;
+}
+
+ 
+.nb-btn-outline {
+  background: transparent;
+  border: 1px solid var(--nb-purple);
+  color: var(--nb-purple) !important;
+}
+
+.nb-btn-outline:hover {
+  background: var(--nb-purple);
+  color: #fff !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-btn-outline {
+    border-color: var(--nb-purple-light);
+    color: var(--nb-purple-light) !important;
+  }
+  .nb-btn-outline:hover {
+    background: var(--nb-purple-light);
+    color: #fff !important;
+  }
+}
+
+ 
+.nb-hero-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.nb-tag {
+  font-size: .75rem;
+  padding: .2rem .65rem;
+  border-radius: 9999px;
+  border: 1px solid var(--nb-gold-dark);
+  color: var(--nb-text-muted, #6b7280);
+  background: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-tag {
+    border-color: var(--nb-gold-dark);
+    color: var(--nb-text-muted);
+    background: rgba(201, 168, 67, .05);
+  }
+}
+
+ 
+.nb-section {
+  margin-bottom: 3rem;
+}
+
+.nb-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12rem;
+  color: var(--nb-purple) !important;
+  border-bottom: 2px solid var(--nb-gold-dark);
+  padding-bottom: .5rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-section-title {
+    color: var(--nb-purple-light) !important;
+    border-color: var(--nb-gold-dark);
+  }
+}
+
+ 
+.nb-post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.nb-post-card {
+  display: block;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--nb-border, #e9ecef);
+  border-radius: .5rem;
+  text-decoration: none !important;
+  transition: border-color .2s, background .2s;
+  background: transparent;
+}
+
+.nb-post-card:hover {
+  border-color: var(--nb-purple);
+  background: rgba(112, 64, 160, .05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-post-card { border-color: var(--nb-border); }
+  .nb-post-card:hover {
+    border-color: var(--nb-purple-light);
+    background: rgba(112, 64, 160, .1);
+  }
+}
+
+.nb-post-meta {
+  font-size: .72rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin-bottom: .4rem;
+  text-transform: uppercase;
+  letter-spacing: .05rem;
+}
+
+.nb-post-title {
+  font-size: .95rem;
+  font-weight: 600;
+  margin: 0 0 .5rem;
+  color: var(--body-font-color);
+  line-height: 1.4;
+}
+
+.nb-post-desc {
+  font-size: .82rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+ 
+.nb-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: .85rem 0;
+  border-bottom: 1px solid var(--nb-border, #f0f0f0);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-list-item { border-color: var(--nb-border); }
+}
+
+.nb-list-meta {
+  flex-shrink: 0;
+  font-size: .72rem;
+  color: var(--nb-text-muted, #6b7280);
+  padding-top: .2rem;
+  min-width: 90px;
+}
+
+.nb-list-body { flex: 1; }
+
+.nb-list-title {
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--body-font-color) !important;
+  text-decoration: none;
+  display: block;
+  margin-bottom: .25rem;
+}
+
+.nb-list-title:hover {
+  color: var(--nb-purple-light) !important;
+}
+
+.nb-list-desc {
+  font-size: .82rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+ 
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  font-weight: 700;
+}
+
+.markdown h2 {
+  border-left: 3px solid var(--nb-gold-dark);
+  padding-left: .75rem;
+}
+
+.markdown code {
+  font-size: .85em;
+}
+</style>
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/main_logo_transparent.png" alt="Logo" class="book-icon" /><span>Jorge&#39;s notebook</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Buscar" aria-label="Buscar" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<div class="nb-lang-switcher">
+  
+    
+      
+        <a class="nb-lang" href="/posts/how-to-create-a-k8s-homelab-with-k3s/">English</a>
+      
+    
+  
+    
+      <span class="nb-lang nb-lang-active">Castellano</span>
+    
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Posts</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-create-a-k8s-homelab-with-k3s/" class="active">Monta tu propio cluster con k3s</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-implement-sops-helmfile/" class="">Como configurar SOPS en Helmfile</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-set-up-your-kluster-with-helmfle/" class="">Configurar tu kluster con Helmfile</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-create-a-small-jvm-docker-image/" class="">jlink con Spring Boot</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/starting-with-spring-boot/" class="">Empezando con Spring Boot</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/what-is-going-on-with-java/" class="">¿Qué está pasando con Java?</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-install-gitlab-on-debian-9/" class="">Cómo instalar GitLab en Debian 9</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-install-jenkins/" class="">Cómo instalar Jenkins</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/about/" class="">About</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="https://github.com/jorgeancal/"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Monta tu propio cluster con k3s</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents"></nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown book-post">
+  <h2>
+    Monta tu propio cluster con k3s
+  </h2>
+  
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>agosto 15, 2023</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/es/categories/cluster/">Cluster</a>, 
+      <a href="/es/categories/kubernetes/">Kubernetes</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/es/tags/kubernetes/">Kubernetes</a>, 
+      <a href="/es/tags/how-to/">How To</a>, 
+      <a href="/es/tags/k3s/">K3s</a>, 
+      <a href="/es/tags/ha/">Ha</a>, 
+      <a href="/es/tags/cilium/">Cilium</a>, 
+      <a href="/es/tags/metallb/">Metallb</a>
+  </div>
+  
+
+
+  <div class="book-post-content"><p>Llevaba mucho tiempo intentando conseguir una configuración mejor en mi homelab. Como llevo bastante tiempo trabajando con Kubernetes, siempre he querido una configuración de overkill con varios nodos para alta disponibilidad. Pero cuando miré los costes de montar algo así me deprimí un poco.</p>
+<p>Estuve mirando alternativas y llegué a la conclusión&hellip; ¡Raspberry Pis! Me compré 6 y me puse a pensar cuál usar: k0s, k3s u otro Kubernetes ligero. Al final dije venga, k3s, parece más fácil :D Las Raspberries llegaron pero&hellip; me mudé de casa y las Raspberries se perdieron en alguna caja&hellip;</p>
+<p>Tres meses después las encontré entre un montón de cosas — que sí, acumulo mucho — y para entonces ya había cambiado de trabajo, me había mudado otra vez y había tenido más complicaciones&hellip;</p>
+<p>Asi que después de 2 años, aquí estamos de nuevo&hellip; mirando este proyecto otra vez. Me fío de mi yo del pasado que dijo que k3s era lo mejor, asi que vamos a ver el hardware que tengo:</p>
+<ul>
+<li>6 Raspberries - 8 GB de RAM cada una</li>
+<li>6 PoE hats para las Raspberries</li>
+<li>8 microSD de 128 GB</li>
+</ul>
+<p>Lo primero que me pasó fue que usé la imagen por defecto sin personalizarla, asi que tuve que quitar el swap. Para eso ejecuté:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo sync <span style="color:#f92672">&amp;&amp;</span> sudo swapoff -a <span style="color:#f92672">&amp;&amp;</span> sudo apt-get purge -y dphys-swapfile <span style="color:#f92672">&amp;&amp;</span> sudo rm /var/swap <span style="color:#f92672">&amp;&amp;</span> sudo sync
+</span></span></code></pre></div><p>Luego me di cuenta de que no había actualizado la Raspberry, asi que:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>sudo apt autoremove &amp;&amp; sudo apt update &amp;&amp; sudo apt upgrade
+</span></span></code></pre></div><p>Después me di cuenta de que necesitaba añadir lo siguiente en el fichero <code>/boot/cmdline.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-txt" data-lang="txt"><span style="display:flex;"><span>cgroup_enable=cpuset cgroup_enable=memory cgroup_memory=1
+</span></span></code></pre></div><p>Después de este cambio hay que reiniciar la Raspberry. Ah, y también tuve que configurar una IP estática.</p>
+<p>Con todo eso hecho, quería probar Cilium y MetalLB en vez de flannel y el load balancer Klipper que vienen por defecto en k3s.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># export MY_IP=$(ip a |grep global | awk &#39;{print $2}&#39; | cut -f1 -d &#39;/&#39;)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=&#34;server&#34; sh -s - \</span>
+</span></span><span style="display:flex;"><span>  --cluster-init --node-ip<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>MY_IP<span style="color:#e6db74">}</span> --node-external-ip<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>MY_IP<span style="color:#e6db74">}</span> --bind-address<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>MY_IP<span style="color:#e6db74">}</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  --flannel-backend<span style="color:#f92672">=</span>none --disable-network-policy --cluster-cidr<span style="color:#f92672">=</span>10.10.0.0/16 --service-cidr<span style="color:#f92672">=</span>10.11.0.0/16 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  --disable <span style="color:#e6db74">&#34;servicelb&#34;</span> --disable <span style="color:#e6db74">&#34;traefik&#34;</span> --disable <span style="color:#e6db74">&#34;metrics-server&#34;</span>
+</span></span></code></pre></div><p>Con los dedos cruzados, ya tenia el primer nodo master. Me asusté porque los pods estaban en pending, pero luego me di cuenta de que no había instalado la network policy. Asi que todo bien :) Tuve que coger el kubectl config de <code>/etc/rancher/k3s/k3s.yaml</code> para poder conectarme al cluster desde mi local.</p>
+<p>Uno hecho, cinco por hacer&hellip; Para añadir un nuevo nodo necesitaba el token de k8s, asi que fui a buscarlo:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># cat /var/lib/rancher/k3s/server/token</span>
+</span></span><span style="display:flex;"><span>93821hp98rf9283jhf82p14hfn2984f2qhfuwhep9r8h3q2498rytq24r::server:9823p54uy19823rj248994fj0429fj
+</span></span></code></pre></div><p>Con el token, me fui a la siguiente Raspberry y repetí los pasos del swap y el cmdline. Luego meti el token, la IP actual y la IP del nodo master en variables de entorno y ejecuté:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># curl -sfL https://get.k3s.io | K3S_TOKEN=${MY_K3S_TOKEN} sh -s - server \</span>
+</span></span><span style="display:flex;"><span>--server https://<span style="color:#e6db74">${</span>MASTER_IP<span style="color:#e6db74">}</span>:6443 --node-ip<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>MY_IP<span style="color:#e6db74">}</span> --node-external-ip<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>MY_IP<span style="color:#e6db74">}</span> --bind-address<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>MY_IP<span style="color:#e6db74">}</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>--flannel-backend<span style="color:#f92672">=</span>none --disable-network-policy --cluster-cidr<span style="color:#f92672">=</span>10.10.0.0/16 --service-cidr<span style="color:#f92672">=</span>10.11.0.0/16 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>--disable <span style="color:#e6db74">&#34;servicelb&#34;</span> --disable <span style="color:#e6db74">&#34;traefik&#34;</span> --disable <span style="color:#e6db74">&#34;metrics-server&#34;</span>
+</span></span></code></pre></div><p>Segundo nodo master listo&hellip; uno más y a por los agents. Con el tercero igual, y luego pasé a los agents. Primero — como te puedes imaginar — el paso del swap, el cmdline y la IP estática. Luego con la IP del nodo master y el token:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;agent&#34;</span> K3S_URL<span style="color:#f92672">=</span>https://<span style="color:#e6db74">${</span>MASTER_IP<span style="color:#e6db74">}</span>:6443 K3S_TOKEN<span style="color:#f92672">=</span><span style="color:#e6db74">${</span>MY_K3S_TOKEN<span style="color:#e6db74">}</span> sh -
+</span></span></code></pre></div><p>Repetí eso 3 veces más&hellip; y llegó el momento de instalar Cilium. Como para todo uso helm:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm repo add cilium https://helm.cilium.io/
+</span></span><span style="display:flex;"><span>helm install cilium cilium/cilium --set global.containerRuntime.integration<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;containerd&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>--set global.containerRuntime.socketPath<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/var/run/k3s/containerd/containerd.sock&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>--set global.kubeProxyReplacement<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;strict&#34;</span> --namespace kube-system
+</span></span></code></pre></div><p>Entonces&hellip; necesitaba un café&hellip; Con mi café caliente y rico, toca instalar el load balancer:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm repo add metallb https://metallb.github.io/metallb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>helm install metallb metallb/metallb --namespace metallb-system --create-namespace
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cat <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39; | kubectl apply -f -
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">apiVersion: metallb.io/v1beta1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">kind: IPAddressPool
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">metadata:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">name: home-lab-pool
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">namespace: metallb-system
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">spec:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">addresses:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">- 172.16.88.1-172.16.88.20
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">---
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">apiVersion: metallb.io/v1beta1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">kind: L2Advertisement
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">metadata:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">name: home-lab
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">namespace: metallb-system
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">spec:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ipAddressPools:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">- home-lab-pool
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  EOF</span>
+</span></span></code></pre></div><p>Y listo.</p>
+<p>Si has seguido toda esta odisea, deberías tener el mismo lab que yo si quieres :D ¡Suerte!</p>
+<p>Espero que te haya sido útil. Talogo!</p>
+</div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jorgesnotebook" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

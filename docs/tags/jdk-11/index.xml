@@ -1,1 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>JDK 11 on Jorge's notebook</title><link>https://jorgesnotebook.com/tags/jdk-11/</link><description>Recent content in JDK 11 on Jorge's notebook</description><generator>Hugo</generator><language>en-GB</language><lastBuildDate>Thu, 23 Jan 2020 23:08:17 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/tags/jdk-11/index.xml" rel="self" type="application/rss+xml"/><item><title>What’s going on with Java?</title><link>https://jorgesnotebook.com/posts/what-is-going-on-with-java/</link><pubDate>Thu, 23 Jan 2020 23:08:17 +0000</pubDate><guid>https://jorgesnotebook.com/posts/what-is-going-on-with-java/</guid><description>&lt;p&gt;The other day there were a few news articles about the new version of Java. I was thinking another one? Really? Like a lot of people in the beginning of their careers, no-one checks the differences between Java versions because they are focused on the projects which they are working on, or maybe it’s just me. But, I had a break between jobs so I decided to update all my knowledge and one thing from my list was this one, so I hope you find this information interesting. As everyone knows, Java has another JDK version which is the JDK 11.&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>JDK 11 on Jorge&#39;s notebook</title>
+    <link>http://localhost:46859/tags/jdk-11/</link>
+    <description>Recent content in JDK 11 on Jorge&#39;s notebook</description>
+    <generator>Hugo</generator>
+    <language>en-GB</language>
+    <lastBuildDate>Thu, 23 Jan 2020 23:08:17 +0000</lastBuildDate>
+    <atom:link href="http://localhost:46859/tags/jdk-11/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>What’s going on with Java?</title>
+      <link>http://localhost:46859/posts/what-is-going-on-with-java/</link>
+      <pubDate>Thu, 23 Jan 2020 23:08:17 +0000</pubDate>
+      <guid>http://localhost:46859/posts/what-is-going-on-with-java/</guid>
+      <description>&lt;p&gt;The other day there were a few news articles about the new version of Java. I was thinking another one? Really? Like a lot of people in the beginning of their careers, no-one checks the differences between Java versions because they are focused on the projects which they are working on, or maybe it’s just me. But, I had a break between jobs so I decided to update all my knowledge and one thing from my list was this one, so I hope you find this information interesting. As everyone knows, Java has another JDK version which is the JDK 11.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

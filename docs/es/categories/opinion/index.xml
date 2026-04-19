@@ -1,1 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Opinion on Jorge's notebook</title><link>https://jorgesnotebook.com/es/categories/opinion/</link><description>Recent content in Opinion on Jorge's notebook</description><generator>Hugo</generator><language>es</language><lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/es/categories/opinion/index.xml" rel="self" type="application/rss+xml"/><item><title>Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)</title><link>https://jorgesnotebook.com/es/posts/designing-otel-pipeline-for-scaling/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/posts/designing-otel-pipeline-for-scaling/</guid><description>&lt;p&gt;Estamos usando Grafana Cloud para observabilidad — Mimir, Tempo, Loki, todo el paquete. Funciona bien, sin quejas. Antes de todo esto solo escalábamos con CPU y memoria con el HPA normal. Que está bien hasta que no lo está — la CPU y la memoria son indicadores con retraso, cuando suben ya estás en problemas. Asi que me puse a mirar KEDA porque quería escalar sobre algo que tuviera más sentido, como la profundidad de la cola. Nadie me lo pidió, simplemente pensé que era lo correcto.&lt;/p&gt;</description></item><item><title>¿Qué está pasando con Java?</title><link>https://jorgesnotebook.com/es/posts/what-is-going-on-with-java/</link><pubDate>Thu, 23 Jan 2020 23:08:17 +0000</pubDate><guid>https://jorgesnotebook.com/es/posts/what-is-going-on-with-java/</guid><description>&lt;p&gt;El otro día salieron varias noticias sobre la nueva versión de Java. Mi primera reacción fue&amp;hellip; ¿otra? ¿en serio? Como mucha gente al principio de su carrera, no me fijaba en las diferencias entre versiones de Java porque estaba centrado en los proyectos en los que trabajaba. O igual era solo yo. El caso es que tuve un parón entre trabajos y me puse a actualizar todo lo que tenía pendiente, y esto era una de las cosas de la lista. Espero que te resulte interesante.&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Opinion on Jorge&#39;s notebook</title>
+    <link>http://localhost:46859/es/categories/opinion/</link>
+    <description>Recent content in Opinion on Jorge&#39;s notebook</description>
+    <generator>Hugo</generator>
+    <language>es</language>
+    <lastBuildDate>Thu, 23 Jan 2020 23:08:17 +0000</lastBuildDate>
+    <atom:link href="http://localhost:46859/es/categories/opinion/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>¿Qué está pasando con Java?</title>
+      <link>http://localhost:46859/es/posts/what-is-going-on-with-java/</link>
+      <pubDate>Thu, 23 Jan 2020 23:08:17 +0000</pubDate>
+      <guid>http://localhost:46859/es/posts/what-is-going-on-with-java/</guid>
+      <description>&lt;p&gt;El otro día salieron varias noticias sobre la nueva versión de Java. Mi primera reacción fue&amp;hellip; ¿otra? ¿en serio? Como mucha gente al principio de su carrera, no me fijaba en las diferencias entre versiones de Java porque estaba centrado en los proyectos en los que trabajaba. O igual era solo yo. El caso es que tuve un parón entre trabajos y me puse a actualizar todo lo que tenía pendiente, y esto era una de las cosas de la lista. Espero que te resulte interesante.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

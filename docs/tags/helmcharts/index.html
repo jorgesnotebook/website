@@ -1,4 +1,739 @@
-<!doctype html><html lang=en-GB dir=ltr><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#343a40"><meta name=color-scheme content="light dark"><meta property="og:url" content="https://jorgesnotebook.com/tags/helmcharts/"><meta property="og:site_name" content="Jorge's notebook"><meta property="og:title" content="Helmcharts"><meta property="og:locale" content="en_GB"><meta property="og:type" content="website"><title>Helmcharts | Jorge's notebook</title><link rel=icon href=/favicon-32.png><link rel=manifest href=/manifest.json><link rel=canonical href=https://jorgesnotebook.com/tags/helmcharts/><link rel=alternate hreflang=es href=https://jorgesnotebook.com/es/tags/helmcharts/ title=Helmcharts><link rel=stylesheet href=/book.min.c6f0ab8898a9b8e243f0aacc03c73275192bd36dfd0d01e4417d38cbfcafdc42.css integrity="sha256-xvCriJipuOJD8KrMA8cydRkr0239DQHkQX04y/yv3EI=" crossorigin=anonymous><script defer src=/fuse.min.js></script><script defer src=/en.search.min.193de4d388f3a4167eb775b8bb779e967ce9cb093c14e9f01866e471b8fc4d32.js integrity="sha256-GT3k04jzpBZ+t3W4u3eelnzpywk8FOnwGGbkcbj8TTI=" crossorigin=anonymous></script><script defer src=/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js integrity="sha256-b2+Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC+NdcPIvZhzk=" crossorigin=anonymous></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-5X0MZZJXFN"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-5X0MZZJXFN")}</script><link rel=alternate type=application/rss+xml href=https://jorgesnotebook.com/tags/helmcharts/index.xml title="Jorge's notebook"><style>:root{--nb-purple:#7040A0;--nb-purple-light:#9060C0;--nb-purple-dark:#4A2870;--nb-gold:#C9A843;--nb-gold-light:#DFC06A;--nb-gold-dark:#9A7E2E;--nb-bg:#0a0a0f;--nb-bg-card:#111118;--nb-border:#1e1e2a;--nb-text:#9ca3af;--nb-text-light:#e5e7eb;--nb-text-muted:#6b7280;--color-link:var(--nb-purple);--color-visited-link:var(--nb-purple-dark)}@media(prefers-color-scheme:dark){:root{--body-background:var(--nb-bg);--body-font-color:var(--nb-text);--color-link:var(--nb-purple-light);--color-visited-link:var(--nb-purple);--gray-100:var(--nb-bg-card);--gray-200:var(--nb-border);--gray-500:var(--nb-text-muted)}.book-menu .book-menu-content,.book-search input{background:var(--nb-bg-card)}h1,h2,h3{color:var(--nb-text-light)}a:hover{color:var(--nb-purple-light)}code,pre{background:#0d0d14}.markdown img{filter:brightness(.88)contrast(1.05);border-radius:.25rem}}.nb-lang-switcher{display:flex;align-items:center;gap:.5rem;padding:.75rem 0 .25rem;font-size:.8rem}.nb-lang{color:var(--nb-text-muted);text-decoration:none;transition:color .2s}.nb-lang:hover{color:var(--nb-purple-light)}.nb-lang-active{color:var(--nb-purple);font-weight:700;cursor:default}@media(prefers-color-scheme:dark){.nb-lang-active{color:var(--nb-purple-light)}}.nb-lang-switcher .nb-lang+.nb-lang::before,.nb-lang-switcher .nb-lang-active+.nb-lang::before,.nb-lang-switcher .nb-lang+.nb-lang-active::before{content:"/";margin-right:.5rem;color:var(--nb-text-muted)}::selection{background:var(--nb-purple);color:#fff}::-moz-selection{background:var(--nb-purple);color:#fff}body{font-family:roboto,-apple-system,BlinkMacSystemFont,segoe ui,sans-serif;line-height:1.75}.book-page{max-width:740px}.book-brand img.book-icon{height:2.2rem;width:2.2rem;filter:none!important}.nb-hero{padding:3rem 0 2.5rem;margin-bottom:2.5rem}.nb-hero-name{font-size:2.4rem;font-weight:900;letter-spacing:.05rem;background:linear-gradient(90deg,var(--nb-purple) 0%,var(--nb-gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 .4rem}.nb-hero-badge{font-size:1rem;font-weight:300;color:var(--nb-gold);margin-bottom:1.2rem;letter-spacing:.08rem}.nb-hero-desc{font-size:.95rem;max-width:560px;line-height:1.7;margin-bottom:1.5rem;color:var(--body-font-color)}.nb-hero-links{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem}.nb-btn{display:inline-block;padding:.45rem 1.1rem;border-radius:.35rem;font-size:.85rem;font-weight:600;background:var(--nb-purple);color:#fff!important;text-decoration:none;transition:background .2s}.nb-btn:hover{background:var(--nb-purple-light);color:#fff!important}.nb-btn-outline{background:0 0;border:1px solid var(--nb-purple);color:var(--nb-purple)!important}.nb-btn-outline:hover{background:var(--nb-purple);color:#fff!important}@media(prefers-color-scheme:dark){.nb-btn-outline{border-color:var(--nb-purple-light);color:var(--nb-purple-light)!important}.nb-btn-outline:hover{background:var(--nb-purple-light);color:#fff!important}}.nb-hero-stack{display:flex;flex-wrap:wrap;gap:.4rem}.nb-tag{font-size:.75rem;padding:.2rem .65rem;border-radius:9999px;border:1px solid var(--nb-gold-dark);color:var(--nb-text-muted,#6b7280);background:0 0}@media(prefers-color-scheme:dark){.nb-tag{border-color:var(--nb-gold-dark);color:var(--nb-text-muted);background:rgba(201,168,67,5%)}}.nb-section{margin-bottom:3rem}.nb-section-title{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.12rem;color:var(--nb-purple)!important;border-bottom:2px solid var(--nb-gold-dark);padding-bottom:.5rem;margin-bottom:1.25rem}@media(prefers-color-scheme:dark){.nb-section-title{color:var(--nb-purple-light)!important;border-color:var(--nb-gold-dark)}}.nb-post-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}.nb-post-card{display:block;padding:1.1rem 1.2rem;border:1px solid var(--nb-border,#e9ecef);border-radius:.5rem;text-decoration:none!important;transition:border-color .2s,background .2s;background:0 0}.nb-post-card:hover{border-color:var(--nb-purple);background:rgba(112,64,160,5%)}@media(prefers-color-scheme:dark){.nb-post-card{border-color:var(--nb-border)}.nb-post-card:hover{border-color:var(--nb-purple-light);background:rgba(112,64,160,.1)}}.nb-post-meta{font-size:.72rem;color:var(--nb-text-muted,#6b7280);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05rem}.nb-post-title{font-size:.95rem;font-weight:600;margin:0 0 .5rem;color:var(--body-font-color);line-height:1.4}.nb-post-desc{font-size:.82rem;color:var(--nb-text-muted,#6b7280);margin:0;line-height:1.5}.nb-list-item{display:flex;align-items:flex-start;gap:1.2rem;padding:.85rem 0;border-bottom:1px solid var(--nb-border,#f0f0f0)}@media(prefers-color-scheme:dark){.nb-list-item{border-color:var(--nb-border)}}.nb-list-meta{flex-shrink:0;font-size:.72rem;color:var(--nb-text-muted,#6b7280);padding-top:.2rem;min-width:90px}.nb-list-body{flex:1}.nb-list-title{font-size:.95rem;font-weight:600;color:var(--body-font-color)!important;text-decoration:none;display:block;margin-bottom:.25rem}.nb-list-title:hover{color:var(--nb-purple-light)!important}.nb-list-desc{font-size:.82rem;color:var(--nb-text-muted,#6b7280);margin:0;line-height:1.5}.markdown h1,.markdown h2,.markdown h3{font-weight:700}.markdown h2{border-left:3px solid var(--nb-gold-dark);padding-left:.75rem}.markdown code{font-size:.85em}</style></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
-<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a class="flex align-center" href=/><img src=/main_logo_transparent.png alt=Logo class=book-icon><span>Jorge's notebook</span></a></h2><div class="book-search hidden"><input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><script>document.querySelector(".book-search").classList.remove("hidden")</script><div class=nb-lang-switcher><span class="nb-lang nb-lang-active">English</span>
-<a class=nb-lang href=/es/tags/helmcharts/>Castellano</a></div><ul><li><input type=checkbox id=section-91dd026ba0b7d00840facdf1d2e82eb2 class=toggle>
-<label for=section-91dd026ba0b7d00840facdf1d2e82eb2 class="flex justify-between"><a role=button>Posts</a></label><ul><li><a href=/posts/designing-otel-pipeline-for-scaling/>Designing an OpenTelemetry Pipeline for Scaling (Not Observability)</a></li><li><a href=/posts/how-to-create-a-k8s-homelab-with-k3s/>Building a Production-Grade k3s Homelab: HA, Cilium, and MetalLB</a></li><li><a href=/posts/how-to-implement-sops-helmfile/>Encrypting Kubernetes Secrets with SOPS and Helmfile</a></li><li><a href=/posts/how-to-set-up-your-kluster-with-helmfle/>Helmfile: Structuring Kubernetes Releases at Scale</a></li><li><a href=/posts/how-to-create-a-small-jvm-docker-image/>jlink with Spring Boot services</a></li><li><a href=/posts/starting-with-spring-boot/>Starting with Spring Boot</a></li><li><a href=/posts/what-is-going-on-with-java/>What’s going on with Java?</a></li><li><a href=/posts/how-to-install-gitlab-on-debian-9/>How to Install Gitlab on Debian 9</a></li><li><a href=/posts/how-to-install-jenkins/>How to Install Jenkins</a></li></ul></li><li><a href=/about/>About</a></li></ul><ul><li><a href=https://github.com/jorgeancal/ target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label><h3>Helmcharts</h3><label for=toc-control><img src=/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents></nav></aside></header><article class="markdown book-article"></article><footer class=book-footer><div class="flex flex-wrap justify-between"></div><script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script></footer><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents></nav></div></aside></main></body></html>
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=46859&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:46859/tags/helmcharts/">
+  <meta property="og:site_name" content="Jorge&#39;s notebook">
+  <meta property="og:title" content="Helmcharts">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:type" content="website">
+<title>Helmcharts | Jorge&#39;s notebook</title>
+<link rel="icon" href="/favicon-32.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:46859/tags/helmcharts/">
+  <link rel="alternate" hreflang="es" href="http://localhost:46859/es/tags/helmcharts/" title="Helmcharts">
+<link rel="stylesheet" href="/book.min.c6f0ab8898a9b8e243f0aacc03c73275192bd36dfd0d01e4417d38cbfcafdc42.css" integrity="sha256-xvCriJipuOJD8KrMA8cydRkr0239DQHkQX04y/yv3EI=" crossorigin="anonymous">
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.447990a87ef080ee8c59580274f7a6c904cafac090964ee2baff932ea6b35b50.js" integrity="sha256-RHmQqH7wgO6MWVgCdPemyQTK&#43;sCQlk7iuv&#43;TLqazW1A=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X0MZZJXFN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-5X0MZZJXFN');
+        }
+      </script><link rel="alternate" type="application/rss+xml" href="http://localhost:46859/tags/helmcharts/index.xml" title="Jorge's notebook" />
+<!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <style>
+ 
+:root {
+  --nb-purple:       #7040A0;
+  --nb-purple-light: #9060C0;
+  --nb-purple-dark:  #4A2870;
+  --nb-gold:         #C9A843;
+  --nb-gold-light:   #DFC06A;
+  --nb-gold-dark:    #9A7E2E;
+  --nb-bg:           #0a0a0f;
+  --nb-bg-card:      #111118;
+  --nb-border:       #1e1e2a;
+  --nb-text:         #9ca3af;
+  --nb-text-light:   #e5e7eb;
+  --nb-text-muted:   #6b7280;
+
+  --color-link:         var(--nb-purple);
+  --color-visited-link: var(--nb-purple-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-background:    var(--nb-bg);
+    --body-font-color:    var(--nb-text);
+    --color-link:         var(--nb-purple-light);
+    --color-visited-link: var(--nb-purple);
+    --gray-100:           var(--nb-bg-card);
+    --gray-200:           var(--nb-border);
+    --gray-500:           var(--nb-text-muted);
+  }
+
+  .book-menu .book-menu-content,
+  .book-search input {
+    background: var(--nb-bg-card);
+  }
+
+  h1, h2, h3 {
+    color: var(--nb-text-light);
+  }
+
+  a:hover {
+    color: var(--nb-purple-light);
+  }
+
+  code, pre {
+    background: #0d0d14;
+  }
+
+   
+  .markdown img {
+    filter: brightness(0.88) contrast(1.05);
+    border-radius: .25rem;
+  }
+}
+
+ 
+.nb-lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .75rem 0 .25rem;
+  font-size: .8rem;
+}
+
+.nb-lang {
+  color: var(--nb-text-muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.nb-lang:hover {
+  color: var(--nb-purple-light);
+}
+
+.nb-lang-active {
+  color: var(--nb-purple);
+  font-weight: 700;
+  cursor: default;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-lang-active { color: var(--nb-purple-light); }
+}
+
+.nb-lang-switcher .nb-lang + .nb-lang::before,
+.nb-lang-switcher .nb-lang-active + .nb-lang::before,
+.nb-lang-switcher .nb-lang + .nb-lang-active::before {
+  content: "/";
+  margin-right: .5rem;
+  color: var(--nb-text-muted);
+}
+
+ 
+::selection {
+  background: var(--nb-purple);
+  color: #fff;
+}
+
+::-moz-selection {
+  background: var(--nb-purple);
+  color: #fff;
+}
+
+ 
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.75;
+}
+
+.book-page {
+  max-width: 740px;
+}
+
+ 
+.book-brand img.book-icon {
+  height: 2.2rem;
+  width:  2.2rem;
+  filter: none !important;
+}
+
+ 
+.nb-hero {
+  padding: 3rem 0 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.nb-hero-name {
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: .05rem;
+  background: linear-gradient(90deg, var(--nb-purple) 0%, var(--nb-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 .4rem;
+}
+
+.nb-hero-badge {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--nb-gold);
+  margin-bottom: 1.2rem;
+  letter-spacing: .08rem;
+}
+
+.nb-hero-desc {
+  font-size: .95rem;
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: var(--body-font-color);
+}
+
+.nb-hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-bottom: 1.5rem;
+}
+
+ 
+.nb-btn {
+  display: inline-block;
+  padding: .45rem 1.1rem;
+  border-radius: .35rem;
+  font-size: .85rem;
+  font-weight: 600;
+  background: var(--nb-purple);
+  color: #fff !important;
+  text-decoration: none;
+  transition: background .2s;
+}
+
+.nb-btn:hover {
+  background: var(--nb-purple-light);
+  color: #fff !important;
+}
+
+ 
+.nb-btn-outline {
+  background: transparent;
+  border: 1px solid var(--nb-purple);
+  color: var(--nb-purple) !important;
+}
+
+.nb-btn-outline:hover {
+  background: var(--nb-purple);
+  color: #fff !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-btn-outline {
+    border-color: var(--nb-purple-light);
+    color: var(--nb-purple-light) !important;
+  }
+  .nb-btn-outline:hover {
+    background: var(--nb-purple-light);
+    color: #fff !important;
+  }
+}
+
+ 
+.nb-hero-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.nb-tag {
+  font-size: .75rem;
+  padding: .2rem .65rem;
+  border-radius: 9999px;
+  border: 1px solid var(--nb-gold-dark);
+  color: var(--nb-text-muted, #6b7280);
+  background: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-tag {
+    border-color: var(--nb-gold-dark);
+    color: var(--nb-text-muted);
+    background: rgba(201, 168, 67, .05);
+  }
+}
+
+ 
+.nb-section {
+  margin-bottom: 3rem;
+}
+
+.nb-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12rem;
+  color: var(--nb-purple) !important;
+  border-bottom: 2px solid var(--nb-gold-dark);
+  padding-bottom: .5rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-section-title {
+    color: var(--nb-purple-light) !important;
+    border-color: var(--nb-gold-dark);
+  }
+}
+
+ 
+.nb-post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.nb-post-card {
+  display: block;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--nb-border, #e9ecef);
+  border-radius: .5rem;
+  text-decoration: none !important;
+  transition: border-color .2s, background .2s;
+  background: transparent;
+}
+
+.nb-post-card:hover {
+  border-color: var(--nb-purple);
+  background: rgba(112, 64, 160, .05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-post-card { border-color: var(--nb-border); }
+  .nb-post-card:hover {
+    border-color: var(--nb-purple-light);
+    background: rgba(112, 64, 160, .1);
+  }
+}
+
+.nb-post-meta {
+  font-size: .72rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin-bottom: .4rem;
+  text-transform: uppercase;
+  letter-spacing: .05rem;
+}
+
+.nb-post-title {
+  font-size: .95rem;
+  font-weight: 600;
+  margin: 0 0 .5rem;
+  color: var(--body-font-color);
+  line-height: 1.4;
+}
+
+.nb-post-desc {
+  font-size: .82rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+ 
+.nb-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: .85rem 0;
+  border-bottom: 1px solid var(--nb-border, #f0f0f0);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-list-item { border-color: var(--nb-border); }
+}
+
+.nb-list-meta {
+  flex-shrink: 0;
+  font-size: .72rem;
+  color: var(--nb-text-muted, #6b7280);
+  padding-top: .2rem;
+  min-width: 90px;
+}
+
+.nb-list-body { flex: 1; }
+
+.nb-list-title {
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--body-font-color) !important;
+  text-decoration: none;
+  display: block;
+  margin-bottom: .25rem;
+}
+
+.nb-list-title:hover {
+  color: var(--nb-purple-light) !important;
+}
+
+.nb-list-desc {
+  font-size: .82rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+ 
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  font-weight: 700;
+}
+
+.markdown h2 {
+  border-left: 3px solid var(--nb-gold-dark);
+  padding-left: .75rem;
+}
+
+.markdown code {
+  font-size: .85em;
+}
+</style>
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/main_logo_transparent.png" alt="Logo" class="book-icon" /><span>Jorge&#39;s notebook</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<div class="nb-lang-switcher">
+  
+    
+      <span class="nb-lang nb-lang-active">English</span>
+    
+  
+    
+      
+        <a class="nb-lang" href="/es/tags/helmcharts/">Castellano</a>
+      
+    
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-06eea90a6e865d57eef6316f4407bb88" class="toggle"  />
+    <label for="section-06eea90a6e865d57eef6316f4407bb88" class="flex justify-between">
+      <a role="button" class="">Posts</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-create-a-k8s-homelab-with-k3s/" class="">Building a Production-Grade k3s Homelab: HA, Cilium, and MetalLB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-implement-sops-helmfile/" class="">Encrypting Kubernetes Secrets with SOPS and Helmfile</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-set-up-your-kluster-with-helmfle/" class="">Helmfile: Structuring Kubernetes Releases at Scale</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-create-a-small-jvm-docker-image/" class="">jlink with Spring Boot services</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/starting-with-spring-boot/" class="">Starting with Spring Boot</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/what-is-going-on-with-java/" class="">What’s going on with Java?</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-install-gitlab-on-debian-9/" class="">How to Install Gitlab on Debian 9</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-install-jenkins/" class="">How to Install Jenkins</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/about/" class="">About</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="https://github.com/jorgeancal/"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Helmcharts</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents"></nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+  <article class="markdown book-article"></article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents"></nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

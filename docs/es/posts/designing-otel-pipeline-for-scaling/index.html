@@ -1,113 +1,1000 @@
-<!doctype html><html lang=es dir=ltr><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="La mayoría monta OpenTelemetry pensando en dashboards. Yo lo use para alimentar las decisiones de escalado de KEDA y el pipeline quedo completamente diferente."><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#343a40"><meta name=color-scheme content="light dark"><meta property="og:url" content="https://jorgesnotebook.com/es/posts/designing-otel-pipeline-for-scaling/"><meta property="og:site_name" content="Jorge's notebook"><meta property="og:title" content="Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)"><meta property="og:description" content="La mayoría monta OpenTelemetry pensando en dashboards. Yo lo use para alimentar las decisiones de escalado de KEDA y el pipeline quedo completamente diferente."><meta property="og:locale" content="es"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-04-18T00:00:00+00:00"><meta property="article:modified_time" content="2026-04-18T00:00:00+00:00"><meta property="article:tag" content="Kubernetes"><meta property="article:tag" content="Opentelemetry"><meta property="article:tag" content="Keda"><meta property="article:tag" content="Prometheus"><meta property="article:tag" content="Scaling"><meta property="article:tag" content="Observability"><title>Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad) | Jorge's notebook</title><link rel=icon href=/favicon-32.png><link rel=manifest href=/manifest.json><link rel=canonical href=https://jorgesnotebook.com/es/posts/designing-otel-pipeline-for-scaling/><link rel=alternate hreflang=en href=https://jorgesnotebook.com/posts/designing-otel-pipeline-for-scaling/ title="Designing an OpenTelemetry Pipeline for Scaling (Not Observability)"><link rel=stylesheet href=/book.min.c6f0ab8898a9b8e243f0aacc03c73275192bd36dfd0d01e4417d38cbfcafdc42.css integrity="sha256-xvCriJipuOJD8KrMA8cydRkr0239DQHkQX04y/yv3EI=" crossorigin=anonymous><script defer src=/fuse.min.js></script><script defer src=/es.search.min.efd5ea4af6bef61397b5556a633d87eeeb668cae246803aaced67b933f9e5825.js integrity="sha256-79XqSva+9hOXtVVqYz2H7utmjK4kaAOqztZ7kz+eWCU=" crossorigin=anonymous></script><script defer src=/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js integrity="sha256-b2+Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC+NdcPIvZhzk=" crossorigin=anonymous></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-5X0MZZJXFN"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-5X0MZZJXFN")}</script><style>:root{--nb-purple:#7040A0;--nb-purple-light:#9060C0;--nb-purple-dark:#4A2870;--nb-gold:#C9A843;--nb-gold-light:#DFC06A;--nb-gold-dark:#9A7E2E;--nb-bg:#0a0a0f;--nb-bg-card:#111118;--nb-border:#1e1e2a;--nb-text:#9ca3af;--nb-text-light:#e5e7eb;--nb-text-muted:#6b7280;--color-link:var(--nb-purple);--color-visited-link:var(--nb-purple-dark)}@media(prefers-color-scheme:dark){:root{--body-background:var(--nb-bg);--body-font-color:var(--nb-text);--color-link:var(--nb-purple-light);--color-visited-link:var(--nb-purple);--gray-100:var(--nb-bg-card);--gray-200:var(--nb-border);--gray-500:var(--nb-text-muted)}.book-menu .book-menu-content,.book-search input{background:var(--nb-bg-card)}h1,h2,h3{color:var(--nb-text-light)}a:hover{color:var(--nb-purple-light)}code,pre{background:#0d0d14}.markdown img{filter:brightness(.88)contrast(1.05);border-radius:.25rem}}.nb-lang-switcher{display:flex;align-items:center;gap:.5rem;padding:.75rem 0 .25rem;font-size:.8rem}.nb-lang{color:var(--nb-text-muted);text-decoration:none;transition:color .2s}.nb-lang:hover{color:var(--nb-purple-light)}.nb-lang-active{color:var(--nb-purple);font-weight:700;cursor:default}@media(prefers-color-scheme:dark){.nb-lang-active{color:var(--nb-purple-light)}}.nb-lang-switcher .nb-lang+.nb-lang::before,.nb-lang-switcher .nb-lang-active+.nb-lang::before,.nb-lang-switcher .nb-lang+.nb-lang-active::before{content:"/";margin-right:.5rem;color:var(--nb-text-muted)}::selection{background:var(--nb-purple);color:#fff}::-moz-selection{background:var(--nb-purple);color:#fff}body{font-family:roboto,-apple-system,BlinkMacSystemFont,segoe ui,sans-serif;line-height:1.75}.book-page{max-width:740px}.book-brand img.book-icon{height:2.2rem;width:2.2rem;filter:none!important}.nb-hero{padding:3rem 0 2.5rem;margin-bottom:2.5rem}.nb-hero-name{font-size:2.4rem;font-weight:900;letter-spacing:.05rem;background:linear-gradient(90deg,var(--nb-purple) 0%,var(--nb-gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 .4rem}.nb-hero-badge{font-size:1rem;font-weight:300;color:var(--nb-gold);margin-bottom:1.2rem;letter-spacing:.08rem}.nb-hero-desc{font-size:.95rem;max-width:560px;line-height:1.7;margin-bottom:1.5rem;color:var(--body-font-color)}.nb-hero-links{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem}.nb-btn{display:inline-block;padding:.45rem 1.1rem;border-radius:.35rem;font-size:.85rem;font-weight:600;background:var(--nb-purple);color:#fff!important;text-decoration:none;transition:background .2s}.nb-btn:hover{background:var(--nb-purple-light);color:#fff!important}.nb-btn-outline{background:0 0;border:1px solid var(--nb-purple);color:var(--nb-purple)!important}.nb-btn-outline:hover{background:var(--nb-purple);color:#fff!important}@media(prefers-color-scheme:dark){.nb-btn-outline{border-color:var(--nb-purple-light);color:var(--nb-purple-light)!important}.nb-btn-outline:hover{background:var(--nb-purple-light);color:#fff!important}}.nb-hero-stack{display:flex;flex-wrap:wrap;gap:.4rem}.nb-tag{font-size:.75rem;padding:.2rem .65rem;border-radius:9999px;border:1px solid var(--nb-gold-dark);color:var(--nb-text-muted,#6b7280);background:0 0}@media(prefers-color-scheme:dark){.nb-tag{border-color:var(--nb-gold-dark);color:var(--nb-text-muted);background:rgba(201,168,67,5%)}}.nb-section{margin-bottom:3rem}.nb-section-title{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.12rem;color:var(--nb-purple)!important;border-bottom:2px solid var(--nb-gold-dark);padding-bottom:.5rem;margin-bottom:1.25rem}@media(prefers-color-scheme:dark){.nb-section-title{color:var(--nb-purple-light)!important;border-color:var(--nb-gold-dark)}}.nb-post-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}.nb-post-card{display:block;padding:1.1rem 1.2rem;border:1px solid var(--nb-border,#e9ecef);border-radius:.5rem;text-decoration:none!important;transition:border-color .2s,background .2s;background:0 0}.nb-post-card:hover{border-color:var(--nb-purple);background:rgba(112,64,160,5%)}@media(prefers-color-scheme:dark){.nb-post-card{border-color:var(--nb-border)}.nb-post-card:hover{border-color:var(--nb-purple-light);background:rgba(112,64,160,.1)}}.nb-post-meta{font-size:.72rem;color:var(--nb-text-muted,#6b7280);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05rem}.nb-post-title{font-size:.95rem;font-weight:600;margin:0 0 .5rem;color:var(--body-font-color);line-height:1.4}.nb-post-desc{font-size:.82rem;color:var(--nb-text-muted,#6b7280);margin:0;line-height:1.5}.nb-list-item{display:flex;align-items:flex-start;gap:1.2rem;padding:.85rem 0;border-bottom:1px solid var(--nb-border,#f0f0f0)}@media(prefers-color-scheme:dark){.nb-list-item{border-color:var(--nb-border)}}.nb-list-meta{flex-shrink:0;font-size:.72rem;color:var(--nb-text-muted,#6b7280);padding-top:.2rem;min-width:90px}.nb-list-body{flex:1}.nb-list-title{font-size:.95rem;font-weight:600;color:var(--body-font-color)!important;text-decoration:none;display:block;margin-bottom:.25rem}.nb-list-title:hover{color:var(--nb-purple-light)!important}.nb-list-desc{font-size:.82rem;color:var(--nb-text-muted,#6b7280);margin:0;line-height:1.5}.markdown h1,.markdown h2,.markdown h3{font-weight:700}.markdown h2{border-left:3px solid var(--nb-gold-dark);padding-left:.75rem}.markdown code{font-size:.85em}</style></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
-<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a class="flex align-center" href=/><img src=/main_logo_transparent.png alt=Logo class=book-icon><span>Jorge's notebook</span></a></h2><div class="book-search hidden"><input type=text id=book-search-input placeholder=Buscar aria-label=Buscar maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><script>document.querySelector(".book-search").classList.remove("hidden")</script><div class=nb-lang-switcher><a class=nb-lang href=/posts/designing-otel-pipeline-for-scaling/>English</a>
-<span class="nb-lang nb-lang-active">Castellano</span></div><ul><li><span>Posts</span><ul><li><a href=/es/posts/designing-otel-pipeline-for-scaling/ class=active>Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)</a></li><li><a href=/es/posts/how-to-create-a-k8s-homelab-with-k3s/>Monta tu propio cluster con k3s</a></li><li><a href=/es/posts/how-to-implement-sops-helmfile/>Como configurar SOPS en Helmfile</a></li><li><a href=/es/posts/how-to-set-up-your-kluster-with-helmfle/>Configurar tu kluster con Helmfile</a></li><li><a href=/es/posts/how-to-create-a-small-jvm-docker-image/>jlink con Spring Boot</a></li><li><a href=/es/posts/starting-with-spring-boot/>Empezando con Spring Boot</a></li><li><a href=/es/posts/what-is-going-on-with-java/>¿Qué está pasando con Java?</a></li><li><a href=/es/posts/how-to-install-gitlab-on-debian-9/>Cómo instalar GitLab en Debian 9</a></li><li><a href=/es/posts/how-to-install-jenkins/>Cómo instalar Jenkins</a></li></ul></li><li><a href=/es/about/>About</a></li></ul><ul><li><a href=https://github.com/jorgeancal/ target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label><h3>Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)</h3><label for=toc-control><img src=/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><ul><li><a href=#el-problema-de-pensar-observabilidad-primero>El problema de pensar &ldquo;observabilidad primero&rdquo;</a></li><li><a href=#lo-que-quería-hacer>Lo que quería hacer</a></li><li><a href=#filtrando-en-el-collector>Filtrando en el collector</a></li><li><a href=#la-config-del-pipeline>La config del pipeline</a></li><li><a href=#la-trampa-de-la-temporalidad>La trampa de la temporalidad</a></li><li><a href=#transformando-métricas-antes-de-que-lleguen-a-prometheus>Transformando métricas antes de que lleguen a Prometheus</a></li><li><a href=#keda-leyendo-desde-prometheus>KEDA leyendo desde Prometheus</a></li><li><a href=#por-qué-no-usar-el-stack-completo-de-observabilidad>Por qué no usar el stack completo de observabilidad</a></li><li><a href=#los-trade-offs>Los trade-offs</a></li><li><a href=#conclusión>Conclusión</a></li></ul></li></ul></nav></aside></header><article class="markdown book-post"><h2>Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)</h2><div class="flex align-center text-small book-post-date"><img src=/svg/calendar.svg class=book-icon alt>
-<span>abril 18, 2026</span></div><div class=text-small><a href=/es/categories/kubernetes/>Kubernetes</a>,
-<a href=/es/categories/how-to/>How To</a>,
-<a href=/es/categories/opinion/>Opinion</a></div><div class=text-small><a href=/es/tags/kubernetes/>Kubernetes</a>,
-<a href=/es/tags/opentelemetry/>Opentelemetry</a>,
-<a href=/es/tags/keda/>Keda</a>,
-<a href=/es/tags/prometheus/>Prometheus</a>,
-<a href=/es/tags/scaling/>Scaling</a>,
-<a href=/es/tags/observability/>Observability</a></div><div class=book-post-content><p>Estamos usando Grafana Cloud para observabilidad — Mimir, Tempo, Loki, todo el paquete. Funciona bien, sin quejas. Antes de todo esto solo escalábamos con CPU y memoria con el HPA normal. Que está bien hasta que no lo está — la CPU y la memoria son indicadores con retraso, cuando suben ya estás en problemas. Asi que me puse a mirar KEDA porque quería escalar sobre algo que tuviera más sentido, como la profundidad de la cola. Nadie me lo pidió, simplemente pensé que era lo correcto.</p><p>Entonces vino la pregunta de de dónde iba a sacar KEDA las métricas. No me apetecia nada que estuviera llamando a Grafana Cloud en cada polling interval. Es una llamada externa, cuesta dinero, añade latencia, y si Grafana Cloud tiene un mal dia tus decisiones de escalado se van con él.</p><p>Asi que monté un Prometheus local y configure el collector de OTel para que solo le mandara ahi las métricas que KEDA necesita de verdad. Y esa decision es la que me hizo pensar diferente sobre el pipeline.</p><h2 id=el-problema-de-pensar-observabilidad-primero>El problema de pensar &ldquo;observabilidad primero&rdquo;
-<a class=anchor href=#el-problema-de-pensar-observabilidad-primero>#</a></h2><p>Cuando configuras OTel pensando en observabilidad lo quieres todo. Todos los traces, todas las métricas, todos los labels. Necesitas ese contexto cuando estas depurando a las 2 de la mañana. Tiene todo el sentido.</p><p>Pero cuando usas métricas para escalar no necesitas todo eso. Necesitas una o dos señales, de forma fiable y con poca latencia. Punto.</p><p>Cuando me di cuenta de eso, dejé de pensar en el collector como una herramienta de observabilidad y empecé a pensarlo como un pipeline.</p><h2 id=lo-que-quería-hacer>Lo que quería hacer
-<a class=anchor href=#lo-que-quer%c3%ada-hacer>#</a></h2><p>Tenia servicios generando métricas personalizadas a través del SDK de OTel. Profundidad de cola, jobs activos, ese tipo de cosas. Quería que KEDA leyera esas métricas desde Prometheus y escalara los consumers arriba y abajo en función de ellas.</p><p>El enfoque de primeras sería: instrumenta todo, manda todo a Prometheus, deja que KEDA lo consulte.</p><p>El problema es que &ldquo;todo&rdquo; es caro. Las métricas con alta cardinalidad hacen daño a tu Prometheus. Un endpoint de scrape hinchado añade latencia. Y KEDA consultando un Prometheus lento pues&mldr; no es lo ideal.</p><p>Asi que necesitaba filtrar en el collector antes de que nada llegara a Prometheus.</p><h2 id=filtrando-en-el-collector>Filtrando en el collector
-<a class=anchor href=#filtrando-en-el-collector>#</a></h2><p>Esta es la parte que la mayoría se salta. El collector de OTel tiene un procesador <code>filter</code> que te deja descartar las métricas que no te interesan antes de que vayan a ningún sitio.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>processors</span>:
-</span></span><span style=display:flex><span>  <span style=color:#f92672>filter/scaling-only</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>metrics</span>:
-</span></span><span style=display:flex><span>      <span style=color:#f92672>include</span>:
-</span></span><span style=display:flex><span>        <span style=color:#f92672>match_type</span>: <span style=color:#ae81ff>strict</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>metric_names</span>:
-</span></span><span style=display:flex><span>          - <span style=color:#ae81ff>app.queue.depth</span>
-</span></span><span style=display:flex><span>          - <span style=color:#ae81ff>app.active_jobs</span>
-</span></span></code></pre></div><p>Y ya. Todo lo demás se descarta antes de llegar al exporter de Prometheus. Tu Prometheus solo ve lo que KEDA necesita para tomar una decision.</p><p>También puedes quitarte los labels que no necesitas con el procesador <code>attributes</code>. Si tu métrica tiene 15 labels y KEDA solo consulta por 2 de ellos, elimina el resto:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>processors</span>:
-</span></span><span style=display:flex><span>  <span style=color:#f92672>attributes/strip</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>actions</span>:
-</span></span><span style=display:flex><span>      - <span style=color:#f92672>key</span>: <span style=color:#ae81ff>http.user_agent</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>action</span>: <span style=color:#ae81ff>delete</span>
-</span></span><span style=display:flex><span>      - <span style=color:#f92672>key</span>: <span style=color:#ae81ff>net.peer.ip</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>action</span>: <span style=color:#ae81ff>delete</span>
-</span></span></code></pre></div><p>Menos cardinalidad, menos memoria, consultas más rápidas.</p><h2 id=la-config-del-pipeline>La config del pipeline
-<a class=anchor href=#la-config-del-pipeline>#</a></h2><p>Juntando todo, el pipeline del collector para la ruta de escalado me quedo algo asi:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>processors</span>:
-</span></span><span style=display:flex><span>  <span style=color:#f92672>memory_limiter</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>check_interval</span>: <span style=color:#ae81ff>1s</span>
-</span></span><span style=display:flex><span>    <span style=color:#f92672>limit_mib</span>: <span style=color:#ae81ff>512</span>
-</span></span><span style=display:flex><span>    <span style=color:#f92672>spike_limit_mib</span>: <span style=color:#ae81ff>128</span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#f92672>service</span>:
-</span></span><span style=display:flex><span>  <span style=color:#f92672>pipelines</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>metrics/scaling</span>:
-</span></span><span style=display:flex><span>      <span style=color:#f92672>receivers</span>: [<span style=color:#ae81ff>otlp]</span>
-</span></span><span style=display:flex><span>      <span style=color:#f92672>processors</span>: [<span style=color:#ae81ff>memory_limiter, filter/scaling-only, attributes/strip, batch]</span>
-</span></span><span style=display:flex><span>      <span style=color:#f92672>exporters</span>: [<span style=color:#ae81ff>prometheus]</span>
-</span></span><span style=display:flex><span>    <span style=color:#f92672>metrics/observability</span>:
-</span></span><span style=display:flex><span>      <span style=color:#f92672>receivers</span>: [<span style=color:#ae81ff>otlp]</span>
-</span></span><span style=display:flex><span>      <span style=color:#f92672>processors</span>: [<span style=color:#ae81ff>memory_limiter, batch]</span>
-</span></span><span style=display:flex><span>      <span style=color:#f92672>exporters</span>: [<span style=color:#ae81ff>otlphttp/grafana]</span>
-</span></span></code></pre></div><p>El <code>memory_limiter</code> tiene que ir primero en la cadena de procesadores. Si lo pones después del filter ya es tarde — el pico de memoria ya paso durante la ingesta. Sin él, con un pico de tráfico el collector se va a OOM y tu pipeline de escalado se apaga justo cuando más lo necesitas.</p><p>Dos pipelines separados desde el mismo receiver. Uno ligero con las métricas filtradas que van a Prometheus para KEDA. Uno completo que va a Grafana Cloud.</p><p>Asi la ruta de escalado nunca se ve bloqueada por un problema con Grafana Cloud.</p><h2 id=la-trampa-de-la-temporalidad>La trampa de la temporalidad
-<a class=anchor href=#la-trampa-de-la-temporalidad>#</a></h2><p>Esta me pilló. Y la he visto pillar a más gente.</p><p>Las métricas de OTel tienen una temporalidad: pueden ser <strong>Cumulative</strong> o <strong>Delta</strong>. Prometheus espera Cumulative. El SDK de OTel probablemente emite Cumulative por defecto para los contadores asi que igual no te enteras nunca. Pero si usas un SDK o una librería que emite métricas Delta — o si lo has configurado manualmente — vas a obtener valores basura en Prometheus y KEDA tomará decisiones de escalado completamente equivocadas.</p><p>La solución está en el collector. Puedes usar el procesador <code>cumulativetodelta</code>, o mejor, decirle al exporter de Prometheus qué temporalidad debe pedir:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>exporters</span>:
-</span></span><span style=display:flex><span>  <span style=color:#f92672>prometheus</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>endpoint</span>: <span style=color:#e6db74>&#34;0.0.0.0:8889&#34;</span>
-</span></span><span style=display:flex><span>    <span style=color:#f92672>resource_to_telemetry_conversion</span>:
-</span></span><span style=display:flex><span>      <span style=color:#f92672>enabled</span>: <span style=color:#66d9ef>true</span>
-</span></span></code></pre></div><p>Y si controlas el SDK, pon explicitamente la preferencia de temporalidad a cumulative. No asumas nada. Mira como quedan tus métricas en Prometheus antes de conectar KEDA.</p><p>Una forma rápida de detectarlo: si tu gauge está saltando entre valores positivos y negativos, o ves contadores que se resetean de forma inesperada, la temporalidad es probablemente tu problema.</p><h2 id=transformando-métricas-antes-de-que-lleguen-a-prometheus>Transformando métricas antes de que lleguen a Prometheus
-<a class=anchor href=#transformando-m%c3%a9tricas-antes-de-que-lleguen-a-prometheus>#</a></h2><p>El procesador filter está bien para descartar lo que no necesitas. Pero a veces necesitas darle forma a las métricas que sí te quedas.</p><p>El procesador <code>metricstransform</code> te deja renombrar métricas, agregar valores de labels y crear métricas derivadas. Esto viene bien cuando tu SDK emite algo como <code>app.queue.depth</code> con un label <code>region</code> y quieres un único valor agregado de todas las regiones para KEDA:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>processors</span>:
-</span></span><span style=display:flex><span>  <span style=color:#f92672>metricstransform/aggregate</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>transforms</span>:
-</span></span><span style=display:flex><span>      - <span style=color:#f92672>include</span>: <span style=color:#ae81ff>app.queue.depth</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>action</span>: <span style=color:#ae81ff>update</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>operations</span>:
-</span></span><span style=display:flex><span>          - <span style=color:#f92672>action</span>: <span style=color:#ae81ff>aggregate_labels</span>
-</span></span><span style=display:flex><span>            <span style=color:#f92672>label_set</span>: [<span style=color:#ae81ff>service]</span>
-</span></span><span style=display:flex><span>            <span style=color:#f92672>aggregation_type</span>: <span style=color:#ae81ff>sum</span>
-</span></span></code></pre></div><p>Eso colapsa todas las variantes de region en una sola métrica por servicio. KEDA recibe una señal limpia y no tienes que escribir una consulta PromQL compleja para hacer la agregación en tiempo de consulta.</p><p>También lo puedes usar para renombrar métricas si el naming de tu SDK no es lo que quieres exponer:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>processors</span>:
-</span></span><span style=display:flex><span>  <span style=color:#f92672>metricstransform/rename</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>transforms</span>:
-</span></span><span style=display:flex><span>      - <span style=color:#f92672>include</span>: <span style=color:#ae81ff>app.queue.depth</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>action</span>: <span style=color:#ae81ff>update</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>new_name</span>: <span style=color:#ae81ff>scaling_queue_depth</span>
-</span></span></code></pre></div><p>Si vas a hacer algo más complejo que un renombrado, piensatelo dos veces antes de hacerlo en el collector. El collector no es el sitio para meter lógica de negocio.</p><h2 id=keda-leyendo-desde-prometheus>KEDA leyendo desde Prometheus
-<a class=anchor href=#keda-leyendo-desde-prometheus>#</a></h2><p>En el lado de KEDA, un <code>ScaledObject</code> con un trigger de Prometheus. Pero hay un par de campos que la mayoría de ejemplos se dejan que importan bastante en producción:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-yaml data-lang=yaml><span style=display:flex><span><span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>keda.sh/v1alpha1</span>
-</span></span><span style=display:flex><span><span style=color:#f92672>kind</span>: <span style=color:#ae81ff>ScaledObject</span>
-</span></span><span style=display:flex><span><span style=color:#f92672>metadata</span>:
-</span></span><span style=display:flex><span>  <span style=color:#f92672>name</span>: <span style=color:#ae81ff>consumer-scaler</span>
-</span></span><span style=display:flex><span><span style=color:#f92672>spec</span>:
-</span></span><span style=display:flex><span>  <span style=color:#f92672>scaleTargetRef</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>apiVersion</span>: <span style=color:#ae81ff>apps/v1</span>
-</span></span><span style=display:flex><span>    <span style=color:#f92672>kind</span>: <span style=color:#ae81ff>Deployment</span>
-</span></span><span style=display:flex><span>    <span style=color:#f92672>name</span>: <span style=color:#ae81ff>consumer</span>
-</span></span><span style=display:flex><span>  <span style=color:#f92672>pollingInterval</span>: <span style=color:#ae81ff>15</span>
-</span></span><span style=display:flex><span>  <span style=color:#f92672>cooldownPeriod</span>: <span style=color:#ae81ff>60</span>
-</span></span><span style=display:flex><span>  <span style=color:#f92672>minReplicaCount</span>: <span style=color:#ae81ff>0</span>
-</span></span><span style=display:flex><span>  <span style=color:#f92672>maxReplicaCount</span>: <span style=color:#ae81ff>20</span>
-</span></span><span style=display:flex><span>  <span style=color:#f92672>fallback</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>failureThreshold</span>: <span style=color:#ae81ff>3</span>
-</span></span><span style=display:flex><span>    <span style=color:#f92672>replicas</span>: <span style=color:#ae81ff>2</span>
-</span></span><span style=display:flex><span>  <span style=color:#f92672>advanced</span>:
-</span></span><span style=display:flex><span>    <span style=color:#f92672>restoreToOriginalReplicaCount</span>: <span style=color:#66d9ef>true</span>
-</span></span><span style=display:flex><span>    <span style=color:#f92672>horizontalPodAutoscalerConfig</span>:
-</span></span><span style=display:flex><span>      <span style=color:#f92672>behavior</span>:
-</span></span><span style=display:flex><span>        <span style=color:#f92672>scaleUp</span>:
-</span></span><span style=display:flex><span>          <span style=color:#f92672>stabilizationWindowSeconds</span>: <span style=color:#ae81ff>30</span>
-</span></span><span style=display:flex><span>          <span style=color:#f92672>policies</span>:
-</span></span><span style=display:flex><span>            - <span style=color:#f92672>type</span>: <span style=color:#ae81ff>Pods</span>
-</span></span><span style=display:flex><span>              <span style=color:#f92672>value</span>: <span style=color:#ae81ff>4</span>
-</span></span><span style=display:flex><span>              <span style=color:#f92672>periodSeconds</span>: <span style=color:#ae81ff>60</span>
-</span></span><span style=display:flex><span>          <span style=color:#f92672>selectPolicy</span>: <span style=color:#ae81ff>Max</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>scaleDown</span>:
-</span></span><span style=display:flex><span>          <span style=color:#f92672>stabilizationWindowSeconds</span>: <span style=color:#ae81ff>300</span>
-</span></span><span style=display:flex><span>          <span style=color:#f92672>policies</span>:
-</span></span><span style=display:flex><span>            - <span style=color:#f92672>type</span>: <span style=color:#ae81ff>Percent</span>
-</span></span><span style=display:flex><span>              <span style=color:#f92672>value</span>: <span style=color:#ae81ff>25</span>
-</span></span><span style=display:flex><span>              <span style=color:#f92672>periodSeconds</span>: <span style=color:#ae81ff>60</span>
-</span></span><span style=display:flex><span>          <span style=color:#f92672>selectPolicy</span>: <span style=color:#ae81ff>Min</span>
-</span></span><span style=display:flex><span>  <span style=color:#f92672>triggers</span>:
-</span></span><span style=display:flex><span>    - <span style=color:#f92672>type</span>: <span style=color:#ae81ff>prometheus</span>
-</span></span><span style=display:flex><span>      <span style=color:#f92672>metadata</span>:
-</span></span><span style=display:flex><span>        <span style=color:#f92672>serverAddress</span>: <span style=color:#ae81ff>http://prometheus:9090</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>query</span>: <span style=color:#ae81ff>app_queue_depth{service=&#34;my-service&#34;}</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>threshold</span>: <span style=color:#e6db74>&#34;10&#34;</span>
-</span></span><span style=display:flex><span>        <span style=color:#f92672>activationThreshold</span>: <span style=color:#e6db74>&#34;1&#34;</span>
-</span></span></code></pre></div><p>Hay bastante cosa aquí, vamos por partes.</p><p><code>pollingInterval: 15</code> — cada cuánto consulta KEDA a Prometheus. Por defecto son 30 segundos. Para un scaler basado en colas donde quieres reaccionar rápido a los picos, 15 está bien. No bajes demasiado o estarás machacando Prometheus en cada tick.</p><p><code>activationThreshold</code> es el que se olvida todo el mundo. <code>threshold</code> es el objetivo por réplica — KEDA intenta escalar a <code>valorActual / threshold</code> réplicas. Pero <code>activationThreshold</code> es el valor mínimo que tiene que alcanzar la métrica antes de que KEDA se moleste en despertar el deployment desde cero. Sin esto, un solo mensaje en la cola dispara un scale-up. Eso casi nunca es lo que quieres.</p><p><code>fallback</code> es lo que te salva cuando Prometheus se cae. Sin él KEDA da error y deja de tomar decisiones. Con <code>failureThreshold: 3</code> y <code>replicas: 2</code>, después de 3 fallos consecutivos deja el deployment en 2 réplicas hasta que la fuente de métricas se recupere. Mucho mejor que &ldquo;KEDA entra en pánico y no hace nada&rdquo; durante un incidente.</p><p>Ahora la parte interesante: <code>advanced.horizontalPodAutoscalerConfig.behavior</code>. Por debajo KEDA crea un HPA, y este bloque le pasa configuración de comportamiento directamente.</p><p><strong>Scale up</strong> — <code>stabilizationWindowSeconds: 30</code> significa que KEDA mira los últimos 30 segundos de valores antes de decidir escalar hacia arriba. Esto evita que un pico puntual dispare inmediatamente un scale event. La policy <code>type: Pods, value: 4</code> limita el scale-up a 4 pods nuevos por cada 60 segundos. <code>selectPolicy: Max</code> significa que si tienes varias policies definidas coge la más agresiva.</p><p><strong>Scale down</strong> — <code>stabilizationWindowSeconds: 300</code> son 5 minutos. KEDA no escalará hacia abajo hasta que la métrica haya estado baja durante 5 minutos seguidos. Esta es la importante. Sin esto, una bajada puntual en la cola dispara un scale-down y estás levantando pods de nuevo 2 minutos después. La policy <code>type: Percent, value: 25</code> significa que KEDA puede eliminar como máximo el 25% de las réplicas actuales por cada 60 segundos. <code>selectPolicy: Min</code> coge la opción más conservadora — escala hacia abajo despacio.</p><p><code>restoreToOriginalReplicaCount: true</code> — cuando borras el ScaledObject, Kubernetes vuelve el deployment al número de réplicas que tenía antes de que KEDA tomara el control. Sin esto se queda en el número que KEDA dejó, que podría ser cero.</p><p>Los números son un punto de partida. Lo que funciona para un procesador de colas es completamente diferente a lo que funciona para un servicio HTTP. Ajusta esto contra tus patrones de tráfico reales.</p><h2 id=por-qué-no-usar-el-stack-completo-de-observabilidad>Por qué no usar el stack completo de observabilidad
-<a class=anchor href=#por-qu%c3%a9-no-usar-el-stack-completo-de-observabilidad>#</a></h2><p>He visto gente intentar que KEDA consulte Thanos o un Prometheus con remote-write. Funciona, pero estás añadiendo latencia y puntos de fallo a una ruta critica. Si tus decisiones de escalado dependen de una métrica que tiene que viajar por un pipeline de remote-write antes de que KEDA la vea, lo vas a pasar mal durante los picos de tráfico&mldr; que es justo cuando necesitas que el escalado sea rápido.</p><p>También está el tema del coste. Guardar todas tus métricas en un almacén a largo plazo cuesta dinero. Si solo usas 2 métricas para escalar no necesitas pagar por guardar 200 métricas con 30 días de retención solo para que KEDA haga su trabajo.</p><p>El trade-off es que tu Prometheus para escalado es intencionadamente limitado. No puedes usarlo para depurar porque no tiene el cuadro completo. Y eso está bien. Para eso no es.</p><h2 id=los-trade-offs>Los trade-offs
-<a class=anchor href=#los-trade-offs>#</a></h2><p>Siendo honesto, esto es lo que pierdes:</p><ul><li><strong>Correlacionar es más difícil.</strong> Cuando algo sale mal durante un scale event tienes que correlacionar entre dos fuentes de datos: tu Prometheus de escalado y tu backend de observabilidad. Es un poco pesado.</li><li><strong>Más configuración que mantener.</strong> Dos pipelines significa mantener la lista de filtros sincronizada cuando añades nuevas métricas de escalado. Yo me he olvidado de hacerlo más de una vez.</li><li><strong>No todo el mundo lo entiende.</strong> Cuando alguien nuevo llega y ve dos pipelines va a preguntar por qué. Es una conversación que merece la pena tener, pero es trabajo extra.</li></ul><p>Lo que ganas es una ruta de escalado ligera, predecible y que no depende de que tu stack de observabilidad esté sano. En mi experiencia eso vale la pena.</p><h2 id=conclusión>Conclusión
-<a class=anchor href=#conclusi%c3%b3n>#</a></h2><p>Creo que la gente llega a OTel pensando en &ldquo;observabilidad&rdquo; y diseña un pipeline enorme que intenta hacerlo todo. A veces lo correcto es separar responsabilidades. El escalado es cosa del plano de control. La observabilidad es una herramienta de diagnóstico. Tienen requisitos diferentes.</p><p>Usar OTel como punto de ingesta para las dos cosas tiene sentido. Pero a partir de ahi los pipelines pueden ser completamente diferentes.</p><p>Si estás usando KEDA y aún no has pensado en esto, merece la pena mirarlo. Tus decisiones de escalado probablemente no necesitan el 80% de las métricas que estás recolectando.</p><p>Espero que te haya sido útil. Talogo!</p></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"></div><script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script></footer><div class=book-comments><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//jorgesnotebook.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><ul><li><a href=#el-problema-de-pensar-observabilidad-primero>El problema de pensar &ldquo;observabilidad primero&rdquo;</a></li><li><a href=#lo-que-quería-hacer>Lo que quería hacer</a></li><li><a href=#filtrando-en-el-collector>Filtrando en el collector</a></li><li><a href=#la-config-del-pipeline>La config del pipeline</a></li><li><a href=#la-trampa-de-la-temporalidad>La trampa de la temporalidad</a></li><li><a href=#transformando-métricas-antes-de-que-lleguen-a-prometheus>Transformando métricas antes de que lleguen a Prometheus</a></li><li><a href=#keda-leyendo-desde-prometheus>KEDA leyendo desde Prometheus</a></li><li><a href=#por-qué-no-usar-el-stack-completo-de-observabilidad>Por qué no usar el stack completo de observabilidad</a></li><li><a href=#los-trade-offs>Los trade-offs</a></li><li><a href=#conclusión>Conclusión</a></li></ul></li></ul></nav></div></aside></main></body></html>
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="La mayoría monta OpenTelemetry pensando en dashboards. Yo lo use para alimentar las decisiones de escalado de KEDA y el pipeline quedo completamente diferente.">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:1313/es/posts/designing-otel-pipeline-for-scaling/">
+  <meta property="og:site_name" content="Jorge&#39;s notebook">
+  <meta property="og:title" content="Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)">
+  <meta property="og:description" content="La mayoría monta OpenTelemetry pensando en dashboards. Yo lo use para alimentar las decisiones de escalado de KEDA y el pipeline quedo completamente diferente.">
+  <meta property="og:locale" content="es">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-04-18T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-04-18T00:00:00+00:00">
+    <meta property="article:tag" content="Kubernetes">
+    <meta property="article:tag" content="Opentelemetry">
+    <meta property="article:tag" content="Keda">
+    <meta property="article:tag" content="Prometheus">
+    <meta property="article:tag" content="Scaling">
+    <meta property="article:tag" content="Observability">
+<title>Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad) | Jorge&#39;s notebook</title>
+<link rel="icon" href="/favicon-32.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:1313/es/posts/designing-otel-pipeline-for-scaling/">
+  <link rel="alternate" hreflang="en" href="http://localhost:1313/posts/designing-otel-pipeline-for-scaling/" title="Designing an OpenTelemetry Pipeline for Scaling (Not Observability)">
+<link rel="stylesheet" href="/book.min.c6f0ab8898a9b8e243f0aacc03c73275192bd36dfd0d01e4417d38cbfcafdc42.css" integrity="sha256-xvCriJipuOJD8KrMA8cydRkr0239DQHkQX04y/yv3EI=" crossorigin="anonymous">
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/es.search.min.2f1003ec86ec02e5dad33dbe4f1fbe97d4c0a4e8afc0eac2b4280560f3aeb431.js" integrity="sha256-LxAD7IbsAuXa0z2&#43;Tx&#43;&#43;l9TApOivwOrCtCgFYPOutDE=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X0MZZJXFN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-5X0MZZJXFN');
+        }
+      </script><!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <style>
+ 
+:root {
+  --nb-purple:       #7040A0;
+  --nb-purple-light: #9060C0;
+  --nb-purple-dark:  #4A2870;
+  --nb-gold:         #C9A843;
+  --nb-gold-light:   #DFC06A;
+  --nb-gold-dark:    #9A7E2E;
+  --nb-bg:           #0a0a0f;
+  --nb-bg-card:      #111118;
+  --nb-border:       #1e1e2a;
+  --nb-text:         #9ca3af;
+  --nb-text-light:   #e5e7eb;
+  --nb-text-muted:   #6b7280;
+
+  --color-link:         var(--nb-purple);
+  --color-visited-link: var(--nb-purple-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-background:    var(--nb-bg);
+    --body-font-color:    var(--nb-text);
+    --color-link:         var(--nb-purple-light);
+    --color-visited-link: var(--nb-purple);
+    --gray-100:           var(--nb-bg-card);
+    --gray-200:           var(--nb-border);
+    --gray-500:           var(--nb-text-muted);
+  }
+
+  .book-menu .book-menu-content,
+  .book-search input {
+    background: var(--nb-bg-card);
+  }
+
+  h1, h2, h3 {
+    color: var(--nb-text-light);
+  }
+
+  a:hover {
+    color: var(--nb-purple-light);
+  }
+
+  code, pre {
+    background: #0d0d14;
+  }
+
+   
+  .markdown img {
+    filter: brightness(0.88) contrast(1.05);
+    border-radius: .25rem;
+  }
+}
+
+ 
+.nb-lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .75rem 0 .25rem;
+  font-size: .8rem;
+}
+
+.nb-lang {
+  color: var(--nb-text-muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.nb-lang:hover {
+  color: var(--nb-purple-light);
+}
+
+.nb-lang-active {
+  color: var(--nb-purple);
+  font-weight: 700;
+  cursor: default;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-lang-active { color: var(--nb-purple-light); }
+}
+
+.nb-lang-switcher .nb-lang + .nb-lang::before,
+.nb-lang-switcher .nb-lang-active + .nb-lang::before,
+.nb-lang-switcher .nb-lang + .nb-lang-active::before {
+  content: "/";
+  margin-right: .5rem;
+  color: var(--nb-text-muted);
+}
+
+ 
+::selection {
+  background: var(--nb-purple);
+  color: #fff;
+}
+
+::-moz-selection {
+  background: var(--nb-purple);
+  color: #fff;
+}
+
+ 
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.75;
+}
+
+.book-page {
+  max-width: 740px;
+}
+
+ 
+.book-brand img.book-icon {
+  height: 2.2rem;
+  width:  2.2rem;
+  filter: none !important;
+}
+
+ 
+.nb-hero {
+  padding: 3rem 0 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.nb-hero-name {
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: .05rem;
+  background: linear-gradient(90deg, var(--nb-purple) 0%, var(--nb-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 .4rem;
+}
+
+.nb-hero-badge {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--nb-gold);
+  margin-bottom: 1.2rem;
+  letter-spacing: .08rem;
+}
+
+.nb-hero-desc {
+  font-size: .95rem;
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: var(--body-font-color);
+}
+
+.nb-hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-bottom: 1.5rem;
+}
+
+ 
+.nb-btn {
+  display: inline-block;
+  padding: .45rem 1.1rem;
+  border-radius: .35rem;
+  font-size: .85rem;
+  font-weight: 600;
+  background: var(--nb-purple);
+  color: #fff !important;
+  text-decoration: none;
+  transition: background .2s;
+}
+
+.nb-btn:hover {
+  background: var(--nb-purple-light);
+  color: #fff !important;
+}
+
+ 
+.nb-btn-outline {
+  background: transparent;
+  border: 1px solid var(--nb-purple);
+  color: var(--nb-purple) !important;
+}
+
+.nb-btn-outline:hover {
+  background: var(--nb-purple);
+  color: #fff !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-btn-outline {
+    border-color: var(--nb-purple-light);
+    color: var(--nb-purple-light) !important;
+  }
+  .nb-btn-outline:hover {
+    background: var(--nb-purple-light);
+    color: #fff !important;
+  }
+}
+
+ 
+.nb-hero-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.nb-tag {
+  font-size: .75rem;
+  padding: .2rem .65rem;
+  border-radius: 9999px;
+  border: 1px solid var(--nb-gold-dark);
+  color: var(--nb-text-muted, #6b7280);
+  background: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-tag {
+    border-color: var(--nb-gold-dark);
+    color: var(--nb-text-muted);
+    background: rgba(201, 168, 67, .05);
+  }
+}
+
+ 
+.nb-section {
+  margin-bottom: 3rem;
+}
+
+.nb-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12rem;
+  color: var(--nb-purple) !important;
+  border-bottom: 2px solid var(--nb-gold-dark);
+  padding-bottom: .5rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-section-title {
+    color: var(--nb-purple-light) !important;
+    border-color: var(--nb-gold-dark);
+  }
+}
+
+ 
+.nb-post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.nb-post-card {
+  display: block;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--nb-border, #e9ecef);
+  border-radius: .5rem;
+  text-decoration: none !important;
+  transition: border-color .2s, background .2s;
+  background: transparent;
+}
+
+.nb-post-card:hover {
+  border-color: var(--nb-purple);
+  background: rgba(112, 64, 160, .05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-post-card { border-color: var(--nb-border); }
+  .nb-post-card:hover {
+    border-color: var(--nb-purple-light);
+    background: rgba(112, 64, 160, .1);
+  }
+}
+
+.nb-post-meta {
+  font-size: .72rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin-bottom: .4rem;
+  text-transform: uppercase;
+  letter-spacing: .05rem;
+}
+
+.nb-post-title {
+  font-size: .95rem;
+  font-weight: 600;
+  margin: 0 0 .5rem;
+  color: var(--body-font-color);
+  line-height: 1.4;
+}
+
+.nb-post-desc {
+  font-size: .82rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+ 
+.nb-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: .85rem 0;
+  border-bottom: 1px solid var(--nb-border, #f0f0f0);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-list-item { border-color: var(--nb-border); }
+}
+
+.nb-list-meta {
+  flex-shrink: 0;
+  font-size: .72rem;
+  color: var(--nb-text-muted, #6b7280);
+  padding-top: .2rem;
+  min-width: 90px;
+}
+
+.nb-list-body { flex: 1; }
+
+.nb-list-title {
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--body-font-color) !important;
+  text-decoration: none;
+  display: block;
+  margin-bottom: .25rem;
+}
+
+.nb-list-title:hover {
+  color: var(--nb-purple-light) !important;
+}
+
+.nb-list-desc {
+  font-size: .82rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+ 
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  font-weight: 700;
+}
+
+.markdown h2 {
+  border-left: 3px solid var(--nb-gold-dark);
+  padding-left: .75rem;
+}
+
+.markdown code {
+  font-size: .85em;
+}
+</style>
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/main_logo_transparent.png" alt="Logo" class="book-icon" /><span>Jorge&#39;s notebook</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Buscar" aria-label="Buscar" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<div class="nb-lang-switcher">
+  
+    
+      
+        <a class="nb-lang" href="/posts/designing-otel-pipeline-for-scaling/">English</a>
+      
+    
+  
+    
+      <span class="nb-lang nb-lang-active">Castellano</span>
+    
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <span>Posts</span>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/designing-otel-pipeline-for-scaling/" class="active">Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-create-a-k8s-homelab-with-k3s/" class="">Monta tu propio cluster con k3s</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-implement-sops-helmfile/" class="">Como configurar SOPS en Helmfile</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-set-up-your-kluster-with-helmfle/" class="">Configurar tu kluster con Helmfile</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-create-a-small-jvm-docker-image/" class="">jlink con Spring Boot</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/starting-with-spring-boot/" class="">Empezando con Spring Boot</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/what-is-going-on-with-java/" class="">¿Qué está pasando con Java?</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-install-gitlab-on-debian-9/" class="">Cómo instalar GitLab en Debian 9</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/posts/how-to-install-jenkins/" class="">Cómo instalar Jenkins</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/es/about/" class="">About</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="https://github.com/jorgeancal/"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#el-problema-de-pensar-observabilidad-primero">El problema de pensar &ldquo;observabilidad primero&rdquo;</a></li>
+        <li><a href="#lo-que-quería-hacer">Lo que quería hacer</a></li>
+        <li><a href="#filtrando-en-el-collector">Filtrando en el collector</a></li>
+        <li><a href="#la-config-del-pipeline">La config del pipeline</a></li>
+        <li><a href="#keda-leyendo-desde-prometheus">KEDA leyendo desde Prometheus</a></li>
+        <li><a href="#por-qué-no-usar-el-stack-completo-de-observabilidad">Por qué no usar el stack completo de observabilidad</a></li>
+        <li><a href="#los-trade-offs">Los trade-offs</a></li>
+        <li><a href="#conclusión">Conclusión</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown book-post">
+  <h2>
+    Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)
+  </h2>
+  
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>abril 18, 2026</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/es/categories/kubernetes/">Kubernetes</a>, 
+      <a href="/es/categories/how-to/">How To</a>, 
+      <a href="/es/categories/opinion/">Opinion</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/es/tags/kubernetes/">Kubernetes</a>, 
+      <a href="/es/tags/opentelemetry/">Opentelemetry</a>, 
+      <a href="/es/tags/keda/">Keda</a>, 
+      <a href="/es/tags/prometheus/">Prometheus</a>, 
+      <a href="/es/tags/scaling/">Scaling</a>, 
+      <a href="/es/tags/observability/">Observability</a>
+  </div>
+  
+
+
+  <div class="book-post-content"><p>Estamos usando Grafana Cloud para observabilidad — Mimir, Tempo, Loki, todo el paquete. Funciona bien, sin quejas. Antes de todo esto solo escalábamos con CPU y memoria con el HPA normal. Que está bien hasta que no lo está — la CPU y la memoria son indicadores con retraso, cuando suben ya estás en problemas. Asi que me puse a mirar KEDA porque quería escalar sobre algo que tuviera más sentido, como la profundidad de la cola. Nadie me lo pidió, simplemente pensé que era lo correcto.</p>
+<p>Entonces vino la pregunta de de dónde iba a sacar KEDA las métricas. No me apetecia nada que estuviera llamando a Grafana Cloud en cada polling interval. Es una llamada externa, cuesta dinero, añade latencia, y si Grafana Cloud tiene un mal dia tus decisiones de escalado se van con él.</p>
+<p>Asi que monté un Prometheus local y configure el collector de OTel para que le mandara ahi directamente las métricas que KEDA necesita de verdad. Y esa decision es la que me hizo pensar diferente sobre el pipeline.</p>
+<h2 id="el-problema-de-pensar-observabilidad-primero">
+  El problema de pensar &ldquo;observabilidad primero&rdquo;
+  <a class="anchor" href="#el-problema-de-pensar-observabilidad-primero">#</a>
+</h2>
+<p>Cuando configuras OTel pensando en observabilidad lo quieres todo. Todos los traces, todas las métricas, todos los labels. Necesitas ese contexto cuando estas depurando a las 2 de la mañana. Tiene todo el sentido.</p>
+<p>Pero cuando usas métricas para escalar no necesitas todo eso. Necesitas una o dos señales, de forma fiable y con poca latencia. Punto.</p>
+<p>Cuando me di cuenta de eso, dejé de pensar en el collector como una herramienta de observabilidad y empecé a pensarlo como un pipeline.</p>
+<h2 id="lo-que-quería-hacer">
+  Lo que quería hacer
+  <a class="anchor" href="#lo-que-quer%c3%ada-hacer">#</a>
+</h2>
+<p>Tenia servicios generando métricas personalizadas a través del SDK de OTel. Profundidad de cola, jobs activos, ese tipo de cosas. Quería que KEDA leyera esas métricas desde Prometheus y escalara los consumers arriba y abajo en función de ellas.</p>
+<p>El enfoque de primeras sería: instrumenta todo, manda todo a Prometheus, deja que KEDA lo consulte.</p>
+<p>El problema es que &ldquo;todo&rdquo; es caro. Las métricas con alta cardinalidad hacen daño a tu Prometheus. Y KEDA consultando un Prometheus lento pues&hellip; no es lo ideal.</p>
+<p>Asi que necesitaba filtrar en el collector antes de que nada llegara a Prometheus.</p>
+<h2 id="filtrando-en-el-collector">
+  Filtrando en el collector
+  <a class="anchor" href="#filtrando-en-el-collector">#</a>
+</h2>
+<p>Esta es la parte que la mayoría se salta. El collector de OTel tiene un procesador <code>filter</code> que te deja descartar las métricas que no te interesan antes de que vayan a ningún sitio.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">processors</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">filter/scaling-only</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">metrics</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">include</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">match_type</span>: <span style="color:#ae81ff">strict</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">metric_names</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">app.queue.depth</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">app.active_jobs</span>
+</span></span></code></pre></div><p>Y ya. Todo lo demás se descarta antes de llegar al exporter. Tu Prometheus solo ve lo que KEDA necesita para tomar una decision.</p>
+<p>También puedes quitarte los labels que no necesitas con el procesador <code>attributes</code>. Si tu métrica tiene 15 labels y KEDA solo consulta por 2 de ellos, elimina el resto:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">processors</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">attributes/strip</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">actions</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">key</span>: <span style="color:#ae81ff">http.user_agent</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">action</span>: <span style="color:#ae81ff">delete</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#f92672">key</span>: <span style="color:#ae81ff">net.peer.ip</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">action</span>: <span style="color:#ae81ff">delete</span>
+</span></span></code></pre></div><p>Menos cardinalidad, menos memoria, consultas más rápidas.</p>
+<h2 id="la-config-del-pipeline">
+  La config del pipeline
+  <a class="anchor" href="#la-config-del-pipeline">#</a>
+</h2>
+<p>Juntando todo:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">processors</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">memory_limiter</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">check_interval</span>: <span style="color:#ae81ff">1s</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">limit_mib</span>: <span style="color:#ae81ff">512</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">spike_limit_mib</span>: <span style="color:#ae81ff">128</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">exporters</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">prometheusremotewrite</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">endpoint</span>: <span style="color:#e6db74">&#34;http://prometheus:9090/api/v1/write&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">resource_to_telemetry_conversion</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">enabled</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">tls</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">insecure</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">otlphttp/grafana</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">endpoint</span>: <span style="color:#e6db74">&#34;https://tu-endpoint-de-grafana-cloud&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">service</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">pipelines</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">metrics/scaling</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">receivers</span>: [<span style="color:#ae81ff">otlp]</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">processors</span>: [<span style="color:#ae81ff">memory_limiter, filter/scaling-only, attributes/strip, batch]</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">exporters</span>: [<span style="color:#ae81ff">prometheusremotewrite]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">metrics/observability</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">receivers</span>: [<span style="color:#ae81ff">otlp]</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">processors</span>: [<span style="color:#ae81ff">memory_limiter, batch]</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">exporters</span>: [<span style="color:#ae81ff">otlphttp/grafana]</span>
+</span></span></code></pre></div><p>El <code>memory_limiter</code> tiene que ir primero en la cadena de procesadores. Si lo pones después del filter ya es tarde — el pico de memoria ya paso durante la ingesta. Sin él, con un pico de tráfico el collector se va a OOM y tu pipeline de escalado se apaga justo cuando más lo necesitas.</p>
+<p>Dos pipelines separados desde el mismo receiver. Uno ligero con las métricas filtradas que van a Prometheus para KEDA. Uno completo que va a Grafana Cloud.</p>
+<p>Asi la ruta de escalado nunca se ve bloqueada por un problema con Grafana Cloud.</p>
+<h2 id="keda-leyendo-desde-prometheus">
+  KEDA leyendo desde Prometheus
+  <a class="anchor" href="#keda-leyendo-desde-prometheus">#</a>
+</h2>
+<p>En el lado de KEDA, un <code>ScaledObject</code> con un trigger de Prometheus. Pero hay un par de campos que la mayoría de ejemplos se dejan que importan bastante en producción:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">keda.sh/v1alpha1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">kind</span>: <span style="color:#ae81ff">ScaledObject</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">name</span>: <span style="color:#ae81ff">consumer-scaler</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">scaleTargetRef</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">apiVersion</span>: <span style="color:#ae81ff">apps/v1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">kind</span>: <span style="color:#ae81ff">Deployment</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">consumer</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">pollingInterval</span>: <span style="color:#ae81ff">15</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cooldownPeriod</span>: <span style="color:#ae81ff">60</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">minReplicaCount</span>: <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">maxReplicaCount</span>: <span style="color:#ae81ff">20</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">fallback</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">failureThreshold</span>: <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">replicas</span>: <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">advanced</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">horizontalPodAutoscalerConfig</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">behavior</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">scaleUp</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">stabilizationWindowSeconds</span>: <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">policies</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#f92672">type</span>: <span style="color:#ae81ff">Pods</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">value</span>: <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">periodSeconds</span>: <span style="color:#ae81ff">60</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">selectPolicy</span>: <span style="color:#ae81ff">Max</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">scaleDown</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">stabilizationWindowSeconds</span>: <span style="color:#ae81ff">300</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">policies</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#f92672">type</span>: <span style="color:#ae81ff">Percent</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">value</span>: <span style="color:#ae81ff">25</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">periodSeconds</span>: <span style="color:#ae81ff">60</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">selectPolicy</span>: <span style="color:#ae81ff">Min</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">triggers</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">type</span>: <span style="color:#ae81ff">prometheus</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">metadata</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">serverAddress</span>: <span style="color:#ae81ff">http://prometheus:9090</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">query</span>: <span style="color:#ae81ff">app_queue_depth{service=&#34;my-service&#34;}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">threshold</span>: <span style="color:#e6db74">&#34;10&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">activationThreshold</span>: <span style="color:#e6db74">&#34;1&#34;</span>
+</span></span></code></pre></div><p>Hay bastante cosa aquí, vamos por partes.</p>
+<p><code>pollingInterval: 15</code> — cada cuánto consulta KEDA a Prometheus. Por defecto son 30 segundos. Para un scaler basado en colas donde quieres reaccionar rápido a los picos, 15 está bien. No bajes demasiado o estarás machacando Prometheus en cada tick.</p>
+<p><code>activationThreshold</code> es el que se olvida todo el mundo. <code>threshold</code> es el objetivo por réplica — KEDA intenta escalar a <code>valorActual / threshold</code> réplicas. Pero <code>activationThreshold</code> es el valor mínimo que tiene que alcanzar la métrica antes de que KEDA se moleste en despertar el deployment desde cero. Sin esto, un solo mensaje en la cola dispara un scale-up. Eso casi nunca es lo que quieres.</p>
+<p><code>fallback</code> es lo que te salva cuando Prometheus se cae. Sin él KEDA da error y deja de tomar decisiones. Con <code>failureThreshold: 3</code> y <code>replicas: 2</code>, después de 3 fallos consecutivos deja el deployment en 2 réplicas hasta que la fuente de métricas se recupere. Mucho mejor que &ldquo;KEDA entra en pánico y no hace nada&rdquo; durante un incidente.</p>
+<p>Ahora la parte interesante: <code>advanced.horizontalPodAutoscalerConfig.behavior</code>. Por debajo KEDA crea un HPA, y este bloque le pasa configuración de comportamiento directamente.</p>
+<p><strong>Scale up</strong> — <code>stabilizationWindowSeconds: 30</code> significa que KEDA mira los últimos 30 segundos de valores antes de decidir escalar hacia arriba. Esto evita que un pico puntual dispare inmediatamente un scale event. La policy <code>type: Pods, value: 4</code> limita el scale-up a 4 pods nuevos por cada 60 segundos. <code>selectPolicy: Max</code> significa que si tienes varias policies definidas coge la más agresiva.</p>
+<p><strong>Scale down</strong> — <code>stabilizationWindowSeconds: 300</code> son 5 minutos. KEDA no escalará hacia abajo hasta que la métrica haya estado baja durante 5 minutos seguidos. Esta es la importante. Sin esto, una bajada puntual en la cola dispara un scale-down y estás levantando pods de nuevo 2 minutos después. La policy <code>type: Percent, value: 25</code> significa que KEDA puede eliminar como máximo el 25% de las réplicas actuales por cada 60 segundos. <code>selectPolicy: Min</code> coge la opción más conservadora — escala hacia abajo despacio.</p>
+<p>Los números son un punto de partida. Lo que funciona para un procesador de colas es completamente diferente a lo que funciona para un servicio HTTP. Ajusta esto contra tus patrones de tráfico reales.</p>
+<h2 id="por-qué-no-usar-el-stack-completo-de-observabilidad">
+  Por qué no usar el stack completo de observabilidad
+  <a class="anchor" href="#por-qu%c3%a9-no-usar-el-stack-completo-de-observabilidad">#</a>
+</h2>
+<p>He visto gente intentar que KEDA consulte Thanos o un Prometheus con remote-write. Funciona, pero estás añadiendo latencia y puntos de fallo a una ruta critica. Si tus decisiones de escalado dependen de una métrica que tiene que viajar por un pipeline antes de que KEDA la vea, lo vas a pasar mal durante los picos de tráfico&hellip; que es justo cuando necesitas que el escalado sea rápido.</p>
+<p>También está el tema del coste. Guardar todas tus métricas en un almacén a largo plazo cuesta dinero. Si solo usas 2 métricas para escalar no necesitas pagar por guardar 200 métricas con 30 días de retención solo para que KEDA haga su trabajo.</p>
+<p>El trade-off es que tu Prometheus para escalado es intencionadamente limitado. No puedes usarlo para depurar porque no tiene el cuadro completo. Y eso está bien. Para eso no es.</p>
+<h2 id="los-trade-offs">
+  Los trade-offs
+  <a class="anchor" href="#los-trade-offs">#</a>
+</h2>
+<p>Siendo honesto, esto es lo que pierdes:</p>
+<ul>
+<li><strong>Correlacionar es más difícil.</strong> Cuando algo sale mal durante un scale event tienes que correlacionar entre dos fuentes de datos: tu Prometheus de escalado y tu backend de observabilidad. Es un poco pesado.</li>
+<li><strong>Más configuración que mantener.</strong> Dos pipelines significa mantener la lista de filtros sincronizada cuando añades nuevas métricas de escalado. Yo me he olvidado de hacerlo más de una vez.</li>
+<li><strong>No todo el mundo lo entiende.</strong> Cuando alguien nuevo llega y ve dos pipelines va a preguntar por qué. Es una conversación que merece la pena tener, pero es trabajo extra.</li>
+</ul>
+<p>Lo que ganas es una ruta de escalado ligera, predecible y que no depende de que tu stack de observabilidad esté sano. En mi experiencia eso vale la pena.</p>
+<h2 id="conclusión">
+  Conclusión
+  <a class="anchor" href="#conclusi%c3%b3n">#</a>
+</h2>
+<p>Creo que la gente llega a OTel pensando en &ldquo;observabilidad&rdquo; y diseña un pipeline enorme que intenta hacerlo todo. A veces lo correcto es separar responsabilidades. El escalado es cosa del plano de control. La observabilidad es una herramienta de diagnóstico. Tienen requisitos diferentes.</p>
+<p>Usar OTel como punto de ingesta para las dos cosas tiene sentido. Pero a partir de ahi los pipelines pueden ser completamente diferentes. El de escalado tiene que ser fino: filtra, manda, fin.</p>
+<p>Si estás usando KEDA y aún no has pensado en esto, merece la pena mirarlo. Tus decisiones de escalado probablemente no necesitan el 80% de las métricas que estás recolectando.</p>
+<p>Espero que te haya sido útil. Talogo!</p>
+</div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jorgesnotebook" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#el-problema-de-pensar-observabilidad-primero">El problema de pensar &ldquo;observabilidad primero&rdquo;</a></li>
+        <li><a href="#lo-que-quería-hacer">Lo que quería hacer</a></li>
+        <li><a href="#filtrando-en-el-collector">Filtrando en el collector</a></li>
+        <li><a href="#la-config-del-pipeline">La config del pipeline</a></li>
+        <li><a href="#keda-leyendo-desde-prometheus">KEDA leyendo desde Prometheus</a></li>
+        <li><a href="#por-qué-no-usar-el-stack-completo-de-observabilidad">Por qué no usar el stack completo de observabilidad</a></li>
+        <li><a href="#los-trade-offs">Los trade-offs</a></li>
+        <li><a href="#conclusión">Conclusión</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

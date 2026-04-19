@@ -1,2 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Qué Es Jenkins on Jorge's notebook</title><link>https://jorgesnotebook.com/es/tags/qu%C3%A9-es-jenkins/</link><description>Recent content in Qué Es Jenkins on Jorge's notebook</description><generator>Hugo</generator><language>es</language><lastBuildDate>Thu, 23 Jan 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/es/tags/qu%C3%A9-es-jenkins/index.xml" rel="self" type="application/rss+xml"/><item><title>Cómo instalar Jenkins</title><link>https://jorgesnotebook.com/es/posts/how-to-install-jenkins/</link><pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/posts/how-to-install-jenkins/</guid><description>&lt;p&gt;Voy a intentar explicar qué es Jenkins, para qué lo usamos, cómo instalarlo en Debian y cómo usarlo. Ya sé lo que estás pensando&amp;hellip; otro post aburrido sobre Jenkins. Pues igual sí o igual no, juzga tú mismo.&lt;/p&gt;
-&lt;p&gt;Antes de nada he de decir que esto son mis notas de cuando lo investigué, asi que puede que alguna cosa sea diferente a lo que ves en otras webs, o directamente esté mal. Si ves algo raro dímelo.&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Qué Es Jenkins on Jorge&#39;s notebook</title>
+    <link>http://localhost:46859/es/tags/qu%C3%A9-es-jenkins/</link>
+    <description>Recent content in Qué Es Jenkins on Jorge&#39;s notebook</description>
+    <generator>Hugo</generator>
+    <language>es</language>
+    <lastBuildDate>Thu, 23 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:46859/es/tags/qu%C3%A9-es-jenkins/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cómo instalar Jenkins</title>
+      <link>http://localhost:46859/es/posts/how-to-install-jenkins/</link>
+      <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/posts/how-to-install-jenkins/</guid>
+      <description>&lt;p&gt;Voy a intentar explicar qué es Jenkins, para qué lo usamos, cómo instalarlo en Debian y cómo usarlo. Ya sé lo que estás pensando&amp;hellip; otro post aburrido sobre Jenkins. Pues igual sí o igual no, juzga tú mismo.&lt;/p&gt;&#xA;&lt;p&gt;Antes de nada he de decir que esto son mis notas de cuando lo investigué, asi que puede que alguna cosa sea diferente a lo que ves en otras webs, o directamente esté mal. Si ves algo raro dímelo.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,22 +1,936 @@
-<!doctype html><html lang=en-GB dir=ltr><head><meta charset=UTF-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=description content="Another version of java? See what it's going on with java and what they have to say about it."><meta name=theme-color media="(prefers-color-scheme: light)" content="#ffffff"><meta name=theme-color media="(prefers-color-scheme: dark)" content="#343a40"><meta name=color-scheme content="light dark"><meta property="og:url" content="https://jorgesnotebook.com/posts/what-is-going-on-with-java/"><meta property="og:site_name" content="Jorge's notebook"><meta property="og:title" content="What’s going on with Java?"><meta property="og:description" content="Another version of java? See what it's going on with java and what they have to say about it."><meta property="og:locale" content="en_GB"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-01-23T23:08:17+00:00"><meta property="article:modified_time" content="2020-01-23T23:08:17+00:00"><meta property="article:tag" content="AdoptOpenJDK"><meta property="article:tag" content="Java"><meta property="article:tag" content="Jdk"><meta property="article:tag" content="JDK 11"><meta property="article:tag" content="JDK 11 LTS"><meta property="article:tag" content="JDK 6"><meta property="og:image" content="https://jorgesnotebook.com/images/oracleversion.png"><title>What’s going on with Java? | Jorge's notebook</title><link rel=icon href=/favicon-32.png><link rel=manifest href=/manifest.json><link rel=canonical href=https://jorgesnotebook.com/posts/what-is-going-on-with-java/><link rel=alternate hreflang=es href=https://jorgesnotebook.com/es/posts/what-is-going-on-with-java/ title="¿Qué está pasando con Java?"><link rel=stylesheet href=/book.min.c6f0ab8898a9b8e243f0aacc03c73275192bd36dfd0d01e4417d38cbfcafdc42.css integrity="sha256-xvCriJipuOJD8KrMA8cydRkr0239DQHkQX04y/yv3EI=" crossorigin=anonymous><script defer src=/fuse.min.js></script><script defer src=/en.search.min.193de4d388f3a4167eb775b8bb779e967ce9cb093c14e9f01866e471b8fc4d32.js integrity="sha256-GT3k04jzpBZ+t3W4u3eelnzpywk8FOnwGGbkcbj8TTI=" crossorigin=anonymous></script><script defer src=/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js integrity="sha256-b2+Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC+NdcPIvZhzk=" crossorigin=anonymous></script><script async src="https://www.googletagmanager.com/gtag/js?id=G-5X0MZZJXFN"></script><script>var doNotTrack=!1,dnt=navigator.doNotTrack||window.doNotTrack||navigator.msDoNotTrack,doNotTrack=dnt=="1"||dnt=="yes";if(!doNotTrack){window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-5X0MZZJXFN")}</script><style>:root{--nb-purple:#7040A0;--nb-purple-light:#9060C0;--nb-purple-dark:#4A2870;--nb-gold:#C9A843;--nb-gold-light:#DFC06A;--nb-gold-dark:#9A7E2E;--nb-bg:#0a0a0f;--nb-bg-card:#111118;--nb-border:#1e1e2a;--nb-text:#9ca3af;--nb-text-light:#e5e7eb;--nb-text-muted:#6b7280;--color-link:var(--nb-purple);--color-visited-link:var(--nb-purple-dark)}@media(prefers-color-scheme:dark){:root{--body-background:var(--nb-bg);--body-font-color:var(--nb-text);--color-link:var(--nb-purple-light);--color-visited-link:var(--nb-purple);--gray-100:var(--nb-bg-card);--gray-200:var(--nb-border);--gray-500:var(--nb-text-muted)}.book-menu .book-menu-content,.book-search input{background:var(--nb-bg-card)}h1,h2,h3{color:var(--nb-text-light)}a:hover{color:var(--nb-purple-light)}code,pre{background:#0d0d14}.markdown img{filter:brightness(.88)contrast(1.05);border-radius:.25rem}}.nb-lang-switcher{display:flex;align-items:center;gap:.5rem;padding:.75rem 0 .25rem;font-size:.8rem}.nb-lang{color:var(--nb-text-muted);text-decoration:none;transition:color .2s}.nb-lang:hover{color:var(--nb-purple-light)}.nb-lang-active{color:var(--nb-purple);font-weight:700;cursor:default}@media(prefers-color-scheme:dark){.nb-lang-active{color:var(--nb-purple-light)}}.nb-lang-switcher .nb-lang+.nb-lang::before,.nb-lang-switcher .nb-lang-active+.nb-lang::before,.nb-lang-switcher .nb-lang+.nb-lang-active::before{content:"/";margin-right:.5rem;color:var(--nb-text-muted)}::selection{background:var(--nb-purple);color:#fff}::-moz-selection{background:var(--nb-purple);color:#fff}body{font-family:roboto,-apple-system,BlinkMacSystemFont,segoe ui,sans-serif;line-height:1.75}.book-page{max-width:740px}.book-brand img.book-icon{height:2.2rem;width:2.2rem;filter:none!important}.nb-hero{padding:3rem 0 2.5rem;margin-bottom:2.5rem}.nb-hero-name{font-size:2.4rem;font-weight:900;letter-spacing:.05rem;background:linear-gradient(90deg,var(--nb-purple) 0%,var(--nb-gold) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:0 0 .4rem}.nb-hero-badge{font-size:1rem;font-weight:300;color:var(--nb-gold);margin-bottom:1.2rem;letter-spacing:.08rem}.nb-hero-desc{font-size:.95rem;max-width:560px;line-height:1.7;margin-bottom:1.5rem;color:var(--body-font-color)}.nb-hero-links{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem}.nb-btn{display:inline-block;padding:.45rem 1.1rem;border-radius:.35rem;font-size:.85rem;font-weight:600;background:var(--nb-purple);color:#fff!important;text-decoration:none;transition:background .2s}.nb-btn:hover{background:var(--nb-purple-light);color:#fff!important}.nb-btn-outline{background:0 0;border:1px solid var(--nb-purple);color:var(--nb-purple)!important}.nb-btn-outline:hover{background:var(--nb-purple);color:#fff!important}@media(prefers-color-scheme:dark){.nb-btn-outline{border-color:var(--nb-purple-light);color:var(--nb-purple-light)!important}.nb-btn-outline:hover{background:var(--nb-purple-light);color:#fff!important}}.nb-hero-stack{display:flex;flex-wrap:wrap;gap:.4rem}.nb-tag{font-size:.75rem;padding:.2rem .65rem;border-radius:9999px;border:1px solid var(--nb-gold-dark);color:var(--nb-text-muted,#6b7280);background:0 0}@media(prefers-color-scheme:dark){.nb-tag{border-color:var(--nb-gold-dark);color:var(--nb-text-muted);background:rgba(201,168,67,5%)}}.nb-section{margin-bottom:3rem}.nb-section-title{font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.12rem;color:var(--nb-purple)!important;border-bottom:2px solid var(--nb-gold-dark);padding-bottom:.5rem;margin-bottom:1.25rem}@media(prefers-color-scheme:dark){.nb-section-title{color:var(--nb-purple-light)!important;border-color:var(--nb-gold-dark)}}.nb-post-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}.nb-post-card{display:block;padding:1.1rem 1.2rem;border:1px solid var(--nb-border,#e9ecef);border-radius:.5rem;text-decoration:none!important;transition:border-color .2s,background .2s;background:0 0}.nb-post-card:hover{border-color:var(--nb-purple);background:rgba(112,64,160,5%)}@media(prefers-color-scheme:dark){.nb-post-card{border-color:var(--nb-border)}.nb-post-card:hover{border-color:var(--nb-purple-light);background:rgba(112,64,160,.1)}}.nb-post-meta{font-size:.72rem;color:var(--nb-text-muted,#6b7280);margin-bottom:.4rem;text-transform:uppercase;letter-spacing:.05rem}.nb-post-title{font-size:.95rem;font-weight:600;margin:0 0 .5rem;color:var(--body-font-color);line-height:1.4}.nb-post-desc{font-size:.82rem;color:var(--nb-text-muted,#6b7280);margin:0;line-height:1.5}.nb-list-item{display:flex;align-items:flex-start;gap:1.2rem;padding:.85rem 0;border-bottom:1px solid var(--nb-border,#f0f0f0)}@media(prefers-color-scheme:dark){.nb-list-item{border-color:var(--nb-border)}}.nb-list-meta{flex-shrink:0;font-size:.72rem;color:var(--nb-text-muted,#6b7280);padding-top:.2rem;min-width:90px}.nb-list-body{flex:1}.nb-list-title{font-size:.95rem;font-weight:600;color:var(--body-font-color)!important;text-decoration:none;display:block;margin-bottom:.25rem}.nb-list-title:hover{color:var(--nb-purple-light)!important}.nb-list-desc{font-size:.82rem;color:var(--nb-text-muted,#6b7280);margin:0;line-height:1.5}.markdown h1,.markdown h2,.markdown h3{font-weight:700}.markdown h2{border-left:3px solid var(--nb-gold-dark);padding-left:.75rem}.markdown code{font-size:.85em}</style></head><body dir=ltr><input type=checkbox class="hidden toggle" id=menu-control>
-<input type=checkbox class="hidden toggle" id=toc-control><main class="container flex"><aside class=book-menu><div class=book-menu-content><nav><h2 class=book-brand><a class="flex align-center" href=/><img src=/main_logo_transparent.png alt=Logo class=book-icon><span>Jorge's notebook</span></a></h2><div class="book-search hidden"><input type=text id=book-search-input placeholder=Search aria-label=Search maxlength=64 data-hotkeys=s/><div class="book-search-spinner hidden"></div><ul id=book-search-results></ul></div><script>document.querySelector(".book-search").classList.remove("hidden")</script><div class=nb-lang-switcher><span class="nb-lang nb-lang-active">English</span>
-<a class=nb-lang href=/es/posts/what-is-going-on-with-java/>Castellano</a></div><ul><li><input type=checkbox id=section-91dd026ba0b7d00840facdf1d2e82eb2 class=toggle checked>
-<label for=section-91dd026ba0b7d00840facdf1d2e82eb2 class="flex justify-between"><a role=button>Posts</a></label><ul><li><a href=/posts/designing-otel-pipeline-for-scaling/>Designing an OpenTelemetry Pipeline for Scaling (Not Observability)</a></li><li><a href=/posts/how-to-create-a-k8s-homelab-with-k3s/>Building a Production-Grade k3s Homelab: HA, Cilium, and MetalLB</a></li><li><a href=/posts/how-to-implement-sops-helmfile/>Encrypting Kubernetes Secrets with SOPS and Helmfile</a></li><li><a href=/posts/how-to-set-up-your-kluster-with-helmfle/>Helmfile: Structuring Kubernetes Releases at Scale</a></li><li><a href=/posts/how-to-create-a-small-jvm-docker-image/>jlink with Spring Boot services</a></li><li><a href=/posts/starting-with-spring-boot/>Starting with Spring Boot</a></li><li><a href=/posts/what-is-going-on-with-java/ class=active>What’s going on with Java?</a></li><li><a href=/posts/how-to-install-gitlab-on-debian-9/>How to Install Gitlab on Debian 9</a></li><li><a href=/posts/how-to-install-jenkins/>How to Install Jenkins</a></li></ul></li><li><a href=/about/>About</a></li></ul><ul><li><a href=https://github.com/jorgeancal/ target=_blank rel=noopener>Github</a></li></ul></nav><script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script></div></aside><div class=book-page><header class=book-header><div class="flex align-center justify-between"><label for=menu-control><img src=/svg/menu.svg class=book-icon alt=Menu></label><h3>What’s going on with Java?</h3><label for=toc-control><img src=/svg/toc.svg class=book-icon alt="Table of Contents"></label></div><aside class="hidden clearfix"><nav id=TableOfContents><ul><li><ul><li><a href=#the-future>The Future</a></li><li><a href=#about-versions>About Versions</a></li><li><a href=#jdk-11-lts>JDK 11 LTS</a></li><li><a href=#openjdk>OpenJDK</a></li></ul></li></ul></nav></aside></header><article class="markdown book-post"><h2>What’s going on with Java?</h2><div class="flex align-center text-small book-post-date"><img src=/svg/calendar.svg class=book-icon alt>
-<span>January 23, 2020</span></div><div class=text-small><a href=/categories/java/>Java</a>,
-<a href=/categories/opinion/>Opinion</a></div><div class=text-small><a href=/tags/adoptopenjdk/>AdoptOpenJDK</a>,
-<a href=/tags/java/>Java</a>,
-<a href=/tags/jdk/>Jdk</a>,
-<a href=/tags/jdk-11/>JDK 11</a>,
-<a href=/tags/jdk-11-lts/>JDK 11 LTS</a>,
-<a href=/tags/jdk-6/>JDK 6</a>,
-<a href=/tags/jdk-7/>JDK 7</a>,
-<a href=/tags/jdk-8/>JDK 8</a>,
-<a href=/tags/openjdk/>OpenJDK</a>,
-<a href=/tags/opinion/>Opinion</a></div><div class=book-post-content><p>The other day there were a few news articles about the new version of Java. I was thinking another one? Really? Like a lot of people in the beginning of their careers, no-one checks the differences between Java versions because they are focused on the projects which they are working on, or maybe it’s just me. But, I had a break between jobs so I decided to update all my knowledge and one thing from my list was this one, so I hope you find this information interesting. As everyone knows, Java has another JDK version which is the JDK 11.</p><p>One year ago, Oracle released JDK 9 which a lot of people said was really bad, Oracle released JDK 11 after JDK 10, that’s pretty obvious. But I learned to develop with JDK 7 which was released in July 2011 while I was studying vocational training. Three years later, I started university and I had to use the JDK 8 which a lot of people said was something gorgeous. If I have to tell you whether I realised about the differences between them, I didn’t. Furthermore, I didn’t mind, but now I’ve started to do some research about which would be better for all the applications which I want to do, so now I mind. I’m going to tell you what’s going to happen with Java in the next few years and which one I chose for my apps.</p><h2 id=the-future>The Future
-<a class=anchor href=#the-future>#</a></h2><p>It’s madness, but we’re developers so it’s something which you find out when you start to work in this crazy world. The future of Java is open source, but it depends on you or the business which you’re working for because if you want to use it… get your wallet out. I think for a business it wouldn’t be a problem, but for a person like me who cares about each penny that I spend, it’s a problem because I hadn’t planned to spend money on this. The good thing is, if you don’t want to pay, you can use OpenJDK, check the price of JDK, maybe it’s worth it for you:</p><table><thead><tr><th>Products/Metrics</th><th>N up</th><th>License</th><th>CPU</th><th>Support</th></tr></thead><tbody><tr><td>Java SE Advanced Desktop</td><td>$40</td><td>$8.80</td><td>-</td><td>-</td></tr><tr><td>Java SE Advanced</td><td>$100</td><td>$22</td><td>5000</td><td>$ 1100</td></tr><tr><td>Java SE Suite</td><td>$300</td><td>$66</td><td>15000</td><td>$3300</td></tr></tbody></table><p>Maybe you can say “well it’s not expensive” and I think it’s not really expensive if you have a successful application and you earn a ton of money with it. But, as I don’t know if my applications are going to be successful, I prefer to save some money because I don’t know when I’m going to need it. I guess in a business you’re not going to have any problem buying the license. I don’t know how it is in the rest in the world but, in Spain, clients don’t want to spend a bit more money on developing their applications, for that reason we cannot spend a lot of money on extra libraries, plugins or raise your salaries or that’s what our bosses tell us when we ask them for it.</p><h2 id=about-versions>About Versions
-<a class=anchor href=#about-versions>#</a></h2><p>When I read about this new version and that I would have to pay if I want to use JDK for my applications, I just started to laugh. After laughing a lot, I saw a Java version timeline. I hope no-one tells me you have to pay for this image too.</p><p><img src=/images/oracleversion.png alt="Oracle Versions #incenter"></p><p>As you can see in the image, there’s a good thing, which is OpenJDK which is public and free for life. If you have an application and you’re using JDK which is not OpenJDK, sorry but you’re falling down into a bottomless pit because you need to upgrade it urgently. If I were you, I would use OpenJDK, but I love to use Open Source.</p><p>Now I’m going to give you some information about the JDK 11 LTS, furthermore I’m going to give you some information about openJDK too.</p><h2 id=jdk-11-lts>JDK 11 LTS
-<a class=anchor href=#jdk-11-lts>#</a></h2><p>Well, it’s not a really good thing when you see LTS on a development kit and you don’t want to see it near Java. I cannot understand what exactly Oracle is thinking, but I think it’s not going a good way. When you see the versions picture and you see the updates and everything which they want to do, the first thing you think is… this is weird. They spent three years releasing one version and now every few months you’re going to have a ton of updates and versions. I’m a bit worried about that because I saw three versions of Java in one year, two of which no-one is using, and even Oracle said forget them are not good versions.</p><p>I hope everything will go well. At the moment, Oracle tell us about a few of the bugs which have been fixed in JDK 11 and they are:</p><ul><li><a href=http://openjdk.java.net/jeps/181>181</a>: Nest-Based Access Control</li><li><a href=http://openjdk.java.net/jeps/309>309</a>309: Dynamic Class-File Constants</li><li><a href=http://openjdk.java.net/jeps/>315</a>: Improve Aarch64 Intrinsics</li><li><a href=http://openjdk.java.net/jeps/>318</a>: Epsilon: A No-Op Garbage Collector</li><li><a href=http://openjdk.java.net/jeps/>320</a>: Remove the Java EE and CORBA Modules</li><li><a href=http://openjdk.java.net/jeps/>321</a>: HTTP Client (Standard)</li><li><a href=http://openjdk.java.net/jeps/>323</a>: Local-Variable Syntax for Lambda Parameters</li><li><a href=http://openjdk.java.net/jeps/>324</a>: Key Agreement with Curve25519 and Curve448</li><li><a href=http://openjdk.java.net/jeps/>327</a>: Unicode 10</li><li><a href=http://openjdk.java.net/jeps/>328</a>: Flight Recorder</li><li><a href=http://openjdk.java.net/jeps/>329</a>: ChaCha20 and Poly1305 Cryptographic Algorithms</li><li><a href=http://openjdk.java.net/jeps/>330</a>: Launch Single-File Source-Code Programs</li><li><a href=http://openjdk.java.net/jeps/>331</a>: Low-Overhead Heap Profiling</li><li><a href=http://openjdk.java.net/jeps/>332</a>: Transport Layer Security (TLS) 1.3</li><li><a href=http://openjdk.java.net/jeps/>333</a>: ZGC: A Scalable Low-Latency Garbage Collector (Experimental)</li><li><a href=http://openjdk.java.net/jeps/>335</a>: Deprecate the Nashorn JavaScript Engine</li><li><a href=http://openjdk.java.net/jeps/>336</a>: Deprecate the Pack200 Tools and API</li></ul><p>If you want to know more about it without reading a lot, you can go to YouTube, Java has its own channel
-<a href=https://www.youtube.com/channel/UCmRtPmgnQ04CMUpSUqPfhxQ>here</a>.</p><h2 id=openjdk>OpenJDK
-<a class=anchor href=#openjdk>#</a></h2><p>You should use it, it’s the one I’m going to use. Why? Because I’m using Linux and I don’t want to use something which isn’t free. Free things are always the best and even more so if it’s free food. I have been reading a lot about it and it looks like I’m not going to have any problem when I change everything, but this is in theory. I’ll let you know if I have any problems with them, but I don’t think I’m going to have a problem.</p><p>If you want to install it, you have to go to the official
-<a href=http://openjdk.java.net/>website</a>, or this
-<a href="https://adoptopenjdk.net/index.html?variant=openjdk11&amp;jvmVariant=hotspot">one</a>. AdoptOpenJDK provides prebuilt OpenJDK binaries from a fully open source set of build scripts and infrastructure.</p><p>In conclusion, if you don’t want to pay, use OpenJDK.</p></div></article><footer class=book-footer><div class="flex flex-wrap justify-between"></div><script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script></footer><div class=book-comments><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//jorgesnotebook.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></div><label for=menu-control class="hidden book-menu-overlay"></label></div><aside class=book-toc><div class=book-toc-content><nav id=TableOfContents><ul><li><ul><li><a href=#the-future>The Future</a></li><li><a href=#about-versions>About Versions</a></li><li><a href=#jdk-11-lts>JDK 11 LTS</a></li><li><a href=#openjdk>OpenJDK</a></li></ul></li></ul></nav></div></aside></main></body></html>
+<!DOCTYPE html>
+<html lang="en-GB" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=46859&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Another version of java? See what it&#39;s going on with java and what they have to say about it.">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#343a40">
+<meta name="color-scheme" content="light dark"><meta property="og:url" content="http://localhost:46859/posts/what-is-going-on-with-java/">
+  <meta property="og:site_name" content="Jorge&#39;s notebook">
+  <meta property="og:title" content="What’s going on with Java?">
+  <meta property="og:description" content="Another version of java? See what it&#39;s going on with java and what they have to say about it.">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2020-01-23T23:08:17+00:00">
+    <meta property="article:modified_time" content="2020-01-23T23:08:17+00:00">
+    <meta property="article:tag" content="AdoptOpenJDK">
+    <meta property="article:tag" content="Java">
+    <meta property="article:tag" content="JDK">
+    <meta property="article:tag" content="JDK 11">
+    <meta property="article:tag" content="JDK 11 LTS">
+    <meta property="article:tag" content="JDK 6">
+    <meta property="og:image" content="http://localhost:46859/images/oracleversion.png">
+<title>What’s going on with Java? | Jorge&#39;s notebook</title>
+<link rel="icon" href="/favicon-32.png" >
+<link rel="manifest" href="/manifest.json">
+<link rel="canonical" href="http://localhost:46859/posts/what-is-going-on-with-java/">
+  <link rel="alternate" hreflang="es" href="http://localhost:46859/es/posts/what-is-going-on-with-java/" title="¿Qué está pasando con Java?">
+<link rel="stylesheet" href="/book.min.c6f0ab8898a9b8e243f0aacc03c73275192bd36dfd0d01e4417d38cbfcafdc42.css" integrity="sha256-xvCriJipuOJD8KrMA8cydRkr0239DQHkQX04y/yv3EI=" crossorigin="anonymous">
+  <script defer src="/fuse.min.js"></script>
+  <script defer src="/en.search.min.447990a87ef080ee8c59580274f7a6c904cafac090964ee2baff932ea6b35b50.js" integrity="sha256-RHmQqH7wgO6MWVgCdPemyQTK&#43;sCQlk7iuv&#43;TLqazW1A=" crossorigin="anonymous"></script>
+
+  <script defer src="/sw.min.6f6f90fcb8eb1c49ec389838e6b801d0de19430b8e516902f8d75c3c8bd98739.js" integrity="sha256-b2&#43;Q/LjrHEnsOJg45rgB0N4ZQwuOUWkC&#43;NdcPIvZhzk=" crossorigin="anonymous"></script>
+
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-5X0MZZJXFN"></script>
+      <script>
+        var doNotTrack = false;
+        if ( true ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-5X0MZZJXFN');
+        }
+      </script><!--
+Made with Book Theme
+https://github.com/alex-shpak/hugo-book
+-->
+  <style>
+ 
+:root {
+  --nb-purple:       #7040A0;
+  --nb-purple-light: #9060C0;
+  --nb-purple-dark:  #4A2870;
+  --nb-gold:         #C9A843;
+  --nb-gold-light:   #DFC06A;
+  --nb-gold-dark:    #9A7E2E;
+  --nb-bg:           #0a0a0f;
+  --nb-bg-card:      #111118;
+  --nb-border:       #1e1e2a;
+  --nb-text:         #9ca3af;
+  --nb-text-light:   #e5e7eb;
+  --nb-text-muted:   #6b7280;
+
+  --color-link:         var(--nb-purple);
+  --color-visited-link: var(--nb-purple-dark);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-background:    var(--nb-bg);
+    --body-font-color:    var(--nb-text);
+    --color-link:         var(--nb-purple-light);
+    --color-visited-link: var(--nb-purple);
+    --gray-100:           var(--nb-bg-card);
+    --gray-200:           var(--nb-border);
+    --gray-500:           var(--nb-text-muted);
+  }
+
+  .book-menu .book-menu-content,
+  .book-search input {
+    background: var(--nb-bg-card);
+  }
+
+  h1, h2, h3 {
+    color: var(--nb-text-light);
+  }
+
+  a:hover {
+    color: var(--nb-purple-light);
+  }
+
+  code, pre {
+    background: #0d0d14;
+  }
+
+   
+  .markdown img {
+    filter: brightness(0.88) contrast(1.05);
+    border-radius: .25rem;
+  }
+}
+
+ 
+.nb-lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .75rem 0 .25rem;
+  font-size: .8rem;
+}
+
+.nb-lang {
+  color: var(--nb-text-muted);
+  text-decoration: none;
+  transition: color .2s;
+}
+
+.nb-lang:hover {
+  color: var(--nb-purple-light);
+}
+
+.nb-lang-active {
+  color: var(--nb-purple);
+  font-weight: 700;
+  cursor: default;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-lang-active { color: var(--nb-purple-light); }
+}
+
+.nb-lang-switcher .nb-lang + .nb-lang::before,
+.nb-lang-switcher .nb-lang-active + .nb-lang::before,
+.nb-lang-switcher .nb-lang + .nb-lang-active::before {
+  content: "/";
+  margin-right: .5rem;
+  color: var(--nb-text-muted);
+}
+
+ 
+::selection {
+  background: var(--nb-purple);
+  color: #fff;
+}
+
+::-moz-selection {
+  background: var(--nb-purple);
+  color: #fff;
+}
+
+ 
+body {
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.75;
+}
+
+.book-page {
+  max-width: 740px;
+}
+
+ 
+.book-brand img.book-icon {
+  height: 2.2rem;
+  width:  2.2rem;
+  filter: none !important;
+}
+
+ 
+.nb-hero {
+  padding: 3rem 0 2.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.nb-hero-name {
+  font-size: 2.4rem;
+  font-weight: 900;
+  letter-spacing: .05rem;
+  background: linear-gradient(90deg, var(--nb-purple) 0%, var(--nb-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 .4rem;
+}
+
+.nb-hero-badge {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--nb-gold);
+  margin-bottom: 1.2rem;
+  letter-spacing: .08rem;
+}
+
+.nb-hero-desc {
+  font-size: .95rem;
+  max-width: 560px;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: var(--body-font-color);
+}
+
+.nb-hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-bottom: 1.5rem;
+}
+
+ 
+.nb-btn {
+  display: inline-block;
+  padding: .45rem 1.1rem;
+  border-radius: .35rem;
+  font-size: .85rem;
+  font-weight: 600;
+  background: var(--nb-purple);
+  color: #fff !important;
+  text-decoration: none;
+  transition: background .2s;
+}
+
+.nb-btn:hover {
+  background: var(--nb-purple-light);
+  color: #fff !important;
+}
+
+ 
+.nb-btn-outline {
+  background: transparent;
+  border: 1px solid var(--nb-purple);
+  color: var(--nb-purple) !important;
+}
+
+.nb-btn-outline:hover {
+  background: var(--nb-purple);
+  color: #fff !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-btn-outline {
+    border-color: var(--nb-purple-light);
+    color: var(--nb-purple-light) !important;
+  }
+  .nb-btn-outline:hover {
+    background: var(--nb-purple-light);
+    color: #fff !important;
+  }
+}
+
+ 
+.nb-hero-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.nb-tag {
+  font-size: .75rem;
+  padding: .2rem .65rem;
+  border-radius: 9999px;
+  border: 1px solid var(--nb-gold-dark);
+  color: var(--nb-text-muted, #6b7280);
+  background: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-tag {
+    border-color: var(--nb-gold-dark);
+    color: var(--nb-text-muted);
+    background: rgba(201, 168, 67, .05);
+  }
+}
+
+ 
+.nb-section {
+  margin-bottom: 3rem;
+}
+
+.nb-section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12rem;
+  color: var(--nb-purple) !important;
+  border-bottom: 2px solid var(--nb-gold-dark);
+  padding-bottom: .5rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-section-title {
+    color: var(--nb-purple-light) !important;
+    border-color: var(--nb-gold-dark);
+  }
+}
+
+ 
+.nb-post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.nb-post-card {
+  display: block;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--nb-border, #e9ecef);
+  border-radius: .5rem;
+  text-decoration: none !important;
+  transition: border-color .2s, background .2s;
+  background: transparent;
+}
+
+.nb-post-card:hover {
+  border-color: var(--nb-purple);
+  background: rgba(112, 64, 160, .05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-post-card { border-color: var(--nb-border); }
+  .nb-post-card:hover {
+    border-color: var(--nb-purple-light);
+    background: rgba(112, 64, 160, .1);
+  }
+}
+
+.nb-post-meta {
+  font-size: .72rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin-bottom: .4rem;
+  text-transform: uppercase;
+  letter-spacing: .05rem;
+}
+
+.nb-post-title {
+  font-size: .95rem;
+  font-weight: 600;
+  margin: 0 0 .5rem;
+  color: var(--body-font-color);
+  line-height: 1.4;
+}
+
+.nb-post-desc {
+  font-size: .82rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+ 
+.nb-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.2rem;
+  padding: .85rem 0;
+  border-bottom: 1px solid var(--nb-border, #f0f0f0);
+}
+
+@media (prefers-color-scheme: dark) {
+  .nb-list-item { border-color: var(--nb-border); }
+}
+
+.nb-list-meta {
+  flex-shrink: 0;
+  font-size: .72rem;
+  color: var(--nb-text-muted, #6b7280);
+  padding-top: .2rem;
+  min-width: 90px;
+}
+
+.nb-list-body { flex: 1; }
+
+.nb-list-title {
+  font-size: .95rem;
+  font-weight: 600;
+  color: var(--body-font-color) !important;
+  text-decoration: none;
+  display: block;
+  margin-bottom: .25rem;
+}
+
+.nb-list-title:hover {
+  color: var(--nb-purple-light) !important;
+}
+
+.nb-list-desc {
+  font-size: .82rem;
+  color: var(--nb-text-muted, #6b7280);
+  margin: 0;
+  line-height: 1.5;
+}
+
+ 
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  font-weight: 700;
+}
+
+.markdown h2 {
+  border-left: 3px solid var(--nb-gold-dark);
+  padding-left: .75rem;
+}
+
+.markdown code {
+  font-size: .85em;
+}
+</style>
+
+</head>
+<body dir="ltr">
+  <input type="checkbox" class="hidden toggle" id="menu-control" />
+  <input type="checkbox" class="hidden toggle" id="toc-control" />
+  <main class="container flex">
+    <aside class="book-menu">
+      <div class="book-menu-content">
+        
+  <nav>
+<h2 class="book-brand">
+  <a class="flex align-center" href="/"><img src="/main_logo_transparent.png" alt="Logo" class="book-icon" /><span>Jorge&#39;s notebook</span>
+  </a>
+</h2>
+
+
+<div class="book-search hidden">
+  <input type="text" id="book-search-input" placeholder="Search" aria-label="Search" maxlength="64" data-hotkeys="s/" />
+  <div class="book-search-spinner hidden"></div>
+  <ul id="book-search-results"></ul>
+</div>
+<script>document.querySelector(".book-search").classList.remove("hidden")</script>
+
+
+
+  
+
+
+  
+    
+  
+
+
+  
+
+
+<div class="nb-lang-switcher">
+  
+    
+      <span class="nb-lang nb-lang-active">English</span>
+    
+  
+    
+      
+        <a class="nb-lang" href="/es/posts/what-is-going-on-with-java/">Castellano</a>
+      
+    
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <input type="checkbox" id="section-06eea90a6e865d57eef6316f4407bb88" class="toggle" checked />
+    <label for="section-06eea90a6e865d57eef6316f4407bb88" class="flex justify-between">
+      <a role="button" class="">Posts</a>
+    </label>
+  
+
+          
+  <ul>
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-create-a-k8s-homelab-with-k3s/" class="">Building a Production-Grade k3s Homelab: HA, Cilium, and MetalLB</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-implement-sops-helmfile/" class="">Encrypting Kubernetes Secrets with SOPS and Helmfile</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-set-up-your-kluster-with-helmfle/" class="">Helmfile: Structuring Kubernetes Releases at Scale</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-create-a-small-jvm-docker-image/" class="">jlink with Spring Boot services</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/starting-with-spring-boot/" class="">Starting with Spring Boot</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/what-is-going-on-with-java/" class="active">What’s going on with Java?</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-install-gitlab-on-debian-9/" class="">How to Install Gitlab on Debian 9</a>
+  
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/posts/how-to-install-jenkins/" class="">How to Install Jenkins</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+        </li>
+      
+    
+      
+        <li>
+          
+  
+  
+
+  
+    <a href="/about/" class="">About</a>
+  
+
+        </li>
+      
+    
+  </ul>
+
+
+
+
+
+
+
+
+
+
+  
+<ul>
+  
+  <li>
+    <a href="https://github.com/jorgeancal/"  target="_blank" rel="noopener">
+        Github
+      </a>
+  </li>
+  
+</ul>
+
+
+
+
+
+
+</nav>
+
+
+
+
+  <script>(function(){var e=document.querySelector("aside .book-menu-content");addEventListener("beforeunload",function(){localStorage.setItem("menu.scrollTop",e.scrollTop)}),e.scrollTop=localStorage.getItem("menu.scrollTop")})()</script>
+
+
+ 
+      </div>
+    </aside>
+
+    <div class="book-page">
+      <header class="book-header">
+        
+  <div class="flex align-center justify-between">
+  <label for="menu-control">
+    <img src="/svg/menu.svg" class="book-icon" alt="Menu" />
+  </label>
+
+  <h3>What’s going on with Java?</h3>
+
+  <label for="toc-control">
+    
+    <img src="/svg/toc.svg" class="book-icon" alt="Table of Contents" />
+    
+  </label>
+</div>
+
+
+  
+  <aside class="hidden clearfix">
+    
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#the-future">The Future</a></li>
+        <li><a href="#about-versions">About Versions</a></li>
+        <li><a href="#jdk-11-lts">JDK 11 LTS</a></li>
+        <li><a href="#openjdk">OpenJDK</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+
+  </aside>
+  
+ 
+      </header>
+
+      
+      
+<article class="markdown book-post">
+  <h2>
+    What’s going on with Java?
+  </h2>
+  
+  <div class="flex align-center text-small book-post-date">
+    <img src="/svg/calendar.svg" class="book-icon " alt="" />
+    <span>January 23, 2020</span>
+  </div>
+
+
+
+  
+  <div class="text-small">
+    
+      <a href="/categories/java/">Java</a>, 
+      <a href="/categories/opinion/">Opinion</a>
+  </div>
+  
+
+  
+  <div class="text-small">
+    
+      <a href="/tags/adoptopenjdk/">AdoptOpenJDK</a>, 
+      <a href="/tags/java/">Java</a>, 
+      <a href="/tags/jdk/">JDK</a>, 
+      <a href="/tags/jdk-11/">JDK 11</a>, 
+      <a href="/tags/jdk-11-lts/">JDK 11 LTS</a>, 
+      <a href="/tags/jdk-6/">JDK 6</a>, 
+      <a href="/tags/jdk-7/">JDK 7</a>, 
+      <a href="/tags/jdk-8/">JDK 8</a>, 
+      <a href="/tags/openjdk/">OpenJDK</a>, 
+      <a href="/tags/opinion/">Opinion</a>
+  </div>
+  
+
+
+  <div class="book-post-content"><p>The other day there were a few news articles about the new version of Java. I was thinking another one? Really? Like a lot of people in the beginning of their careers, no-one checks the differences between Java versions because they are focused on the projects which they are working on, or maybe it’s just me. But, I had a break between jobs so I decided to update all my knowledge and one thing from my list was this one, so I hope you find this information interesting. As everyone knows, Java has another JDK version which is the JDK 11.</p>
+<p>One year ago, Oracle released JDK 9 which a lot of people said was really bad, Oracle released JDK 11 after JDK 10, that’s pretty obvious. But I learned to develop with JDK 7 which was released in July 2011 while I was studying vocational training. Three years later, I started university and I had to use the JDK 8 which a lot of people said was something gorgeous. If I have to tell you whether I realised about the differences between them, I didn’t. Furthermore, I didn’t mind, but now I’ve started to do some research about which would be better for all the applications which I want to do, so now I mind. I’m going to tell you what’s going to happen with Java in the next few years and which one I chose for my apps.</p>
+<h2 id="the-future">
+  The Future
+  <a class="anchor" href="#the-future">#</a>
+</h2>
+<p>It’s madness, but we’re developers so it’s something which you find out when you start to work in this crazy world. The future of Java is open source, but it depends on you or the business which you’re working for because if you want to use it… get your wallet out. I think for a business it wouldn’t be a problem, but for a person like me who cares about each penny that I spend, it’s a problem because I hadn’t planned to spend money on this. The good thing is, if you don’t want to pay, you can use OpenJDK, check the price of JDK, maybe it’s worth it for you:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Products/Metrics</th>
+          <th>N up</th>
+          <th>License</th>
+          <th>CPU</th>
+          <th>Support</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Java SE Advanced Desktop</td>
+          <td>$40</td>
+          <td>$8.80</td>
+          <td>-</td>
+          <td>-</td>
+      </tr>
+      <tr>
+          <td>Java SE Advanced</td>
+          <td>$100</td>
+          <td>$22</td>
+          <td>5000</td>
+          <td>$ 1100</td>
+      </tr>
+      <tr>
+          <td>Java SE Suite</td>
+          <td>$300</td>
+          <td>$66</td>
+          <td>15000</td>
+          <td>$3300</td>
+      </tr>
+  </tbody>
+</table>
+<p>Maybe you can say “well it’s not expensive” and I think it’s not really expensive if you have a successful application and you earn a ton of money with it. But, as I don’t know if my applications are going to be successful, I prefer to save some money because I don’t know when I’m going to need it. I guess in a business you’re not going to have any problem buying the license. I don’t know how it is in the rest in the world but, in Spain, clients don’t want to spend a bit more money on developing their applications, for that reason we cannot spend a lot of money on extra libraries, plugins or raise your salaries or that’s what our bosses tell us when we ask them for it.</p>
+<h2 id="about-versions">
+  About Versions
+  <a class="anchor" href="#about-versions">#</a>
+</h2>
+<p>When I read about this new version and that I would have to pay if I want to use JDK for my applications, I just started to laugh. After laughing a lot, I saw a Java version timeline. I hope no-one tells me you have to pay for this image too.</p>
+<p>
+  <img src="/images/oracleversion.png" alt="Oracle Versions #incenter" /></p>
+<p>As you can see in the image, there’s a good thing, which is OpenJDK which is public and free for life. If you have an application and you’re using JDK which is not OpenJDK, sorry but you’re falling down into a bottomless pit because you need to upgrade it urgently. If I were you, I would use OpenJDK, but I love to use Open Source.</p>
+<p>Now I’m going to give you some information about the JDK 11 LTS, furthermore I’m going to give you some information about openJDK too.</p>
+<h2 id="jdk-11-lts">
+  JDK 11 LTS
+  <a class="anchor" href="#jdk-11-lts">#</a>
+</h2>
+<p>Well, it’s not a really good thing when you see LTS on a development kit and you don’t want to see it near Java. I cannot understand what exactly Oracle is thinking, but I think it’s not going a good way. When you see the versions picture and you see the updates and everything which they want to do, the first thing you think is… this is weird. They spent three years releasing one version and now every few months you’re going to have a ton of updates and versions. I’m a bit worried about that because I saw three versions of Java in one year, two of which no-one is using, and even Oracle said forget them are not good versions.</p>
+<p>I hope everything will go well. At the moment, Oracle tell us about a few of the bugs which have been fixed in JDK 11 and they are:</p>
+<ul>
+<li>
+  <a href="http://openjdk.java.net/jeps/181">181</a>: Nest-Based Access Control</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/309">309</a>309: Dynamic Class-File Constants</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">315</a>: Improve Aarch64 Intrinsics</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">318</a>: Epsilon: A No-Op Garbage Collector</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">320</a>: Remove the Java EE and CORBA Modules</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">321</a>: HTTP Client (Standard)</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">323</a>: Local-Variable Syntax for Lambda Parameters</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">324</a>: Key Agreement with Curve25519 and Curve448</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">327</a>: Unicode 10</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">328</a>: Flight Recorder</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">329</a>: ChaCha20 and Poly1305 Cryptographic Algorithms</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">330</a>: Launch Single-File Source-Code Programs</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">331</a>: Low-Overhead Heap Profiling</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">332</a>: Transport Layer Security (TLS) 1.3</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">333</a>: ZGC: A Scalable Low-Latency Garbage Collector (Experimental)</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">335</a>: Deprecate the Nashorn JavaScript Engine</li>
+<li>
+  <a href="http://openjdk.java.net/jeps/">336</a>: Deprecate the Pack200 Tools and API</li>
+</ul>
+<p>If you want to know more about it without reading a lot, you can go to YouTube, Java has its own channel 
+  <a href="https://www.youtube.com/channel/UCmRtPmgnQ04CMUpSUqPfhxQ">here</a>.</p>
+<h2 id="openjdk">
+  OpenJDK
+  <a class="anchor" href="#openjdk">#</a>
+</h2>
+<p>You should use it, it’s the one I’m going to use. Why? Because I’m using Linux and I don’t want to use something which isn’t free. Free things are always the best and even more so if it’s free food. I have been reading a lot about it and it looks like I’m not going to have any problem when I change everything, but this is in theory. I’ll let you know if I have any problems with them, but I don’t think I’m going to have a problem.</p>
+<p>If you want to install it, you have to go to the official 
+  <a href="http://openjdk.java.net/">website</a>, or this 
+  <a href="https://adoptopenjdk.net/index.html?variant=openjdk11&amp;jvmVariant=hotspot">one</a>. AdoptOpenJDK provides prebuilt OpenJDK binaries from a fully open source set of build scripts and infrastructure.</p>
+<p>In conclusion, if you don’t want to pay, use OpenJDK.</p>
+</div>
+</article>
+ 
+      
+
+      <footer class="book-footer">
+        
+  <div class="flex flex-wrap justify-between">
+
+
+
+
+
+</div>
+
+
+
+  <script>(function(){function e(e){const t=window.getSelection(),n=document.createRange();n.selectNodeContents(e),t.removeAllRanges(),t.addRange(n)}document.querySelectorAll("pre code").forEach(t=>{t.addEventListener("click",function(){if(window.getSelection().toString())return;e(t.parentElement),navigator.clipboard&&navigator.clipboard.writeText(t.parentElement.textContent)})})})()</script>
+
+
+ 
+        
+      </footer>
+
+      
+  
+  <div class="book-comments">
+<div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jorgesnotebook" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+  
+ 
+
+      <label for="menu-control" class="hidden book-menu-overlay"></label>
+    </div>
+
+    
+    <aside class="book-toc">
+      <div class="book-toc-content">
+        
+  
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#the-future">The Future</a></li>
+        <li><a href="#about-versions">About Versions</a></li>
+        <li><a href="#jdk-11-lts">JDK 11 LTS</a></li>
+        <li><a href="#openjdk">OpenJDK</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+
+ 
+      </div>
+    </aside>
+    
+  </main>
+
+  
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

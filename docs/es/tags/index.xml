@@ -1,1 +1,152 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Tags on Jorge's notebook</title><link>https://jorgesnotebook.com/es/tags/</link><description>Recent content in Tags on Jorge's notebook</description><generator>Hugo</generator><language>es</language><lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/es/tags/index.xml" rel="self" type="application/rss+xml"/><item><title>Keda</title><link>https://jorgesnotebook.com/es/tags/keda/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/keda/</guid><description/></item><item><title>Kubernetes</title><link>https://jorgesnotebook.com/es/tags/kubernetes/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/kubernetes/</guid><description/></item><item><title>Observability</title><link>https://jorgesnotebook.com/es/tags/observability/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/observability/</guid><description/></item><item><title>Opentelemetry</title><link>https://jorgesnotebook.com/es/tags/opentelemetry/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/opentelemetry/</guid><description/></item><item><title>Prometheus</title><link>https://jorgesnotebook.com/es/tags/prometheus/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/prometheus/</guid><description/></item><item><title>Scaling</title><link>https://jorgesnotebook.com/es/tags/scaling/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/scaling/</guid><description/></item><item><title>Cilium</title><link>https://jorgesnotebook.com/es/tags/cilium/</link><pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/cilium/</guid><description/></item><item><title>Ha</title><link>https://jorgesnotebook.com/es/tags/ha/</link><pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/ha/</guid><description/></item><item><title>How To</title><link>https://jorgesnotebook.com/es/tags/how-to/</link><pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/how-to/</guid><description/></item><item><title>K3s</title><link>https://jorgesnotebook.com/es/tags/k3s/</link><pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/k3s/</guid><description/></item><item><title>Metallb</title><link>https://jorgesnotebook.com/es/tags/metallb/</link><pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/metallb/</guid><description/></item><item><title>Cluster</title><link>https://jorgesnotebook.com/es/tags/cluster/</link><pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/cluster/</guid><description/></item><item><title>Helm</title><link>https://jorgesnotebook.com/es/tags/helm/</link><pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/helm/</guid><description/></item><item><title>Helm-Secrets</title><link>https://jorgesnotebook.com/es/tags/helm-secrets/</link><pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/helm-secrets/</guid><description/></item><item><title>Helmcharts</title><link>https://jorgesnotebook.com/es/tags/helmcharts/</link><pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/helmcharts/</guid><description/></item><item><title>Helmfile</title><link>https://jorgesnotebook.com/es/tags/helmfile/</link><pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/helmfile/</guid><description/></item><item><title>Secrets</title><link>https://jorgesnotebook.com/es/tags/secrets/</link><pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/secrets/</guid><description/></item><item><title>Sops</title><link>https://jorgesnotebook.com/es/tags/sops/</link><pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/sops/</guid><description/></item><item><title>Docker</title><link>https://jorgesnotebook.com/es/tags/docker/</link><pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/docker/</guid><description/></item><item><title>DockerImages</title><link>https://jorgesnotebook.com/es/tags/dockerimages/</link><pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/tags/dockerimages/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Jorge&#39;s notebook</title>
+    <link>http://localhost:46859/es/tags/</link>
+    <description>Recent content in Tags on Jorge&#39;s notebook</description>
+    <generator>Hugo</generator>
+    <language>es</language>
+    <lastBuildDate>Tue, 15 Aug 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:46859/es/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cilium</title>
+      <link>http://localhost:46859/es/tags/cilium/</link>
+      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/cilium/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Ha</title>
+      <link>http://localhost:46859/es/tags/ha/</link>
+      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/ha/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>How To</title>
+      <link>http://localhost:46859/es/tags/how-to/</link>
+      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/how-to/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>K3s</title>
+      <link>http://localhost:46859/es/tags/k3s/</link>
+      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/k3s/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kubernetes</title>
+      <link>http://localhost:46859/es/tags/kubernetes/</link>
+      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/kubernetes/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Metallb</title>
+      <link>http://localhost:46859/es/tags/metallb/</link>
+      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/metallb/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Cluster</title>
+      <link>http://localhost:46859/es/tags/cluster/</link>
+      <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/cluster/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Helm</title>
+      <link>http://localhost:46859/es/tags/helm/</link>
+      <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/helm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Helm-Secrets</title>
+      <link>http://localhost:46859/es/tags/helm-secrets/</link>
+      <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/helm-secrets/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Helmcharts</title>
+      <link>http://localhost:46859/es/tags/helmcharts/</link>
+      <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/helmcharts/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Helmfile</title>
+      <link>http://localhost:46859/es/tags/helmfile/</link>
+      <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/helmfile/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Secrets</title>
+      <link>http://localhost:46859/es/tags/secrets/</link>
+      <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/secrets/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Sops</title>
+      <link>http://localhost:46859/es/tags/sops/</link>
+      <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/sops/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Docker</title>
+      <link>http://localhost:46859/es/tags/docker/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/docker/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>DockerImages</title>
+      <link>http://localhost:46859/es/tags/dockerimages/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/dockerimages/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Java</title>
+      <link>http://localhost:46859/es/tags/java/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>JDK</title>
+      <link>http://localhost:46859/es/tags/jdk/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/jdk/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Jre</title>
+      <link>http://localhost:46859/es/tags/jre/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/jre/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Jvm</title>
+      <link>http://localhost:46859/es/tags/jvm/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/jvm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Maven</title>
+      <link>http://localhost:46859/es/tags/maven/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/tags/maven/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

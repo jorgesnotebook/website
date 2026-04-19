@@ -1,4 +1,26 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>OpenJDK on Jorge's notebook</title><link>https://jorgesnotebook.com/es/tags/openjdk/</link><description>Recent content in OpenJDK on Jorge's notebook</description><generator>Hugo</generator><language>es</language><lastBuildDate>Mon, 28 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/es/tags/openjdk/index.xml" rel="self" type="application/rss+xml"/><item><title>jlink con Spring Boot</title><link>https://jorgesnotebook.com/es/posts/how-to-create-a-small-jvm-docker-image/</link><pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/posts/how-to-create-a-small-jvm-docker-image/</guid><description>&lt;p&gt;Esto siempre ha sido una prioridad para mí porque&amp;hellip; no quiero pagar de más en ECR. Asi que toca crear imágenes Docker pequeñas.&lt;/p&gt;
-&lt;p&gt;Lo primero es listar el classpath de todas las librerias que vamos a usar. Para eso ejecutamos el siguiente comando en maven y lo guardamos en un fichero:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mvn dependency:build-classpath -Dmdep.includeScope&lt;span style="color:#f92672"&gt;=&lt;/span&gt;runtime -Dmdep.outputFile&lt;span style="color:#f92672"&gt;=&lt;/span&gt;classpath
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Una vez que tenemos todas las librerias en el fichero, las metemos en una variable de entorno para poder usarla después:&lt;/p&gt;</description></item><item><title>¿Qué está pasando con Java?</title><link>https://jorgesnotebook.com/es/posts/what-is-going-on-with-java/</link><pubDate>Thu, 23 Jan 2020 23:08:17 +0000</pubDate><guid>https://jorgesnotebook.com/es/posts/what-is-going-on-with-java/</guid><description>&lt;p&gt;El otro día salieron varias noticias sobre la nueva versión de Java. Mi primera reacción fue&amp;hellip; ¿otra? ¿en serio? Como mucha gente al principio de su carrera, no me fijaba en las diferencias entre versiones de Java porque estaba centrado en los proyectos en los que trabajaba. O igual era solo yo. El caso es que tuve un parón entre trabajos y me puse a actualizar todo lo que tenía pendiente, y esto era una de las cosas de la lista. Espero que te resulte interesante.&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>OpenJDK on Jorge&#39;s notebook</title>
+    <link>http://localhost:46859/es/tags/openjdk/</link>
+    <description>Recent content in OpenJDK on Jorge&#39;s notebook</description>
+    <generator>Hugo</generator>
+    <language>es</language>
+    <lastBuildDate>Mon, 28 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:46859/es/tags/openjdk/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>jlink con Spring Boot</title>
+      <link>http://localhost:46859/es/posts/how-to-create-a-small-jvm-docker-image/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/posts/how-to-create-a-small-jvm-docker-image/</guid>
+      <description>&lt;p&gt;Esto siempre ha sido una prioridad para mí porque&amp;hellip; no quiero pagar de más en ECR. Asi que toca crear imágenes Docker pequeñas.&lt;/p&gt;&#xA;&lt;p&gt;Lo primero es listar el classpath de todas las librerias que vamos a usar. Para eso ejecutamos el siguiente comando en maven y lo guardamos en un fichero:&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mvn dependency:build-classpath -Dmdep.includeScope&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;runtime -Dmdep.outputFile&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;classpath&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Una vez que tenemos todas las librerias en el fichero, las metemos en una variable de entorno para poder usarla después:&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>¿Qué está pasando con Java?</title>
+      <link>http://localhost:46859/es/posts/what-is-going-on-with-java/</link>
+      <pubDate>Thu, 23 Jan 2020 23:08:17 +0000</pubDate>
+      <guid>http://localhost:46859/es/posts/what-is-going-on-with-java/</guid>
+      <description>&lt;p&gt;El otro día salieron varias noticias sobre la nueva versión de Java. Mi primera reacción fue&amp;hellip; ¿otra? ¿en serio? Como mucha gente al principio de su carrera, no me fijaba en las diferencias entre versiones de Java porque estaba centrado en los proyectos en los que trabajaba. O igual era solo yo. El caso es que tuve un parón entre trabajos y me puse a actualizar todo lo que tenía pendiente, y esto era una de las cosas de la lista. Espero que te resulte interesante.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

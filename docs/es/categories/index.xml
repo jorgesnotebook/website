@@ -1,1 +1,96 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Categories on Jorge's notebook</title><link>https://jorgesnotebook.com/es/categories/</link><description>Recent content in Categories on Jorge's notebook</description><generator>Hugo</generator><language>es</language><lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/es/categories/index.xml" rel="self" type="application/rss+xml"/><item><title>How To</title><link>https://jorgesnotebook.com/es/categories/how-to/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/how-to/</guid><description/></item><item><title>Kubernetes</title><link>https://jorgesnotebook.com/es/categories/kubernetes/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/kubernetes/</guid><description/></item><item><title>Opinion</title><link>https://jorgesnotebook.com/es/categories/opinion/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/opinion/</guid><description/></item><item><title>Cluster</title><link>https://jorgesnotebook.com/es/categories/cluster/</link><pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/cluster/</guid><description/></item><item><title>Helm</title><link>https://jorgesnotebook.com/es/categories/helm/</link><pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/helm/</guid><description/></item><item><title>Helmfile</title><link>https://jorgesnotebook.com/es/categories/helmfile/</link><pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/helmfile/</guid><description/></item><item><title>Docker</title><link>https://jorgesnotebook.com/es/categories/docker/</link><pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/docker/</guid><description/></item><item><title>Java</title><link>https://jorgesnotebook.com/es/categories/java/</link><pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/java/</guid><description/></item><item><title>Spring Boot</title><link>https://jorgesnotebook.com/es/categories/spring-boot/</link><pubDate>Thu, 23 Jan 2020 23:10:39 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/spring-boot/</guid><description/></item><item><title>Debian</title><link>https://jorgesnotebook.com/es/categories/debian/</link><pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/debian/</guid><description/></item><item><title>Gitlab</title><link>https://jorgesnotebook.com/es/categories/gitlab/</link><pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/gitlab/</guid><description/></item><item><title>Linux</title><link>https://jorgesnotebook.com/es/categories/linux/</link><pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/es/categories/linux/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on Jorge&#39;s notebook</title>
+    <link>http://localhost:46859/es/categories/</link>
+    <description>Recent content in Categories on Jorge&#39;s notebook</description>
+    <generator>Hugo</generator>
+    <language>es</language>
+    <lastBuildDate>Tue, 15 Aug 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:46859/es/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Cluster</title>
+      <link>http://localhost:46859/es/categories/cluster/</link>
+      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/cluster/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Kubernetes</title>
+      <link>http://localhost:46859/es/categories/kubernetes/</link>
+      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/kubernetes/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Helm</title>
+      <link>http://localhost:46859/es/categories/helm/</link>
+      <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/helm/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>How To</title>
+      <link>http://localhost:46859/es/categories/how-to/</link>
+      <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/how-to/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Helmfile</title>
+      <link>http://localhost:46859/es/categories/helmfile/</link>
+      <pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/helmfile/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Docker</title>
+      <link>http://localhost:46859/es/categories/docker/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/docker/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Java</title>
+      <link>http://localhost:46859/es/categories/java/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Spring Boot</title>
+      <link>http://localhost:46859/es/categories/spring-boot/</link>
+      <pubDate>Thu, 23 Jan 2020 23:10:39 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/spring-boot/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Opinion</title>
+      <link>http://localhost:46859/es/categories/opinion/</link>
+      <pubDate>Thu, 23 Jan 2020 23:08:17 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/opinion/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Debian</title>
+      <link>http://localhost:46859/es/categories/debian/</link>
+      <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/debian/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Gitlab</title>
+      <link>http://localhost:46859/es/categories/gitlab/</link>
+      <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/gitlab/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linux</title>
+      <link>http://localhost:46859/es/categories/linux/</link>
+      <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/es/categories/linux/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

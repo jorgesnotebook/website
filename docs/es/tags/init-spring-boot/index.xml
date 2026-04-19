@@ -1,6 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Init Spring Boot on Jorge's notebook</title><link>https://jorgesnotebook.com/es/tags/init-spring-boot/</link><description>Recent content in Init Spring Boot on Jorge's notebook</description><generator>Hugo</generator><language>es</language><lastBuildDate>Thu, 23 Jan 2020 23:10:39 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/es/tags/init-spring-boot/index.xml" rel="self" type="application/rss+xml"/><item><title>Empezando con Spring Boot</title><link>https://jorgesnotebook.com/es/posts/starting-with-spring-boot/</link><pubDate>Thu, 23 Jan 2020 23:10:39 +0000</pubDate><guid>https://jorgesnotebook.com/es/posts/starting-with-spring-boot/</guid><description>&lt;p&gt;Vamos a ver qué es Spring, cómo crear un proyecto con Spring Boot y qué significa cada fichero que te genera cuando empiezas. Lo típico de todo curso de iniciación.&lt;/p&gt;
-&lt;h2 id="qué-es-spring"&gt;
- ¿Qué es Spring?
- &lt;a class="anchor" href="#qu%c3%a9-es-spring"&gt;#&lt;/a&gt;
-&lt;/h2&gt;
-&lt;p&gt;Si paras a alguien por la calle y le preguntas te va a decir que Spring es una estación del año, pero eso no es lo que buscamos. Spring en IT es un framework open source para plataformas Java creado por Roderick &amp;ldquo;Rod&amp;rdquo; Johnson. Es ligero porque tiene una filosofía modular, es decir, tienes una base y vas añadiendo los módulos que necesitas conforme la aplicación crece. Es muy popular por su simplicidad, bajo acoplamiento y lo fácil que es testearlo.&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Init Spring Boot on Jorge&#39;s notebook</title>
+    <link>http://localhost:46859/es/tags/init-spring-boot/</link>
+    <description>Recent content in Init Spring Boot on Jorge&#39;s notebook</description>
+    <generator>Hugo</generator>
+    <language>es</language>
+    <lastBuildDate>Thu, 23 Jan 2020 23:10:39 +0000</lastBuildDate>
+    <atom:link href="http://localhost:46859/es/tags/init-spring-boot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Empezando con Spring Boot</title>
+      <link>http://localhost:46859/es/posts/starting-with-spring-boot/</link>
+      <pubDate>Thu, 23 Jan 2020 23:10:39 +0000</pubDate>
+      <guid>http://localhost:46859/es/posts/starting-with-spring-boot/</guid>
+      <description>&lt;p&gt;Vamos a ver qué es Spring, cómo crear un proyecto con Spring Boot y qué significa cada fichero que te genera cuando empiezas. Lo típico de todo curso de iniciación.&lt;/p&gt;&#xA;&lt;h2 id=&#34;qué-es-spring&#34;&gt;&#xA;  ¿Qué es Spring?&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#qu%c3%a9-es-spring&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;Si paras a alguien por la calle y le preguntas te va a decir que Spring es una estación del año, pero eso no es lo que buscamos. Spring en IT es un framework open source para plataformas Java creado por Roderick &amp;ldquo;Rod&amp;rdquo; Johnson. Es ligero porque tiene una filosofía modular, es decir, tienes una base y vas añadiendo los módulos que necesitas conforme la aplicación crece. Es muy popular por su simplicidad, bajo acoplamiento y lo fácil que es testearlo.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

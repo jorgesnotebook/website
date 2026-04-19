@@ -1,31 +1,68 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Jorge's notebook</title><link>https://jorgesnotebook.com/posts/</link><description>Recent content on Jorge's notebook</description><generator>Hugo</generator><language>en-GB</language><lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/posts/index.xml" rel="self" type="application/rss+xml"/><item><title>Designing an OpenTelemetry Pipeline for Scaling (Not Observability)</title><link>https://jorgesnotebook.com/posts/designing-otel-pipeline-for-scaling/</link><pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/posts/designing-otel-pipeline-for-scaling/</guid><description>&lt;p&gt;We&amp;rsquo;re using Grafana Cloud for observability — Mimir, Tempo, Loki, the whole thing. It&amp;rsquo;s great, no complaints. Before all this we were only scaling on CPU and memory with the normal HPA. Which is fine until it isn&amp;rsquo;t — CPU and memory are lagging indicators, by the time they spike you&amp;rsquo;re already in trouble. So I started looking at KEDA because I wanted to scale on something that actually meant something, like queue depth. Nobody asked for it, I just thought it was the right call.&lt;/p&gt;</description></item><item><title>Building a Production-Grade k3s Homelab: HA, Cilium, and MetalLB</title><link>https://jorgesnotebook.com/posts/how-to-create-a-k8s-homelab-with-k3s/</link><pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/posts/how-to-create-a-k8s-homelab-with-k3s/</guid><description>&lt;p&gt;For a long time, I&amp;rsquo;ve been trying to achieve a better configuration in my home lab.
-Since I have been working with Kubernetes (k8s) for an extended period of time,
-I have always desired an overkill configuration with multiple nodes for high availability.
-However, looking at the costs related to running such a setup, I got depressed.
-I then explored alternatives and came to the conclusion&amp;hellip; Raspberry Pis!
-I bought 6 Raspberry Pis and said which one should I use k0s, k3s or some other lightweight k8s?
-Then I said let&amp;rsquo;s go for k3s, it seems easier :D So the Raspberry Pis arrived but&amp;hellip;
-I moved house then my Raspberries went missing in one of the boxes&amp;hellip;
-Three months later, I stumbled upon them again amidst my collection of belongings –
-I tend to accumulate a lot of stuff – and by this point, I had changed jobs, moved again,
-and dealt with more complications&amp;hellip;
-So after 2 years, here we are again&amp;hellip; looking again at this project&amp;hellip; so I will trust my old me
-saying the k3s is the best thing that I could use&amp;hellip; So let&amp;rsquo;s look at the hardware that I have&amp;hellip;&lt;/p&gt;</description></item><item><title>Encrypting Kubernetes Secrets with SOPS and Helmfile</title><link>https://jorgesnotebook.com/posts/how-to-implement-sops-helmfile/</link><pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/posts/how-to-implement-sops-helmfile/</guid><description>&lt;p&gt;In our previous post about helmfile, we spoke briefly about sops, but we didn&amp;rsquo;t use it or speak more about it&amp;hellip; Now it&amp;rsquo;s the time to do that. With SOPS, we can have a file in our repo that is encrypted by sops and have the variables to use in our chart through Helmfile there.&lt;/p&gt;
-&lt;h2 id="what-is-sops"&gt;
- What is Sops?
- &lt;a class="anchor" href="#what-is-sops"&gt;#&lt;/a&gt;
-&lt;/h2&gt;
-&lt;p&gt;If we take a look at the 
- &lt;a href="https://github.com/mozilla/sops"&gt;Project&lt;/a&gt;, we&amp;rsquo;ll see that Mozilla defines SOPS as &amp;ldquo;an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault and PGP&amp;rdquo;.&lt;/p&gt;</description></item><item><title>Helmfile: Structuring Kubernetes Releases at Scale</title><link>https://jorgesnotebook.com/posts/how-to-set-up-your-kluster-with-helmfle/</link><pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/posts/how-to-set-up-your-kluster-with-helmfle/</guid><description>&lt;p&gt;Helmfile is a tool that allows you to get more out of Helm. When you use helmfile, you can implement as many charts as you want. Helmfile allows you to template the charts with the values that you want, and it will ship it to your cluster. Helmfile brings modular deployments too, by this I mean that you can have a huge list of deployments, and you can say deploy only this group of helmchart, you can also deploy them in sequence.&lt;/p&gt;</description></item><item><title>jlink with Spring Boot services</title><link>https://jorgesnotebook.com/posts/how-to-create-a-small-jvm-docker-image/</link><pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/posts/how-to-create-a-small-jvm-docker-image/</guid><description>&lt;p&gt;This always has been my priority because&amp;hellip; I don&amp;rsquo;t want to pay extra in ECR so&amp;hellip; I have to create small docker images.&lt;/p&gt;
-&lt;p&gt;we need to list the classpath of all the libraries that we are going to use the follow command in maven ot save all of them in a file&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"&gt;&lt;code class="language-shell" data-lang="shell"&gt;&lt;span style="display:flex;"&gt;&lt;span&gt;mvn dependency:build-classpath -Dmdep.includeScope&lt;span style="color:#f92672"&gt;=&lt;/span&gt;runtime -Dmdep.outputFile&lt;span style="color:#f92672"&gt;=&lt;/span&gt;classpath
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;once we have all the libraries in a file&amp;hellip; we need are going to put everything in a environment variable that way we can use it later on. To be able to do that&amp;hellip; we need to run the following command&lt;/p&gt;</description></item><item><title>Starting with Spring Boot</title><link>https://jorgesnotebook.com/posts/starting-with-spring-boot/</link><pubDate>Thu, 23 Jan 2020 23:10:39 +0000</pubDate><guid>https://jorgesnotebook.com/posts/starting-with-spring-boot/</guid><description>&lt;p&gt;In this post we’re going to have different sections, in the first one, as in all beginner courses, we’re going to define Spring, learn how to create a project with Spring Boot and learn what the meaning of the basic class which Spring gives you when you start a project is.&lt;/p&gt;
-&lt;h2 id="whats-spring"&gt;
- What’s Spring?
- &lt;a class="anchor" href="#whats-spring"&gt;#&lt;/a&gt;
-&lt;/h2&gt;
-&lt;p&gt;If you stop someone on the street and ask them about it, they are going to tell you that Spring is a season of the year, but that’s not the meaning that we want. Spring in IT is an open source framework for Java Platforms which was created by Roderick “Rod” Johnson. This framework is lightweight because it has a modular philosophy, I mean if you have a base and you add the different modules when you need them or when the application is getting bigger. This framework is really popular because of it’s simplicity, loose coupling and testability.&lt;/p&gt;</description></item><item><title>What’s going on with Java?</title><link>https://jorgesnotebook.com/posts/what-is-going-on-with-java/</link><pubDate>Thu, 23 Jan 2020 23:08:17 +0000</pubDate><guid>https://jorgesnotebook.com/posts/what-is-going-on-with-java/</guid><description>&lt;p&gt;The other day there were a few news articles about the new version of Java. I was thinking another one? Really? Like a lot of people in the beginning of their careers, no-one checks the differences between Java versions because they are focused on the projects which they are working on, or maybe it’s just me. But, I had a break between jobs so I decided to update all my knowledge and one thing from my list was this one, so I hope you find this information interesting. As everyone knows, Java has another JDK version which is the JDK 11.&lt;/p&gt;</description></item><item><title>How to Install Gitlab on Debian 9</title><link>https://jorgesnotebook.com/posts/how-to-install-gitlab-on-debian-9/</link><pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/posts/how-to-install-gitlab-on-debian-9/</guid><description>&lt;p&gt;Let’s go with another installation. I’m not really sure about installing GitLab on my server, but I have been thinking a lot about it. I had installed Git which I like, but I tried one years ago and I like it but I haven’t installed it on my server.&lt;/p&gt;
-&lt;p&gt;GitLab is a really good tool. You can have it installed on your server and you can create different teams and just developers. I really like the teams thing because you can create the teams and you can create a project for the teams and you can create roles for each person of the team. I think is excellent.
-Installation&lt;/p&gt;</description></item><item><title>How to Install Jenkins</title><link>https://jorgesnotebook.com/posts/how-to-install-jenkins/</link><pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/posts/how-to-install-jenkins/</guid><description>&lt;p&gt;In this post I’m going to try to explain what Jenkins is, why we use it, how to install it in Debain and how to use it. Everyone is going to say… oh no! Another boring post about it. I’ll tell them just maybe or maybe not. Find out for yourself.&lt;/p&gt;
-&lt;p&gt;Firstly, I have to say this post is all my notes about my research about Jenkins, therefore, it could be a bit different than other websites, or just wrong! So if you see something wrong, just tell me about it.
-What’s Jenkins?&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jorge&#39;s notebook</title>
+    <link>http://localhost:46859/posts/</link>
+    <description>Recent content on Jorge&#39;s notebook</description>
+    <generator>Hugo</generator>
+    <language>en-GB</language>
+    <lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:46859/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Building a Production-Grade k3s Homelab: HA, Cilium, and MetalLB</title>
+      <link>http://localhost:46859/posts/how-to-create-a-k8s-homelab-with-k3s/</link>
+      <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/posts/how-to-create-a-k8s-homelab-with-k3s/</guid>
+      <description>&lt;p&gt;For a long time, I&amp;rsquo;ve been trying to achieve a better configuration in my home lab.&#xA;Since I have been working with Kubernetes (k8s) for an extended period of time,&#xA;I have always desired an overkill configuration with multiple nodes for high availability.&#xA;However, looking at the costs related to running such a setup, I got depressed.&#xA;I then explored alternatives and came to the conclusion&amp;hellip; Raspberry Pis!&#xA;I bought 6 Raspberry Pis and said which one should I use k0s, k3s or some other lightweight k8s?&#xA;Then I said let&amp;rsquo;s go for k3s, it seems easier :D So the Raspberry Pis arrived but&amp;hellip;&#xA;I moved house then my Raspberries went missing in one of the boxes&amp;hellip;&#xA;Three months later, I stumbled upon them again amidst my collection of belongings –&#xA;I tend to accumulate a lot of stuff – and by this point, I had changed jobs, moved again,&#xA;and dealt with more complications&amp;hellip;&#xA;So after 2 years, here we are again&amp;hellip; looking again at this project&amp;hellip; so I will trust my old me&#xA;saying the k3s is the best thing that I could use&amp;hellip; So let&amp;rsquo;s look at the hardware that I have&amp;hellip;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Encrypting Kubernetes Secrets with SOPS and Helmfile</title>
+      <link>http://localhost:46859/posts/how-to-implement-sops-helmfile/</link>
+      <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/posts/how-to-implement-sops-helmfile/</guid>
+      <description>&lt;p&gt;In our previous post about helmfile, we spoke briefly about sops, but we didn&amp;rsquo;t use it or speak more about it&amp;hellip; Now it&amp;rsquo;s the time to do that. With SOPS, we can have a file in our repo that is encrypted by sops and have the variables to use in our chart through Helmfile there.&lt;/p&gt;&#xA;&lt;h2 id=&#34;what-is-sops&#34;&gt;&#xA;  What is Sops?&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#what-is-sops&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;If we take a look at the &#xA;  &lt;a href=&#34;https://github.com/mozilla/sops&#34;&gt;Project&lt;/a&gt;, we&amp;rsquo;ll see that Mozilla defines SOPS as &amp;ldquo;an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY formats and encrypts with AWS KMS, GCP KMS, Azure Key Vault and PGP&amp;rdquo;.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Helmfile: Structuring Kubernetes Releases at Scale</title>
+      <link>http://localhost:46859/posts/how-to-set-up-your-kluster-with-helmfle/</link>
+      <pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/posts/how-to-set-up-your-kluster-with-helmfle/</guid>
+      <description>&lt;p&gt;Helmfile is a tool that allows you to get more out of Helm. When you use helmfile, you can implement as many charts as you want. Helmfile allows you to template the charts with the values that you want, and it will ship it to your cluster. Helmfile brings modular deployments too, by this I mean that you can have a huge list of deployments, and you can say deploy only this group of helmchart, you can also deploy them in sequence.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>jlink with Spring Boot services</title>
+      <link>http://localhost:46859/posts/how-to-create-a-small-jvm-docker-image/</link>
+      <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/posts/how-to-create-a-small-jvm-docker-image/</guid>
+      <description>&lt;p&gt;This always has been my priority because&amp;hellip; I don&amp;rsquo;t want to pay extra in ECR so&amp;hellip; I have to create small docker images.&lt;/p&gt;&#xA;&lt;p&gt;we need to list the classpath of all the libraries that we are going to use the follow command in maven ot save all of them in a file&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mvn dependency:build-classpath -Dmdep.includeScope&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;runtime -Dmdep.outputFile&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;classpath&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;once we have all the libraries in a file&amp;hellip; we need are going to put everything in a environment variable that way we can use it later on. To be able to do that&amp;hellip; we need to run the following command&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Starting with Spring Boot</title>
+      <link>http://localhost:46859/posts/starting-with-spring-boot/</link>
+      <pubDate>Thu, 23 Jan 2020 23:10:39 +0000</pubDate>
+      <guid>http://localhost:46859/posts/starting-with-spring-boot/</guid>
+      <description>&lt;p&gt;In this post we’re going to have different sections, in the first one, as in all beginner courses, we’re going to define Spring, learn how to create a project with Spring Boot and learn what the meaning of the basic class which Spring gives you when you start a project is.&lt;/p&gt;&#xA;&lt;h2 id=&#34;whats-spring&#34;&gt;&#xA;  What’s Spring?&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#whats-spring&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;If you stop someone on the street and ask them about it, they are going to tell you that Spring is a season of the year, but that’s not the meaning that we want. Spring in IT is an open source framework  for Java Platforms which was created by Roderick “Rod” Johnson. This framework is lightweight because it has a modular philosophy, I mean if you have a base and you add the different modules when you need them or when the application is getting bigger. This framework is really popular because of it’s simplicity, loose coupling and testability.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>What’s going on with Java?</title>
+      <link>http://localhost:46859/posts/what-is-going-on-with-java/</link>
+      <pubDate>Thu, 23 Jan 2020 23:08:17 +0000</pubDate>
+      <guid>http://localhost:46859/posts/what-is-going-on-with-java/</guid>
+      <description>&lt;p&gt;The other day there were a few news articles about the new version of Java. I was thinking another one? Really? Like a lot of people in the beginning of their careers, no-one checks the differences between Java versions because they are focused on the projects which they are working on, or maybe it’s just me. But, I had a break between jobs so I decided to update all my knowledge and one thing from my list was this one, so I hope you find this information interesting. As everyone knows, Java has another JDK version which is the JDK 11.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>How to Install Gitlab on Debian 9</title>
+      <link>http://localhost:46859/posts/how-to-install-gitlab-on-debian-9/</link>
+      <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/posts/how-to-install-gitlab-on-debian-9/</guid>
+      <description>&lt;p&gt;Let’s go with another installation. I’m not really sure about installing GitLab on my server, but I have been thinking a lot about it. I had installed Git which I like, but I tried one years ago and I like it but I haven’t installed it on my server.&lt;/p&gt;&#xA;&lt;p&gt;GitLab is a really good tool. You can have it installed on your server and you can create different teams and just developers. I really like the teams thing because you can create the teams and you can create a project for the teams and you can create roles for each person of the team. I think is excellent.&#xA;Installation&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>How to Install Jenkins</title>
+      <link>http://localhost:46859/posts/how-to-install-jenkins/</link>
+      <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/posts/how-to-install-jenkins/</guid>
+      <description>&lt;p&gt;In this post I’m going to try to explain what Jenkins is, why we use it, how to install it in Debain and how to use it. Everyone is going to say… oh no! Another boring post about it. I’ll tell them just maybe or maybe not. Find out for yourself.&lt;/p&gt;&#xA;&lt;p&gt;Firstly, I have to say this post is all my notes about my research about Jenkins, therefore, it could be a bit different than other websites, or just wrong! So if you see something wrong, just tell me about it.&#xA;What’s Jenkins?&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,3 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>How to Install GitLab on Jorge's notebook</title><link>https://jorgesnotebook.com/tags/how-to-install-gitlab/</link><description>Recent content in How to Install GitLab on Jorge's notebook</description><generator>Hugo</generator><language>en-GB</language><lastBuildDate>Thu, 23 Jan 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://jorgesnotebook.com/tags/how-to-install-gitlab/index.xml" rel="self" type="application/rss+xml"/><item><title>How to Install Gitlab on Debian 9</title><link>https://jorgesnotebook.com/posts/how-to-install-gitlab-on-debian-9/</link><pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate><guid>https://jorgesnotebook.com/posts/how-to-install-gitlab-on-debian-9/</guid><description>&lt;p&gt;Let’s go with another installation. I’m not really sure about installing GitLab on my server, but I have been thinking a lot about it. I had installed Git which I like, but I tried one years ago and I like it but I haven’t installed it on my server.&lt;/p&gt;
-&lt;p&gt;GitLab is a really good tool. You can have it installed on your server and you can create different teams and just developers. I really like the teams thing because you can create the teams and you can create a project for the teams and you can create roles for each person of the team. I think is excellent.
-Installation&lt;/p&gt;</description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>How to Install GitLab on Jorge&#39;s notebook</title>
+    <link>http://localhost:46859/tags/how-to-install-gitlab/</link>
+    <description>Recent content in How to Install GitLab on Jorge&#39;s notebook</description>
+    <generator>Hugo</generator>
+    <language>en-GB</language>
+    <lastBuildDate>Thu, 23 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:46859/tags/how-to-install-gitlab/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>How to Install Gitlab on Debian 9</title>
+      <link>http://localhost:46859/posts/how-to-install-gitlab-on-debian-9/</link>
+      <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>http://localhost:46859/posts/how-to-install-gitlab-on-debian-9/</guid>
+      <description>&lt;p&gt;Let’s go with another installation. I’m not really sure about installing GitLab on my server, but I have been thinking a lot about it. I had installed Git which I like, but I tried one years ago and I like it but I haven’t installed it on my server.&lt;/p&gt;&#xA;&lt;p&gt;GitLab is a really good tool. You can have it installed on your server and you can create different teams and just developers. I really like the teams thing because you can create the teams and you can create a project for the teams and you can create roles for each person of the team. I think is excellent.&#xA;Installation&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
