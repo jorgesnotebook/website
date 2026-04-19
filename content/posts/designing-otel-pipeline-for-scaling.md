@@ -1,6 +1,7 @@
 +++
 title= "Designing an OpenTelemetry Pipeline for Scaling (Not Observability)"
 date= "2026-04-18"
+draft= true
 comments = true
 categories = ["kubernetes", "How to", "opinion"]
 description = "Most people set up OpenTelemetry thinking about dashboards. I used it to feed KEDA scaling decisions and the pipeline looks completely different."
@@ -12,7 +13,7 @@ We're using Grafana Cloud for observability — Mimir, Tempo, Loki, the whole th
 
 Then came the question of where KEDA should get its metrics from. I really didn't want it hitting Grafana Cloud on every polling interval. That's an external call, it costs money, it adds latency, and if Grafana Cloud has a bad day your scaling decisions go with it.
 
-So I set up a local Prometheus and configured the OTel collector to send only the metrics KEDA actually needs there. And that decision is what made me think differently about the pipeline.
+So I set up a local Prometheus and configured the OTel collector to push only the metrics KEDA actually needs there. And that decision is what made me think differently about the pipeline.
 
 ## The problem with thinking "observability first"
 
@@ -28,7 +29,7 @@ I had services generating custom metrics through the OTel SDK. Queue depth, acti
 
 The naive approach would be: instrument everything, ship everything to Prometheus, let KEDA query it.
 
-The problem is that "everything" is expensive. High cardinality metrics will hurt your Prometheus. A bloated scrape endpoint adds latency. And KEDA polling a slow Prometheus is... well, not ideal.
+The problem is that "everything" is expensive. High cardinality metrics will hurt your Prometheus. And KEDA polling a slow Prometheus is... well, not ideal.
 
 So I needed to filter at the collector level before anything hit Prometheus.
 
@@ -47,7 +48,7 @@ processors:
           - app.active_jobs
 ```
 
-And that's it. Everything else gets dropped before it reaches the Prometheus exporter. Your Prometheus only sees what KEDA actually needs to make a decision.
+And that's it. Everything else gets dropped before it reaches the exporter. Your Prometheus only sees what KEDA actually needs to make a decision.
 
 You can also strip labels you don't need with the `attributes` processor. If your metric has 15 labels and KEDA only queries on 2 of them, drop the rest:
 
@@ -65,7 +66,7 @@ Less cardinality, less memory, faster queries.
 
 ## The pipeline config
 
-Putting it all together, my collector pipeline for the scaling path looked something like this:
+Putting it all together:
 
 ```yaml
 processors:
@@ -74,12 +75,22 @@ processors:
     limit_mib: 512
     spike_limit_mib: 128
 
+exporters:
+  prometheusremotewrite:
+    endpoint: "http://prometheus:9090/api/v1/write"
+    resource_to_telemetry_conversion:
+      enabled: true
+    tls:
+      insecure: true
+  otlphttp/grafana:
+    endpoint: "https://your-grafana-cloud-endpoint"
+
 service:
   pipelines:
     metrics/scaling:
       receivers: [otlp]
       processors: [memory_limiter, filter/scaling-only, attributes/strip, batch]
-      exporters: [prometheus]
+      exporters: [prometheusremotewrite]
     metrics/observability:
       receivers: [otlp]
       processors: [memory_limiter, batch]
@@ -88,62 +99,9 @@ service:
 
 The `memory_limiter` has to go first in the processor chain. If you put it after the filter it's already too late — the memory spike happened during ingestion. Without it, under a traffic burst the collector will OOM and your scaling pipeline goes dark at exactly the wrong moment.
 
-Two separate pipelines from the same receiver. One lean pipeline with filtered metrics going to Prometheus for KEDA. One full pipeline going to Grafana Cloud.
+Two separate pipelines from the same receiver. One lean pipeline with filtered metrics pushed to Prometheus for KEDA. One full pipeline going to Grafana Cloud.
 
 This means your scaling path is never blocked by a slow trace backend or a Grafana Cloud hiccup.
-
-## The temporality trap
-
-This one got me. And I've seen it get other people too.
-
-OTel metrics have a temporality: they can be **Cumulative** or **Delta**. Prometheus expects Cumulative. Your OTel SDK probably emits Cumulative by default for counters so you might never notice. But if you're using a SDK or a library that emits Delta metrics — or if you've configured it manually — you're going to get garbage values in Prometheus and KEDA will make completely wrong scaling decisions.
-
-The fix is in the collector. You can use the `cumulativetodelta` processor, or more usefully, tell the Prometheus exporter which temporality it should request from upstream:
-
-```yaml
-exporters:
-  prometheus:
-    endpoint: "0.0.0.0:8889"
-    resource_to_telemetry_conversion:
-      enabled: true
-```
-
-And on the receiver side, if you control the SDK, explicitly set the temporality preference to cumulative. Don't assume. Check what your metrics actually look like in Prometheus before you connect KEDA to them.
-
-A quick way to spot it: if your gauge is jumping between positive and negative values, or you're seeing counters reset unexpectedly, temporality is probably your problem.
-
-## Transforming metrics before they hit Prometheus
-
-The filter processor is good for dropping what you don't need. But sometimes you need to shape the metrics you're keeping.
-
-The `metricstransform` processor lets you rename metrics, aggregate across label values, and create derived metrics. This is useful when your SDK emits something like `app.queue.depth` with a `region` label and you want a single aggregated value across all regions for KEDA:
-
-```yaml
-processors:
-  metricstransform/aggregate:
-    transforms:
-      - include: app.queue.depth
-        action: update
-        operations:
-          - action: aggregate_labels
-            label_set: [service]
-            aggregation_type: sum
-```
-
-That collapses all the region variants into a single metric per service. KEDA gets a clean signal and you don't have to write a complex PromQL query to do the aggregation at query time.
-
-You can also use it to rename metrics if your SDK naming doesn't match what you want to expose:
-
-```yaml
-processors:
-  metricstransform/rename:
-    transforms:
-      - include: app.queue.depth
-        action: update
-        new_name: scaling_queue_depth
-```
-
-Honestly, if you're doing something more complex than a rename, think twice about whether you should be doing it in the collector or in the application. The collector is not the right place to put business logic.
 
 ## KEDA reading from Prometheus
 
@@ -167,7 +125,6 @@ spec:
     failureThreshold: 3
     replicas: 2
   advanced:
-    restoreToOriginalReplicaCount: true
     horizontalPodAutoscalerConfig:
       behavior:
         scaleUp:
@@ -207,8 +164,6 @@ Now the interesting bit: `advanced.horizontalPodAutoscalerConfig.behavior`. Unde
 
 **Scale down** — `stabilizationWindowSeconds: 300` is 5 minutes. KEDA won't scale down until the metric has been consistently low for 5 minutes. This is the important one. Without this, a brief dip in queue depth triggers a scale-down, and then you're spinning pods back up 2 minutes later. The policy `type: Percent, value: 25` means KEDA can remove at most 25% of current replicas per 60 seconds. `selectPolicy: Min` means take the most conservative option — scale down slowly.
 
-`restoreToOriginalReplicaCount: true` — when you delete the ScaledObject, Kubernetes puts the deployment back to whatever replica count it had before KEDA took over. Without this it stays at whatever count KEDA left it at, which might be zero.
-
 The numbers here are a starting point. What works for a queue processor is completely different from what works for an HTTP service. Tune these against your actual traffic patterns.
 
 ## Why not just use the full observability stack?
@@ -233,7 +188,7 @@ What you gain is a scaling path that's lean, predictable and doesn't depend on y
 
 I think people reach for OTel thinking "observability" and design one big pipeline that tries to do everything. Sometimes the right move is to separate concerns. Scaling is a control plane concern. Observability is a diagnostic concern. They have different requirements.
 
-Using OTel as the ingestion point for both makes sense. But after that the pipelines can look completely different.
+Using OTel as the ingestion point for both makes sense. But after that the pipelines can look completely different. Keep the scaling pipeline thin: filter, push, done.
 
 If you're using KEDA and haven't thought about this yet, it's worth looking at. Your scaling decisions probably don't need 80% of the metrics you're collecting.
 
