@@ -1,6 +1,6 @@
 baseurl = "https://jorgesnotebook.com"
 DefaultContentLanguage  = "en"
-languageCode = "en-GB"
+locale = "en-GB"
 title = "Jorge's notebook"
 theme = 'book'
 disqusShortname = "jorgesnotebook"
@@ -39,11 +39,11 @@ startLevel = 1
 # And https://gohugo.io/content-management/multilingual/#translation-by-content-directory
 [languages]
 [languages.en]
-languageName = 'English'
+label = 'English'
 weight = 1
 
 [languages.es]
-languageName = 'Castellano'
+label = 'Castellano'
 weight = 2
 
 

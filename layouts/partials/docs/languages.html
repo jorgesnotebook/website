@@ -12,10 +12,10 @@
 <div class="nb-lang-switcher">
   {{ range hugo.Sites }}
     {{ if eq .Language.Lang $.Site.Language.Lang }}
-      <span class="nb-lang nb-lang-active">{{ .Language.LanguageName }}</span>
+      <span class="nb-lang nb-lang-active">{{ .Language.Label }}</span>
     {{ else }}
       {{ with index $translations .Language.Lang }}
-        <a class="nb-lang" href="{{ cond hugo.IsMultihost .Permalink .RelPermalink }}">{{ .Language.LanguageName }}</a>
+        <a class="nb-lang" href="{{ cond hugo.IsMultihost .Permalink .RelPermalink }}">{{ .Language.Label }}</a>
       {{ end }}
     {{ end }}
   {{ end }}

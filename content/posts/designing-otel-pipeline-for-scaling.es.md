@@ -1,111 +1,123 @@
 +++
 title= "Diseñando un pipeline de OpenTelemetry para escalar (no para observabilidad)"
 date= "2026-04-18"
+lastmod = "2026-04-26"
 draft= true
 comments = true
 categories = ["kubernetes", "How to", "opinion"]
-description = "La mayoría monta OpenTelemetry pensando en dashboards. Yo lo use para alimentar las decisiones de escalado de KEDA y el pipeline quedo completamente diferente."
+description = "OpenTelemetry sirve para más cosas que dashboards. Yo usé el collector para separar una ruta local y fina para KEDA de una ruta completa para observabilidad."
 tags= ["kubernetes", "opentelemetry", "keda", "prometheus", "scaling", "observability"]
 author = "Jorge Andreu Calatayud"
 +++
 
-Estamos usando Grafana Cloud para observabilidad — Mimir, Tempo, Loki, todo el paquete. Funciona bien, sin quejas. Antes de todo esto solo escalábamos con CPU y memoria con el HPA normal. Que está bien hasta que no lo está — la CPU y la memoria son indicadores con retraso, cuando suben ya estás en problemas. Asi que me puse a mirar KEDA porque quería escalar sobre algo que tuviera más sentido, como la profundidad de la cola. Nadie me lo pidió, simplemente pensé que era lo correcto.
+Usamos el stack self-hosted de Grafana para observabilidad y la verdad es que hace su trabajo bien. El problema que yo quería resolver no era de dashboards. Era de autoscaling.
 
-Entonces vino la pregunta de de dónde iba a sacar KEDA las métricas. No me apetecia nada que estuviera llamando a Grafana Cloud en cada polling interval. Es una llamada externa, cuesta dinero, añade latencia, y si Grafana Cloud tiene un mal dia tus decisiones de escalado se van con él.
+CPU y memoria están bien como señales de seguridad, pero reaccionan tarde. Cuando ves que suben, la cola ya se te está acumulando. Para los consumers de cola quería que KEDA escalara usando profundidad de cola y trabajo activo, no solo CPU.
 
-Asi que monté un Prometheus local y configure el collector de OTel para que le mandara ahi directamente las métricas que KEDA necesita de verdad. Y esa decision es la que me hizo pensar diferente sobre el pipeline.
+Y ahí apareció la pregunta importante: ¿de dónde debería leer KEDA esas métricas?
 
-## El problema de pensar "observabilidad primero"
+No me apetecía nada que KEDA estuviera consultando de un clúster a otro solo porque sí. Eso añade coste y mete latencia justo en la ruta donde quiero el camino más corto posible. Así que separé el flujo de métricas en dos:
 
-Cuando configuras OTel pensando en observabilidad lo quieres todo. Todos los traces, todas las métricas, todos los labels. Necesitas ese contexto cuando estas depurando a las 2 de la mañana. Tiene todo el sentido.
+- una ruta local y fina para escalado
+- una ruta completa para observabilidad
 
-Pero cuando usas métricas para escalar no necesitas todo eso. Necesitas una o dos señales, de forma fiable y con poca latencia. Punto.
+El OpenTelemetry Collector es un buen sitio para hacer esa bifurcación. Entra una sola vez por OTLP y salen dos pipelines distintos.
 
-Cuando me di cuenta de eso, dejé de pensar en el collector como una herramienta de observabilidad y empecé a pensarlo como un pipeline.
+## Las métricas de escalado no son métricas de observabilidad
 
-## Lo que quería hacer
+La observabilidad quiere amplitud. Cuando estás depurando quieres labels, retención, contexto y suficiente información como para correlacionar métricas, logs y traces.
 
-Tenia servicios generando métricas personalizadas a través del SDK de OTel. Profundidad de cola, jobs activos, ese tipo de cosas. Quería que KEDA leyera esas métricas desde Prometheus y escalara los consumers arriba y abajo en función de ellas.
+El escalado quiere casi lo contrario:
 
-El enfoque de primeras sería: instrumenta todo, manda todo a Prometheus, deja que KEDA lo consulte.
+- muy pocas métricas
+- consultas predecibles
+- baja cardinalidad
+- la cadena de dependencias lo más corta posible
 
-El problema es que "todo" es caro. Las métricas con alta cardinalidad hacen daño a tu Prometheus. Y KEDA consultando un Prometheus lento pues... no es lo ideal.
+Si tratas ambos problemas como "manda todo a un sitio y ya lo consultaré luego", tu ruta de escalado acaba heredando costes y puntos de fallo que realmente pertenecen al mundo del diagnóstico.
 
-Asi que necesitaba filtrar en el collector antes de que nada llegara a Prometheus.
+## La arquitectura
 
-## Filtrando en el collector
+La idea final quedó así:
 
-Esta es la parte que la mayoría se salta. El collector de OTel tiene un procesador `filter` que te deja descartar las métricas que no te interesan antes de que vayan a ningún sitio.
+1. Las aplicaciones emiten métricas por OTLP una sola vez.
+2. El collector las divide en dos pipelines.
+3. El pipeline de escalado se queda solo con las métricas que necesita KEDA y las manda a un Prometheus local.
+4. El pipeline de observabilidad envía el stream completo al stack de observabilidad.
 
-```yaml
-processors:
-  filter/scaling-only:
-    metrics:
-      include:
-        match_type: strict
-        metric_names:
-          - app.queue.depth
-          - app.active_jobs
-```
+De esa forma KEDA tiene una fuente local para tomar decisiones sin obligarme a mantener una segunda ruta de instrumentación en las aplicaciones.
 
-Y ya. Todo lo demás se descarta antes de llegar al exporter. Tu Prometheus solo ve lo que KEDA necesita para tomar una decision.
+## Configuración del collector
 
-También puedes quitarte los labels que no necesitas con el procesador `attributes`. Si tu métrica tiene 15 labels y KEDA solo consulta por 2 de ellos, elimina el resto:
+Este sería un ejemplo completo del collector:
 
 ```yaml
-processors:
-  attributes/strip:
-    actions:
-      - key: http.user_agent
-        action: delete
-      - key: net.peer.ip
-        action: delete
-```
+receivers:
+  otlp:
+    protocols:
+      grpc:
+      http:
 
-Menos cardinalidad, menos memoria, consultas más rápidas.
-
-## La config del pipeline
-
-Juntando todo:
-
-```yaml
 processors:
   memory_limiter:
     check_interval: 1s
     limit_mib: 512
     spike_limit_mib: 128
 
+  filter/scaling:
+    error_mode: ignore
+    metric_conditions:
+      - metric.name != "app.queue.depth" and metric.name != "app.active_jobs"
+
+  batch:
+
 exporters:
-  prometheusremotewrite:
-    endpoint: "http://prometheus:9090/api/v1/write"
-    resource_to_telemetry_conversion:
-      enabled: true
-    tls:
-      insecure: true
+  prometheusremotewrite/scaling:
+    endpoint: http://prometheus:9090/api/v1/write
+    target_info:
+      enabled: false
+
   otlphttp/grafana:
-    endpoint: "https://tu-endpoint-de-grafana-cloud"
+    endpoint: https://tu-endpoint-de-grafana
 
 service:
   pipelines:
     metrics/scaling:
       receivers: [otlp]
-      processors: [memory_limiter, filter/scaling-only, attributes/strip, batch]
-      exporters: [prometheusremotewrite]
+      processors: [memory_limiter, filter/scaling, batch]
+      exporters: [prometheusremotewrite/scaling]
+
     metrics/observability:
       receivers: [otlp]
       processors: [memory_limiter, batch]
       exporters: [otlphttp/grafana]
 ```
 
-El `memory_limiter` tiene que ir primero en la cadena de procesadores. Si lo pones después del filter ya es tarde — el pico de memoria ya paso durante la ingesta. Sin él, con un pico de tráfico el collector se va a OOM y tu pipeline de escalado se apaga justo cuando más lo necesitas.
+Aquí hay varios detalles que importan.
 
-Dos pipelines separados desde el mismo receiver. Uno ligero con las métricas filtradas que van a Prometheus para KEDA. Uno completo que va a Grafana Cloud.
+El filtro es el primer punto de decisión de verdad. Todo lo que no sea una señal útil para escalado se descarta antes de llegar al Prometheus local. Eso mantiene el conjunto de consultas pequeño y fácil de razonar.
 
-Asi la ruta de escalado nunca se ve bloqueada por un problema con Grafana Cloud.
+Con los labels conviene ser intencional. Si tu métrica de escalado lleva dimensiones por `pod`, `instance` o cualquier otra cosa que KEDA no necesita, mejor corregir eso en la instrumentación o agregarlo explícitamente. Borrar labels a ciegas puede colapsar series distintas en una sola y cambiar el significado de la métrica.
 
-## KEDA leyendo desde Prometheus
+Fíjate también en lo que no aparece: `resource_to_telemetry_conversion`. El exporter de Prometheus remote write puede convertir los resource attributes en labels, pero para la ruta de escalado eso suele ser justo lo contrario de lo que quieres. Para depurar puede venir bien. Para autoscaling normalmente solo te mete más cardinalidad.
 
-En el lado de KEDA, un `ScaledObject` con un trigger de Prometheus. Pero hay un par de campos que la mayoría de ejemplos se dejan que importan bastante en producción:
+También desactivo `target_info` en el exporter de escalado. Esa métrica es útil si quieres hacer joins en Prometheus contra metadatos del target. KEDA no necesita eso. El almacén de métricas de escalado debería ser aburrido, y eso es bueno.
+
+## Ojo con Prometheus
+
+Si vas a mandar métricas a Prometheus usando el remote write receiver, tienes que habilitarlo explícitamente con:
+
+```text
+--web.enable-remote-write-receiver
+```
+
+La propia documentación de Prometheus deja claro que esta no es la ruta de ingesta más eficiente por defecto y que hay que usarla con cabeza. Para un conjunto minúsculo de métricas de escalado me parece una decisión razonable. Para empujar "todas las métricas de la aplicación" por ahí, no.
+
+Si prefieres usar el receiver OTLP de Prometheus, la arquitectura sigue siendo la misma. Lo importante aquí no es tanto el protocolo como la separación de responsabilidades.
+
+## Configuración de KEDA
+
+En KEDA, lo importante es que la query sea simple y que devuelva un único valor.
 
 ```yaml
 apiVersion: keda.sh/v1alpha1
@@ -114,25 +126,25 @@ metadata:
   name: consumer-scaler
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
     name: consumer
+
   pollingInterval: 15
-  cooldownPeriod: 60
+  cooldownPeriod: 300
   minReplicaCount: 0
   maxReplicaCount: 20
+
   fallback:
     failureThreshold: 3
     replicas: 2
+
   advanced:
     horizontalPodAutoscalerConfig:
       behavior:
         scaleUp:
-          stabilizationWindowSeconds: 30
           policies:
             - type: Pods
               value: 4
-              periodSeconds: 60
+              periodSeconds: 15
           selectPolicy: Max
         scaleDown:
           stabilizationWindowSeconds: 300
@@ -141,55 +153,41 @@ spec:
               value: 25
               periodSeconds: 60
           selectPolicy: Min
+
   triggers:
     - type: prometheus
       metadata:
         serverAddress: http://prometheus:9090
-        query: app_queue_depth{service="my-service"}
+        query: sum(app_queue_depth{queue="payments"})
         threshold: "10"
-        activationThreshold: "1"
+        activationThreshold: "2"
+        ignoreNullValues: "false"
 ```
 
-Hay bastante cosa aquí, vamos por partes.
+Aquí hay tres campos que merece la pena comentar.
 
-`pollingInterval: 15` — cada cuánto consulta KEDA a Prometheus. Por defecto son 30 segundos. Para un scaler basado en colas donde quieres reaccionar rápido a los picos, 15 está bien. No bajes demasiado o estarás machacando Prometheus en cada tick.
+`query` tiene que devolver un escalar o un vector de un solo elemento. Por eso uso `sum(...)` en vez de consultar la métrica en crudo. Si tu métrica sigue saliendo con labels de más, KEDA puede encontrarse varias series y el trigger se vuelve frágil.
 
-`activationThreshold` es el que se olvida todo el mundo. `threshold` es el objetivo por réplica — KEDA intenta escalar a `valorActual / threshold` réplicas. Pero `activationThreshold` es el valor mínimo que tiene que alcanzar la métrica antes de que KEDA se moleste en despertar el deployment desde cero. Sin esto, un solo mensaje en la cola dispara un scale-up. Eso casi nunca es lo que quieres.
+`pollingInterval` importa sobre todo cuando el workload está en cero. Una vez ya estás escalando entre 1 y N réplicas, también entra en juego el periodo de sincronización del HPA de Kubernetes. Y `cooldownPeriod` en KEDA solo afecta de verdad al escalado de vuelta a cero, que es un matiz que muchos ejemplos ni mencionan.
 
-`fallback` es lo que te salva cuando Prometheus se cae. Sin él KEDA da error y deja de tomar decisiones. Con `failureThreshold: 3` y `replicas: 2`, después de 3 fallos consecutivos deja el deployment en 2 réplicas hasta que la fuente de métricas se recupere. Mucho mejor que "KEDA entra en pánico y no hace nada" durante un incidente.
+`fallback` gana bastante sentido si lo combinas con `ignoreNullValues: "false"`, pero solo si en tu caso un resultado vacío significa que algo va mal. Si tu query desaparece de forma natural cuando la cola está vacía, entonces mejor forzar un cero en PromQL o dejar el comportamiento por defecto.
 
-Ahora la parte interesante: `advanced.horizontalPodAutoscalerConfig.behavior`. Por debajo KEDA crea un HPA, y este bloque le pasa configuración de comportamiento directamente.
+## Qué te aporta este diseño
 
-**Scale up** — `stabilizationWindowSeconds: 30` significa que KEDA mira los últimos 30 segundos de valores antes de decidir escalar hacia arriba. Esto evita que un pico puntual dispare inmediatamente un scale event. La policy `type: Pods, value: 4` limita el scale-up a 4 pods nuevos por cada 60 segundos. `selectPolicy: Max` significa que si tienes varias policies definidas coge la más agresiva.
+La ganancia principal no es que quede bonito. La ganancia principal es que la query de escalado pasa a ser barata, local y fácil de entender.
 
-**Scale down** — `stabilizationWindowSeconds: 300` son 5 minutos. KEDA no escalará hacia abajo hasta que la métrica haya estado baja durante 5 minutos seguidos. Esta es la importante. Sin esto, una bajada puntual en la cola dispara un scale-down y estás levantando pods de nuevo 2 minutos después. La policy `type: Percent, value: 25` significa que KEDA puede eliminar como máximo el 25% de las réplicas actuales por cada 60 segundos. `selectPolicy: Min` coge la opción más conservadora — escala hacia abajo despacio.
+Mi backend de observabilidad puede optimizarse para retención, diagnóstico y coste. Mi Prometheus de escalado puede optimizarse para una sola cosa: responder rápido a un conjunto pequeño de consultas.
 
-Los números son un punto de partida. Lo que funciona para un procesador de colas es completamente diferente a lo que funciona para un servicio HTTP. Ajusta esto contra tus patrones de tráfico reales.
+Eso sí, dos pipelines dentro del mismo collector no son aislamiento duro. Sigues compartiendo proceso, receiver y presupuesto de memoria. Si la ruta de escalado es tan crítica que ni siquiera quieres compartir ese dominio de fallo, entonces separa también los collectors. El patrón es el mismo; el blast radius cambia.
 
-## Por qué no usar el stack completo de observabilidad
+## Trade-offs
 
-He visto gente intentar que KEDA consulte Thanos o un Prometheus con remote-write. Funciona, pero estás añadiendo latencia y puntos de fallo a una ruta critica. Si tus decisiones de escalado dependen de una métrica que tiene que viajar por un pipeline antes de que KEDA la vea, lo vas a pasar mal durante los picos de tráfico... que es justo cuando necesitas que el escalado sea rápido.
+Claro que esto también tiene peaje.
 
-También está el tema del coste. Guardar todas tus métricas en un almacén a largo plazo cuesta dinero. Si solo usas 2 métricas para escalar no necesitas pagar por guardar 200 métricas con 30 días de retención solo para que KEDA haga su trabajo.
+- Tienes otro Prometheus más que operar, aunque sea pequeño.
+- Tienes que mantener sincronizada la lista de métricas que el escalado necesita.
+- Tu Prometheus de escalado es intencionadamente malo para depurar, así que el backend de observabilidad completo sigue siendo necesario.
 
-El trade-off es que tu Prometheus para escalado es intencionadamente limitado. No puedes usarlo para depurar porque no tiene el cuadro completo. Y eso está bien. Para eso no es.
+Aun así, a mí me compensa. El escalado es un problema de control. La observabilidad es un problema de diagnóstico. Pueden compartir instrumentación, pero no necesitan ni el mismo almacenamiento ni el mismo pipeline.
 
-## Los trade-offs
-
-Siendo honesto, esto es lo que pierdes:
-
-- **Correlacionar es más difícil.** Cuando algo sale mal durante un scale event tienes que correlacionar entre dos fuentes de datos: tu Prometheus de escalado y tu backend de observabilidad. Es un poco pesado.
-- **Más configuración que mantener.** Dos pipelines significa mantener la lista de filtros sincronizada cuando añades nuevas métricas de escalado. Yo me he olvidado de hacerlo más de una vez.
-- **No todo el mundo lo entiende.** Cuando alguien nuevo llega y ve dos pipelines va a preguntar por qué. Es una conversación que merece la pena tener, pero es trabajo extra.
-
-Lo que ganas es una ruta de escalado ligera, predecible y que no depende de que tu stack de observabilidad esté sano. En mi experiencia eso vale la pena.
-
-## Conclusión
-
-Creo que la gente llega a OTel pensando en "observabilidad" y diseña un pipeline enorme que intenta hacerlo todo. A veces lo correcto es separar responsabilidades. El escalado es cosa del plano de control. La observabilidad es una herramienta de diagnóstico. Tienen requisitos diferentes.
-
-Usar OTel como punto de ingesta para las dos cosas tiene sentido. Pero a partir de ahi los pipelines pueden ser completamente diferentes. El de escalado tiene que ser fino: filtra, manda, fin.
-
-Si estás usando KEDA y aún no has pensado en esto, merece la pena mirarlo. Tus decisiones de escalado probablemente no necesitan el 80% de las métricas que estás recolectando.
-
-Espero que te haya sido útil. Talogo!
+Si ya estás usando OpenTelemetry y KEDA juntos, merece la pena hacerse una pregunta muy simple: ¿tu autoscaler necesita realmente todo tu stack de observabilidad o solo necesita un número limpio y cerca del clúster?

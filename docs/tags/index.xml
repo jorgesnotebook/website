@@ -2,150 +2,150 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Jorge&#39;s notebook</title>
-    <link>http://localhost:46859/tags/</link>
+    <link>https://jorgesnotebook.com/tags/</link>
     <description>Recent content in Tags on Jorge&#39;s notebook</description>
     <generator>Hugo</generator>
     <language>en-GB</language>
     <lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:46859/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jorgesnotebook.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Cilium</title>
-      <link>http://localhost:46859/tags/cilium/</link>
+      <link>https://jorgesnotebook.com/tags/cilium/</link>
       <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/cilium/</guid>
+      <guid>https://jorgesnotebook.com/tags/cilium/</guid>
       <description></description>
     </item>
     <item>
       <title>Ha</title>
-      <link>http://localhost:46859/tags/ha/</link>
+      <link>https://jorgesnotebook.com/tags/ha/</link>
       <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/ha/</guid>
+      <guid>https://jorgesnotebook.com/tags/ha/</guid>
       <description></description>
     </item>
     <item>
       <title>Homelab</title>
-      <link>http://localhost:46859/tags/homelab/</link>
+      <link>https://jorgesnotebook.com/tags/homelab/</link>
       <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/homelab/</guid>
+      <guid>https://jorgesnotebook.com/tags/homelab/</guid>
       <description></description>
     </item>
     <item>
       <title>K3s</title>
-      <link>http://localhost:46859/tags/k3s/</link>
+      <link>https://jorgesnotebook.com/tags/k3s/</link>
       <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/k3s/</guid>
+      <guid>https://jorgesnotebook.com/tags/k3s/</guid>
       <description></description>
     </item>
     <item>
       <title>Kubernetes</title>
-      <link>http://localhost:46859/tags/kubernetes/</link>
+      <link>https://jorgesnotebook.com/tags/kubernetes/</link>
       <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/kubernetes/</guid>
+      <guid>https://jorgesnotebook.com/tags/kubernetes/</guid>
       <description></description>
     </item>
     <item>
       <title>Metallb</title>
-      <link>http://localhost:46859/tags/metallb/</link>
+      <link>https://jorgesnotebook.com/tags/metallb/</link>
       <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/metallb/</guid>
+      <guid>https://jorgesnotebook.com/tags/metallb/</guid>
       <description></description>
     </item>
     <item>
       <title>Raspberry-Pi</title>
-      <link>http://localhost:46859/tags/raspberry-pi/</link>
+      <link>https://jorgesnotebook.com/tags/raspberry-pi/</link>
       <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/raspberry-pi/</guid>
+      <guid>https://jorgesnotebook.com/tags/raspberry-pi/</guid>
       <description></description>
     </item>
     <item>
       <title>Aws-Kms</title>
-      <link>http://localhost:46859/tags/aws-kms/</link>
+      <link>https://jorgesnotebook.com/tags/aws-kms/</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/aws-kms/</guid>
+      <guid>https://jorgesnotebook.com/tags/aws-kms/</guid>
       <description></description>
     </item>
     <item>
       <title>Helm</title>
-      <link>http://localhost:46859/tags/helm/</link>
+      <link>https://jorgesnotebook.com/tags/helm/</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/helm/</guid>
+      <guid>https://jorgesnotebook.com/tags/helm/</guid>
       <description></description>
     </item>
     <item>
       <title>Helm-Secrets</title>
-      <link>http://localhost:46859/tags/helm-secrets/</link>
+      <link>https://jorgesnotebook.com/tags/helm-secrets/</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/helm-secrets/</guid>
+      <guid>https://jorgesnotebook.com/tags/helm-secrets/</guid>
       <description></description>
     </item>
     <item>
       <title>Helmfile</title>
-      <link>http://localhost:46859/tags/helmfile/</link>
+      <link>https://jorgesnotebook.com/tags/helmfile/</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/helmfile/</guid>
+      <guid>https://jorgesnotebook.com/tags/helmfile/</guid>
       <description></description>
     </item>
     <item>
       <title>Secrets</title>
-      <link>http://localhost:46859/tags/secrets/</link>
+      <link>https://jorgesnotebook.com/tags/secrets/</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/secrets/</guid>
+      <guid>https://jorgesnotebook.com/tags/secrets/</guid>
       <description></description>
     </item>
     <item>
       <title>Security</title>
-      <link>http://localhost:46859/tags/security/</link>
+      <link>https://jorgesnotebook.com/tags/security/</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/security/</guid>
+      <guid>https://jorgesnotebook.com/tags/security/</guid>
       <description></description>
     </item>
     <item>
       <title>Sops</title>
-      <link>http://localhost:46859/tags/sops/</link>
+      <link>https://jorgesnotebook.com/tags/sops/</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/sops/</guid>
+      <guid>https://jorgesnotebook.com/tags/sops/</guid>
       <description></description>
     </item>
     <item>
       <title>Helmcharts</title>
-      <link>http://localhost:46859/tags/helmcharts/</link>
+      <link>https://jorgesnotebook.com/tags/helmcharts/</link>
       <pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/helmcharts/</guid>
+      <guid>https://jorgesnotebook.com/tags/helmcharts/</guid>
       <description></description>
     </item>
     <item>
       <title>Platform-Engineering</title>
-      <link>http://localhost:46859/tags/platform-engineering/</link>
+      <link>https://jorgesnotebook.com/tags/platform-engineering/</link>
       <pubDate>Sat, 30 Jan 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/platform-engineering/</guid>
+      <guid>https://jorgesnotebook.com/tags/platform-engineering/</guid>
       <description></description>
     </item>
     <item>
       <title>Docker</title>
-      <link>http://localhost:46859/tags/docker/</link>
+      <link>https://jorgesnotebook.com/tags/docker/</link>
       <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/docker/</guid>
+      <guid>https://jorgesnotebook.com/tags/docker/</guid>
       <description></description>
     </item>
     <item>
       <title>DockerImages</title>
-      <link>http://localhost:46859/tags/dockerimages/</link>
+      <link>https://jorgesnotebook.com/tags/dockerimages/</link>
       <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/dockerimages/</guid>
+      <guid>https://jorgesnotebook.com/tags/dockerimages/</guid>
       <description></description>
     </item>
     <item>
       <title>Java</title>
-      <link>http://localhost:46859/tags/java/</link>
+      <link>https://jorgesnotebook.com/tags/java/</link>
       <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/java/</guid>
+      <guid>https://jorgesnotebook.com/tags/java/</guid>
       <description></description>
     </item>
     <item>
       <title>JDK</title>
-      <link>http://localhost:46859/tags/jdk/</link>
+      <link>https://jorgesnotebook.com/tags/jdk/</link>
       <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/tags/jdk/</guid>
+      <guid>https://jorgesnotebook.com/tags/jdk/</guid>
       <description></description>
     </item>
   </channel>

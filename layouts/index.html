@@ -20,7 +20,7 @@
   <h2 class="nb-section-title">Featured</h2>
   <div class="nb-post-grid">
     {{ range first 3 $featured }}
-    <a class="nb-post-card" href="{{ .Permalink }}">
+    <a class="nb-post-card" href="{{ .RelPermalink }}">
       <div class="nb-post-meta">{{ .Date.Format "Jan 2, 2006" }}{{ with .Params.categories }} · {{ index . 0 }}{{ end }}</div>
       <h3 class="nb-post-title">{{ .Title }}</h3>
       {{ with .Description }}<p class="nb-post-desc">{{ . }}</p>{{ end }}
@@ -36,7 +36,7 @@
   <article class="nb-list-item">
     <span class="nb-list-meta">{{ .Date.Format "Jan 2, 2006" }}</span>
     <div class="nb-list-body">
-      <a class="nb-list-title" href="{{ .Permalink }}">{{ .Title }}</a>
+      <a class="nb-list-title" href="{{ .RelPermalink }}">{{ .Title }}</a>
       {{ with .Description }}<p class="nb-list-desc">{{ . }}</p>{{ end }}
     </div>
   </article>

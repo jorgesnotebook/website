@@ -2,101 +2,101 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Jorge&#39;s notebook</title>
-    <link>http://localhost:46859/categories/</link>
+    <link>https://jorgesnotebook.com/categories/</link>
     <description>Recent content in Categories on Jorge&#39;s notebook</description>
     <generator>Hugo</generator>
     <language>en-GB</language>
     <lastBuildDate>Sat, 18 Apr 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:46859/categories/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://jorgesnotebook.com/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Homelab</title>
-      <link>http://localhost:46859/categories/homelab/</link>
+      <link>https://jorgesnotebook.com/categories/homelab/</link>
       <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/homelab/</guid>
+      <guid>https://jorgesnotebook.com/categories/homelab/</guid>
       <description></description>
     </item>
     <item>
       <title>Kubernetes</title>
-      <link>http://localhost:46859/categories/kubernetes/</link>
+      <link>https://jorgesnotebook.com/categories/kubernetes/</link>
       <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/kubernetes/</guid>
+      <guid>https://jorgesnotebook.com/categories/kubernetes/</guid>
       <description></description>
     </item>
     <item>
       <title>Platform Engineering</title>
-      <link>http://localhost:46859/categories/platform-engineering/</link>
+      <link>https://jorgesnotebook.com/categories/platform-engineering/</link>
       <pubDate>Tue, 15 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/platform-engineering/</guid>
+      <guid>https://jorgesnotebook.com/categories/platform-engineering/</guid>
       <description></description>
     </item>
     <item>
       <title>Helm</title>
-      <link>http://localhost:46859/categories/helm/</link>
+      <link>https://jorgesnotebook.com/categories/helm/</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/helm/</guid>
+      <guid>https://jorgesnotebook.com/categories/helm/</guid>
       <description></description>
     </item>
     <item>
       <title>Security</title>
-      <link>http://localhost:46859/categories/security/</link>
+      <link>https://jorgesnotebook.com/categories/security/</link>
       <pubDate>Sun, 28 Feb 2021 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/security/</guid>
+      <guid>https://jorgesnotebook.com/categories/security/</guid>
       <description></description>
     </item>
     <item>
       <title>Docker</title>
-      <link>http://localhost:46859/categories/docker/</link>
+      <link>https://jorgesnotebook.com/categories/docker/</link>
       <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/docker/</guid>
+      <guid>https://jorgesnotebook.com/categories/docker/</guid>
       <description></description>
     </item>
     <item>
       <title>Java</title>
-      <link>http://localhost:46859/categories/java/</link>
+      <link>https://jorgesnotebook.com/categories/java/</link>
       <pubDate>Mon, 28 Sep 2020 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/java/</guid>
+      <guid>https://jorgesnotebook.com/categories/java/</guid>
       <description></description>
     </item>
     <item>
       <title>Spring Boot</title>
-      <link>http://localhost:46859/categories/spring-boot/</link>
+      <link>https://jorgesnotebook.com/categories/spring-boot/</link>
       <pubDate>Thu, 23 Jan 2020 23:10:39 +0000</pubDate>
-      <guid>http://localhost:46859/categories/spring-boot/</guid>
+      <guid>https://jorgesnotebook.com/categories/spring-boot/</guid>
       <description></description>
     </item>
     <item>
       <title>Opinion</title>
-      <link>http://localhost:46859/categories/opinion/</link>
+      <link>https://jorgesnotebook.com/categories/opinion/</link>
       <pubDate>Thu, 23 Jan 2020 23:08:17 +0000</pubDate>
-      <guid>http://localhost:46859/categories/opinion/</guid>
+      <guid>https://jorgesnotebook.com/categories/opinion/</guid>
       <description></description>
     </item>
     <item>
       <title>Debian</title>
-      <link>http://localhost:46859/categories/debian/</link>
+      <link>https://jorgesnotebook.com/categories/debian/</link>
       <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/debian/</guid>
+      <guid>https://jorgesnotebook.com/categories/debian/</guid>
       <description></description>
     </item>
     <item>
       <title>Gitlab</title>
-      <link>http://localhost:46859/categories/gitlab/</link>
+      <link>https://jorgesnotebook.com/categories/gitlab/</link>
       <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/gitlab/</guid>
+      <guid>https://jorgesnotebook.com/categories/gitlab/</guid>
       <description></description>
     </item>
     <item>
       <title>How To</title>
-      <link>http://localhost:46859/categories/how-to/</link>
+      <link>https://jorgesnotebook.com/categories/how-to/</link>
       <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/how-to/</guid>
+      <guid>https://jorgesnotebook.com/categories/how-to/</guid>
       <description></description>
     </item>
     <item>
       <title>Linux</title>
-      <link>http://localhost:46859/categories/linux/</link>
+      <link>https://jorgesnotebook.com/categories/linux/</link>
       <pubDate>Thu, 23 Jan 2020 00:00:00 +0000</pubDate>
-      <guid>http://localhost:46859/categories/linux/</guid>
+      <guid>https://jorgesnotebook.com/categories/linux/</guid>
       <description></description>
     </item>
   </channel>
